@@ -9,9 +9,11 @@ import 'react-native-gesture-handler';
 
 // 외부에서 불러온 것들
 import Icon from 'react-native-vector-icons/FontAwesome';
-// import BookMarkModal from './BookmarkModal.js';
 import BookMarkModal from './BookMarkModal';
-// import MediModal from './MediModal';
+
+// 약 목록 보여주는 component
+import List from '../../Components/Lists';
+
 
 
 function BookMarkMain({navigation}) {
@@ -23,13 +25,7 @@ function BookMarkMain({navigation}) {
 
         
       <TouchableOpacity onPress={()=>{navigation.navigate("MedicineDetail")}}>
-        <View style={styles.medibox}>
-            <Icon style={styles.mediicon} name="medkit" size={80} color="black" />
-            <View style={styles.medititletext}>
-              <Text style={styles.meditext}>약 이름</Text>
-              <Text>dfsdf</Text>
-            </View>
-        </View>          
+        <List />   
       </TouchableOpacity>
 
       {/* 밑에 있는 것들 나중에 지울 예정 -> 위에 있는걸로 반복문 만들어서 서버에서 값 있으면 계속 출력되게 수정해야 됌!! */}
