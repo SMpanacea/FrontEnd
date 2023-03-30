@@ -6,11 +6,16 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 
 // BookMark components import
 import BookMarkScreen from '../Pages/BookMark/BookMarkMain';
+// Medicin import
 import MedicineDetailScreen from '../Pages/Medicine/MedicineDetail';
+import MedicineMain from '../Pages/Medicine/MedicineMain';
+
 
 const Tab = createBottomTabNavigator(); //createBottomTabNavigator을 Tab에 저장해줌
 
@@ -26,6 +31,16 @@ function BottomTab() {
             title: '알림',
             tabBarIcon: ({color, size}) => (
               <Icon name="notifications" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="MedicineMain" //이름지정
+          component={MedicineMain}//여기 누르면 BookMarkMain으로 화면 이동
+          options={{
+            title: '모든 약 확인',
+            tabBarIcon: ({color, size}) => (
+              <Icon2 name="pill" color={color} size={size} />
             ),
           }}
         />
