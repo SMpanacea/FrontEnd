@@ -7,9 +7,30 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignIn() {
     //** 간편 로그인 시 해당 세션을 지워줘야 함. 카카오면 카카오, 구글이면 구글
+    AsyncStorage.removeItem('session');
 
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
+
+    //액시오스 통신
+    const handleLogin = async (e) => {
+        try {
+            const res = await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/login', {
+                uid: id,
+                upw: pw
+            }, {
+                withCredentials: true
+            });
+            if (res.data === true) {
+                await AsyncStorage.setItem('session', 'loggedIn');
+                console.log("성공");
+            } else {
+                console.log("실패");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <SafeAreaView style={styles.box}>
@@ -19,6 +40,7 @@ export default function SignIn() {
                 style={styles.input}
                 maxLength={14}
                 onChangeText={setId}
+                onEndEditing={console.log("되나여 : ", id)}
             />
             <Text>비밀번호</Text>
             <TextInput
@@ -42,7 +64,7 @@ export default function SignIn() {
             </View>
             <Button
                 title="로그인"
-            // onPress={()=> navigation.navigate('SignUp')}
+            onPress={()=> {handleLogin()}}
             />
             <Text marginTop={50}>긴편 로그인</Text>
             <Button title="카카오 로그인"/>
