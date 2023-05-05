@@ -1,27 +1,70 @@
-import { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { torch } from 'react-native-pytorch-core';
+import * as React from 'react';
+import {useCallback, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  Button,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Camera, Canvas, Image} from 'react-native-pytorch-core';
+import detectObjects from './Pages/screens/ObjectDetector';
+import CameraScreen from './Pages/screens/CameraScreen';
+import LoadingScreen from './Pages/screens/LoadingScreen';
+import ResultsScreen from './Pages/screens/ResultsScreen';
 
-export default function App() {
-  const [tensor, _setTensor] = useState(torch.rand([2, 3]));
+const ScreenStates = {
+  CAMERA: 0,
+  LOADING: 1,
+  RESULTS: 2,
+};
+
+export default function ObjectDetectionExample() {
+  const [image, setImage] = useState(null);
+  const [boundingBoxes, setBoundingBoxes] = useState(null);
+  const [screenState, setScreenState] = useState(ScreenStates.CAMERA);
+
+  // Handle the reset button and return to the camera capturing mode
+  const handleReset = useCallback(async () => {
+    setScreenState(ScreenStates.CAMERA);
+    if (image != null) {
+      await image.release();
+    }
+    setImage(null);
+    setBoundingBoxes(null);
+  }, [image, setScreenState]);
+
+  // This handler function handles the camera's capture event
+  async function handleImage(capturedImage) {
+    await detectObjects(capturedImage);
+    capturedImage.release();
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>{`Random tensor of shape ${tensor.shape} with data ${tensor.data()}`}</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      {screenState === ScreenStates.CAMERA && (
+        <CameraScreen onCapture={handleImage} />
+      )}
+      {screenState === ScreenStates.LOADING && <LoadingScreen />}
+      {screenState === ScreenStates.RESULTS && (
+        <ResultsScreen
+          image={image}
+          boundingBoxes={boundingBoxes}
+          onReset={handleReset}
+        />
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
-//########################################################################################
+//##############################################################################
 // import React, { useEffect, useState } from 'react';
 // import { StyleSheet, View, ActivityIndicator } from 'react-native';
 // import { useSharedValue } from 'react-native-reanimated';
