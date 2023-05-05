@@ -8,6 +8,7 @@ module.exports = function (api) {
         {
           globals: ['__labelImage'],
         },
+        'react-native-pytorch-core'
       ],
     ],
   }
