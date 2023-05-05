@@ -1,11 +1,7 @@
-// 모든 약 정보 볼 수 있는 메인화면
+//카메라 스캔 후 5개 목록 보여줄 화면
 import axios from 'axios';
 import React from 'react';
-import {StyleSheet,  View, ScrollView, TouchableOpacity , Button} from 'react-native';
-import { Text, TouchableRipple  } from 'react-native-paper';
-// 화면 비율
-import { Dimensions } from 'react-native'; 
-const { width, height } = Dimensions.get('window');
+import {StyleSheet, Text, View, ScrollView, TouchableOpacity , Button} from 'react-native';
 
 // navigation
 import 'react-native-gesture-handler';
@@ -15,23 +11,19 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import BookMarkModal from '../BookMark/BookMarkModal';
 // 약목록 보여주는 component
 import List from '../../Components/Lists';
+import Card from '../../Components/Card'
 
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
 const IP = ServerPort();
 
-function MedicineMain({navigation}) {
+function MedicineCamera({navigation}) {
 
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
-  const [page, setPage] = React.useState(1);//다음 page 번호
-
 
   React.useEffect(()=>{
     const setData = async () =>{
       await axios.get(`${IP}/medicine/search`,{
-        params: {
-          pageNo: page, // 동적으로 변경되는 페이지 번호 값
-        },
       })
       .then(function(res){
         // console.log("res데이터 잘 받아왔나요?: ", res.data);
@@ -44,44 +36,23 @@ function MedicineMain({navigation}) {
     }
     setData();
     // console.log("랜더링 되나?")
-  },[page]);//페이지 번호가 변경될 때마다 실행되도록 해줌
-
-  const handlePageChange = (newPage) => {
-    // console.log("페이지 바뀜?",newPage)
-    setPage(newPage);
-  }
-
-
+  },[]);
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>모든 약 확인할 수 있는 곳</Text>
-        
-          <List medicinedata={medicinedata}/>
-
-            <View style={{flexDirection: 'row',justifyContent:"space-between"}}>
-              <TouchableRipple style={{borderWidth:1,}} onPress={()=>{page > 1 && handlePageChange(page -1)}}>
-                <Text>이전 페이지</Text>
-              </TouchableRipple>
-              <Text>{page}</Text>
-              <TouchableRipple style={{borderWidth:1,}} onPress={()=>{handlePageChange(page +1)}}>
-                <Text>다음 페이지</Text>
-              </TouchableRipple>
-            </View>
-           
+        <Text style={styles.title}>카메라 결과 확인할 수 있는 곳</Text>
+          <Card medicinedata={medicinedata}/>
       </ScrollView> 
-      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: width-15,
-    height: height,
     flex: 1,
-    padding: 20,
+    padding: 24,
+    backgroundColor: '#eaeaea',
   },
   title: {
     borderBottomWidth:1,
@@ -122,5 +93,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default MedicineMain;
+export default MedicineCamera;
 

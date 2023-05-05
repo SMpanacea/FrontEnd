@@ -10,10 +10,12 @@ import 'react-native-gesture-handler';
 // 외부에서 불러온 것들
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BookMarkModal from './BookMarkModal';
-
-// 약 목록 보여주는 component
+// 약목록 보여주는 component
 import List from '../../Components/Lists';
 
+// 화면 비율
+import { Dimensions } from 'react-native'; 
+const { width, height } = Dimensions.get('window');
 
 
 function BookMarkMain({navigation}) {
@@ -24,8 +26,9 @@ function BookMarkMain({navigation}) {
         <Text style={styles.title}>즐겨찾기한 약 확인하는 곳</Text>
 
         
+        
       <TouchableOpacity onPress={()=>{navigation.navigate("MedicineDetail")}}>
-        <List />   
+        <List />
       </TouchableOpacity>
 
       {/* 밑에 있는 것들 나중에 지울 예정 -> 위에 있는걸로 반복문 만들어서 서버에서 값 있으면 계속 출력되게 수정해야 됌!! */}
@@ -59,12 +62,12 @@ function BookMarkMain({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
+    width: width-15,
+    // height: height,
     flex: 1,
     padding: 24,
-    backgroundColor: '#eaeaea',
   },
   title: {
-    borderWidth:1,
     borderBottomWidth:1,
     borderBottomColor: 'black',
     marginBottom: '10%',
