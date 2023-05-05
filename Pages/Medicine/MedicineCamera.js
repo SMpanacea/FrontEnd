@@ -13,6 +13,10 @@ import BookMarkModal from '../BookMark/BookMarkModal';
 import List from '../../Components/Lists';
 import Card from '../../Components/Card'
 
+// 화면 비율
+import { Dimensions } from 'react-native'; 
+const { width, height } = Dimensions.get('window');
+
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
 const IP = ServerPort();
@@ -50,6 +54,8 @@ function MedicineCamera({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
+    width: width-15,
+    height: height,
     flex: 1,
     padding: 24,
     backgroundColor: '#eaeaea',
