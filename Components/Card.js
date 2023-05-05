@@ -43,6 +43,7 @@ import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 // 아이콘
 import Icon from 'react-native-vector-icons/FontAwesome';
+import noimage from '../assets/noimage.png';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="pill" />
 
@@ -63,8 +64,12 @@ const MyComponent = ({medicinedata}) => {
             {/* <Text variant="titleLarge">{medicinedata[idx].updateDe}</Text> */}
             {/* <Text variant="bodyMedium">{medicinedata[idx].updateDe}</Text> */}
           </Card.Content>
-            {
+            {/* {
                 medicinedata[idx].itemImage === null?<Icon style={styles.mediicon} name="medkit" size={70} color="black" />:
+                <Card.Cover source={{uri : medicinedata[idx].itemImage}}/>
+            } */}
+            {
+                medicinedata[idx].itemImage === null?<Card.Cover source={noimage}/>:
                 <Card.Cover source={{uri : medicinedata[idx].itemImage}}/>
             }
           {/* <Card.Cover source={{ uri: item.imageUri }} /> */}
