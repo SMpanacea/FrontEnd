@@ -15,6 +15,10 @@ import { SearchBar } from '@rneui/themed';
 
 import Search from '../../Components/Search';
 
+// 화면 비율
+import { Dimensions } from 'react-native'; 
+const { width, height } = Dimensions.get('window');
+
 const MediModalbox = ({visible, children}) => {
   const [showModal, setShowModal] = React.useState(visible);
   const scaleValue = React.useRef(new Animated.Value(0)).current;
@@ -170,34 +174,23 @@ const styles = StyleSheet.create({
   pluesbox:{
     // borderWidth:1, 
     // borderColor:"blue", 
-    bottom:150, 
-    height:100, 
-    width:100, 
-    left:150,  
-    bottom:60
+    // width: width/,
+    height: height*0.2,
+    // bottom:150, 
+    // height:100, 
+    // width:100, 
+    left:120,  
+    // bottom:60
   },
   pluestouch:{
-    // borderWidth:1, 
-    // borderColor:"green", 
     marginTop:10,     
     justifyContent: 'center',
   },
   plues:{
-    // borderWidth:1, 
-    // borderColor:"red",
     height:'100%',
     width:100,
     padding:10,
     marginTop:10,
-    // marginTop:10
-    // position : 'absolute',
-    // alignItems: 'center',
-    // top:10,
-    // marginTop:10,
-    // height:'100%',
-    // bottom:'0%',
-    // left:55,
-    // right:'0%',
   },
   modalBackGround: {
     flex: 1,
