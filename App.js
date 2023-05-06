@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useCallback, useRef, useState} from 'react';
 import {
   ActivityIndicator,
-  Button,
+  Button,  
   SafeAreaView,
   StyleSheet,
   Text,
@@ -38,8 +38,18 @@ export default function ObjectDetectionExample() {
 
   // This handler function handles the camera's capture event
   async function handleImage(capturedImage) {
-    await detectObjects(capturedImage);
-    capturedImage.release();
+    setImage(capturedImage);
+    // Wait for image to process through YOLOv5 model and draw resulting image
+    setScreenState(ScreenStates.LOADING);
+    try {
+      const newBoxes = await detectObjects(capturedImage);
+      setBoundingBoxes(newBoxes);
+      // Switch to the ResultsScreen to display the detected objects
+      setScreenState(ScreenStates.RESULTS);
+    } catch (err) {
+      // In case something goes wrong, go back to the CameraScreen to take a new picture
+      handleReset();
+    }
   }
 
   return (
