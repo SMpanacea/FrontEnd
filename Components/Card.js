@@ -58,7 +58,7 @@ const MyComponent = ({medicinedata}) => {
   return (
     <View>
       {medicinedata.map((item, idx) => (
-        <Card key={idx} style={{marginBottom:50}} onPress={() => handlePress(medicinedata[idx].itemSeq)}>
+        <Card key={idx} style={{marginBottom:30}} onPress={() => handlePress(medicinedata[idx].itemSeq)}>
           <Card.Title title={medicinedata[idx].itemName} subtitle={medicinedata[idx].updateDe} left={LeftContent} />
           <Card.Content>
             {/* <Text variant="titleLarge">{medicinedata[idx].updateDe}</Text> */}
