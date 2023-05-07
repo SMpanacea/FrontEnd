@@ -1,8 +1,8 @@
 // 모든 약 정보 볼 수 있는 메인화면
 import axios from 'axios';
 import React from 'react';
-import {StyleSheet,  View, ScrollView, TouchableOpacity , Button} from 'react-native';
-import { Text, TouchableRipple  } from 'react-native-paper';
+import {StyleSheet,  View, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, TouchableRipple, Button  } from 'react-native-paper';
 // 화면 비율
 import { Dimensions } from 'react-native'; 
 const { width, height } = Dimensions.get('window');
@@ -15,6 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import BookMarkModal from '../BookMark/BookMarkModal';
 // 약목록 보여주는 component
 import List from '../../Components/Lists';
+import Card from '../../Components/Card';
 
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
@@ -56,21 +57,20 @@ function MedicineMain({navigation}) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>모든 약 확인할 수 있는 곳</Text>
-        
-          <List medicinedata={medicinedata}/>
+        {/* <Text style={styles.title}>모든 약 확인할 수 있는 곳</Text> */}
 
-            <View style={{flexDirection: 'row',justifyContent:"space-between"}}>
-              <TouchableRipple style={{borderWidth:1,}} onPress={()=>{page > 1 && handlePageChange(page -1)}}>
-                <Text>이전 페이지</Text>
-              </TouchableRipple>
-              <Text>{page}</Text>
-              <TouchableRipple style={{borderWidth:1,}} onPress={()=>{handlePageChange(page +1)}}>
-                <Text>다음 페이지</Text>
-              </TouchableRipple>
-            </View>
-           
+          {/* <List medicinedata={medicinedata}/> */}
+          <Card medicinedata={medicinedata}/>
       </ScrollView> 
+      <View style={{flexDirection: 'row',justifyContent:"space-between", marginTop:20,}}>
+        <TouchableRipple onPress={()=>{page > 1 && handlePageChange(page -1)}}>
+          <Button mode="Outlined">이전 페이지</Button>
+        </TouchableRipple>
+        <Text>{page}</Text>
+        <TouchableRipple onPress={()=>{handlePageChange(page +1)}}>
+          <Button mode="Outlined">다음 페이지</Button>
+        </TouchableRipple>
+      </View>
       
     </View>
   );
