@@ -45,7 +45,6 @@ function MedicineCamera({navigation}) {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>카메라 결과 확인할 수 있는 곳</Text>
           <Card medicinedata={medicinedata}/>
       </ScrollView> 
     </View>
