@@ -55,7 +55,7 @@ function MedicineDetail({navigation, route}) {
  
   return (
     <>
-    <StatusBar  hidden={true} />
+ 
       <CustomHeader title={medicinname} route={{ params: { medicinedetail } }} />  
       <View style={styles.container}> 
         <ScrollView>
