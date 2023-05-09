@@ -216,7 +216,7 @@
 
 import axios from 'axios';
 import React, {useState, useEffect, useRef} from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground} from "react-native";
+import { StyleSheet, Text, View, Image, ImageBackground, Alert} from "react-native";
 import {Camera, CameraType} from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 
@@ -234,7 +234,7 @@ const IP = ServerPort();
 
 
 
-function CameraSearch() {
+function CameraSearch({ navigation }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [image, setImage] = useState(null);
   const [isFirstPictureTaken, setIsFirstPictureTaken] = useState(false);
@@ -258,66 +258,91 @@ function CameraSearch() {
     format: 'png',
   };
 
-  //사진 찍기 버튼
-  const takePicture = async () => {
-    if (cameraRef.current) {
-      try {
-        const data = await cameraRef.current.takePictureAsync();
-
-        const pngPhoto = await ImageManipulator.manipulateAsync(
-          data.uri,
-          [{ resize: { width: data.width, height: data.height } }],
-          { compress: 0, format: ImageManipulator.SaveFormat.PNG }
-        );
-
-
-        console.log("png 변환");
-        console.log(pngPhoto.uri);
-
-
-        console.log(data);
-        if (photos.length === 1) {
-          // 두 번째 이미지를 찍을 때
-          alert('사진 배열에 저장 완료♪');
-          console.log("배열 확인용",photos.length)
-          console.log(photos)
-          // sendImageToServer(photos[0], data.uri);
-          setPhotos([...photos, pngPhoto.uri]); // 이전 배열에 새로운 데이터 추가
-          console.log("두번째 사진 배열 저장");
-          setIsFirstPictureTaken(false);
-          saveImage([...photos, pngPhoto.uri]);
-        } else {
-          // 첫 번째 이미지를 찍었을 때
-          alert('사진 배열에 저장 완료♪');
-          alert('두번째 사진을 찍어주세요!');
-          setPhotos([pngPhoto.uri]);
-          console.log("배열 확인용",photos.length)
-          console.log(photos)
-          setIsFirstPictureTaken(true);
-        }
-      } catch (e) {
-        console.log("사진 찍기 실패,,,", e);
-      }
-    }
-  };
-  
-
-  // const nextPicture = async () => {
-  //   if (image) {
+  //사진 찍기 버튼 (alert수정 전)
+  // const takePicture = async () => {
+  //   if (cameraRef.current) {
   //     try {
-  //       const asset = await MediaLibrary.createAssetAsync(image.uri); // 여기에서 변경됨
-  //       setPhotos([...photos, asset]);
-  //       alert('사진 배열에 저장 완료♪')
-  //       console.log("배열",photos)
-  //       setImage(null);
-  //       // setIsFirstPictureTaken(false);
-        
+  //       const data = await cameraRef.current.takePictureAsync();
+
+  //       const pngPhoto = await ImageManipulator.manipulateAsync(
+  //         data.uri,
+  //         [{ resize: { width: data.width, height: data.height } }],
+  //         { compress: 0, format: ImageManipulator.SaveFormat.PNG }
+  //       );
+
+
+  //       console.log("png 변환");
+  //       console.log(pngPhoto.uri);
+
+
+  //       console.log(data);
+  //       if (photos.length === 1) {
+  //         // 두 번째 이미지를 찍을 때
+  //         alert('사진 배열에 저장 완료♪');
+  //         console.log("배열 확인용",photos.length)
+  //         console.log(photos)
+  //         // sendImageToServer(photos[0], data.uri);
+  //         setPhotos([...photos, pngPhoto.uri]); // 이전 배열에 새로운 데이터 추가
+  //         console.log("두번째 사진 배열 저장");
+  //         setIsFirstPictureTaken(false);
+  //         saveImage([...photos, pngPhoto.uri]);
+  //       } else {
+  //         // 첫 번째 이미지를 찍었을 때
+  //         // alert('사진 배열에 저장 완료♪');
+  //         alert('두번째 사진을 찍어주세요!');
+  //         setPhotos([pngPhoto.uri]);
+  //         console.log("배열 확인용",photos.length)
+  //         console.log(photos)
+  //         setIsFirstPictureTaken(true);
+  //       }
   //     } catch (e) {
-  //       console.log("사진 저장하기 실패,,,", e)
+  //       console.log("사진 찍기 실패,,,", e);
   //     }
-      
   //   }
-  // }
+  // };
+
+    //사진 찍기 버튼(alert 수정 중,,,)
+    const takePicture = async () => {
+      if (cameraRef.current) {
+        try {
+          const data = await cameraRef.current.takePictureAsync();
+  
+          const pngPhoto = await ImageManipulator.manipulateAsync(
+            data.uri,
+            [{ resize: { width: data.width, height: data.height } }],
+            { compress: 0, format: ImageManipulator.SaveFormat.PNG }
+          );
+  
+  
+          console.log("png 변환");
+          console.log(pngPhoto.uri);
+  
+  
+          console.log(data);
+          if (photos.length === 1) {
+            // 두 번째 이미지를 찍을 때
+            alert('사진 배열에 저장 완료♪');
+            console.log("배열 확인용",photos.length)
+            console.log(photos)
+            // sendImageToServer(photos[0], data.uri);
+            setPhotos([...photos, pngPhoto.uri]); // 이전 배열에 새로운 데이터 추가
+            console.log("두번째 사진 배열 저장");
+            setIsFirstPictureTaken(false);
+            saveImage([...photos, pngPhoto.uri]); //saveImage에 이미지 저장된 배열 보내줌
+          } else {
+            // 첫 번째 이미지를 찍었을 때
+            // alert('사진 배열에 저장 완료♪');
+            alert('두번째 사진을 찍어주세요!');
+            setPhotos([pngPhoto.uri]);
+            console.log("배열 확인용",photos.length)
+            console.log(photos)
+            setIsFirstPictureTaken(true);
+          }
+        } catch (e) {
+          console.log("사진 찍기 실패,,,", e);
+        }
+      }
+    };
 
   //사진 저장하기 버튼
   const saveImage = async (saveImage) => {
@@ -328,8 +353,8 @@ function CameraSearch() {
         const asset1 = await MediaLibrary.createAssetAsync(saveImage[0]); // 여기에서 변경됨
         const asset2 = await MediaLibrary.createAssetAsync(saveImage[1]); // 여기에서 변경됨
 
-        await sendImageToServer(saveImage); // Flask 서버로 이미지 전송
-        alert('사진 저장 완료♪')
+        await sendImageToServer(saveImage); // Flask 서버로 이미지 전송 (sendImageToServer로 saveImage담아서 보냄)
+        // alert('사진 저장 완료♪')
         
         setImage(null);
         setIsFirstPictureTaken(false);
@@ -343,7 +368,7 @@ function CameraSearch() {
   const sendImageToServer = async (imageUri) => {
     try {
       console.log("보내기전 배열 확인용");
-          console.log(imageUri);
+      console.log(imageUri);
       const image = new FormData();
       image.append('image1', {
         uri: imageUri[0],
@@ -359,9 +384,22 @@ function CameraSearch() {
       }
       console.log("image만듦");
       console.log(image);
-      const res = await axios.post(`${IP}/user/image`, image, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      // const res = await axios.post(`${IP}/user/image`, image, {
+      //   headers: { 'Content-Type': 'multipart/form-data' }
+      // });
+      // alert('사진 저장 완료♪')
+      Alert.alert(
+        '사진 저장 완료♪',
+        '확인',
+        [
+          {
+            text: '확인',
+            onPress: () => {
+              navigation.navigate('CameraList');
+            },
+          },
+        ],
+      );
 
       console.log("돌아옴");
       console.log(res);
@@ -369,18 +407,6 @@ function CameraSearch() {
     } catch (e) {
       console.log('사진 axios 서버로 보내기 실패,,,', e)
       console.log("나오냐", image)
-      // if (e.response) {
-      //   // 요청은 성공했지만 응답에서 오류 코드가 반환됨
-      //   console.log('response.data:', e.response.data);
-      //   console.log('response.status:', e.response.status);
-      //   console.log('response.headers:', e.response.headers);
-      // } else if (e.request) {
-      //   // 요청을 보냈으나 응답을 받지 못함
-      //   console.log('request:', e.request);
-      // } else {
-      //   // 요청을 보내기 전에 오류가 발생함
-      //   console.log('Error:', e.message);
-      // }
     }
   };  
  
@@ -400,7 +426,7 @@ function CameraSearch() {
         flashMode={flash}
         ref={cameraRef}
       >
-         <View style={{flexDirection:'row', justifyContent:'space-between', padding:20,}}>
+        <View style={{flexDirection:'row', justifyContent:'space-between', padding:20,}}>
           <CameraButton icon={'retweet'} onPress={() => {
             setType(type === CameraType.back ? CameraType.front : CameraType.back)
           }}/>
@@ -415,29 +441,24 @@ function CameraSearch() {
       <Image source={{uri: image.uri}} style={styles.camera}/>
       }
       <View>
-        {/* {image ?
-        <View style={{flexDirection:"row", justifyContent: 'space-between', paddingHorizontal: 50}}>
-          <CameraButton title={"Re-take"} icon="retweet" onPress={() => setImage(null)}/>
-          <CameraButton title={"save"} icon="check" onPress={saveImage}/>
-        </View>
-        :
         <CameraButton title={'Take a picture'} icon="camera" onPress={takePicture}/>
-        } */}
-       {image ?
-  <View style={{flexDirection:"row", justifyContent: 'space-between', paddingHorizontal: 50}}>
-    {isFirstPictureTaken ? 
-      <CameraButton title={"Next Picture"} icon="camera" onPress={nextPicture}
-      /> :
-      <>
-        <CameraButton title={"Re-take"} icon="retweet" onPress={() => setImage(null)}/>
-        <CameraButton title={"save"} icon="check" onPress={saveImage}/>
-      </>
-    }
-  </View>
-  :
-  <CameraButton title={'Take a picture'} icon="camera" onPress={takePicture}/>
-}
       </View>
+      {/* <View>
+       {image ?
+          <View style={{flexDirection:"row", justifyContent: 'space-between', paddingHorizontal: 50}}>
+            {isFirstPictureTaken ? 
+              <CameraButton title={"Next Picture"} icon="camera" onPress={nextPicture}
+              /> :
+              <>
+                <CameraButton title={"Re-take"} icon="retweet" onPress={() => setImage(null)}/>
+                <CameraButton title={"save"} icon="check" onPress={saveImage}/>
+              </>
+            }
+          </View>
+            :
+          <CameraButton title={'Take a picture'} icon="camera" onPress={takePicture}/>
+        }
+      </View> */}
     </View>
   )
   
