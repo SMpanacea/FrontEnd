@@ -12,6 +12,7 @@ import Lists from '../Components/Lists';
 // 약 관련 import
 import MedicineMain from '../Pages/Medicine/MedicineMain';
 import MedicineDetail from '../Pages/Medicine/MedicineDetail';
+import MedicineCamera from '../Pages/Medicine/MedicineCamera';
 
 // bottomTab
 // import BottomTabNavigationApp from './BottomTabNavigationApp';
@@ -37,6 +38,10 @@ const Auth = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name='bottom' component={BottomTab} options={ {headerShown:false,tabBarStyle: {display: 'none'}}} />
+      {/* <Stack.Screen name="CameraList" component={MedicineCamera} options={ {headerShown:false,tabBarStyle: {display: 'none'}}}/> */}
+      <Stack.Screen name="CameraList" options={{ headerShown: false }}>
+        {(props) => <MedicineCamera {...props} navigation={props.navigation} />}
+      </Stack.Screen>
         <Stack.Screen name="Main" component={MedicineMain} options={ {headerShown:false,tabBarStyle: {display: 'none'}}}/>
         <Stack.Screen name="Detail" component={MedicineDetail} options={{
           headerShown:false,
