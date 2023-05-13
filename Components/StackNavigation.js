@@ -31,7 +31,7 @@ const Stack = createStackNavigator();
 // const StarStack = createStackNavigator();
 
 // header
-import CustomHeader from './CustomHeader';
+// import CustomHeader from './CustomHeader';
 
 
 const Auth = () => {
@@ -43,13 +43,17 @@ const Auth = () => {
         {(props) => <MedicineCamera {...props} navigation={props.navigation} />}
       </Stack.Screen>
         <Stack.Screen name="Main" component={MedicineMain} options={ {headerShown:false,tabBarStyle: {display: 'none'}}}/>
-        <Stack.Screen name="Detail" component={MedicineDetail} options={{
-          headerShown:false,
+        {/* <Stack.Screen name="Detail" component={MedicineDetail} options={{
+          // headerShown:false,
           tabBarStyle: {display: 'none'},
-          header: ({ navigation, route }) => (
-            <CustomHeader title="Details" navigation={navigation} />
-          ),
-          }}/>
+          // header: ({ navigation, route }) => (
+          //   <CustomHeader title="Details" navigation={navigation} />
+          // ),
+          }}/> */}
+          <Stack.Screen
+            name="Detail"
+            component={MedicineDetail}
+          />
     </Stack.Navigator>
   );
 };
