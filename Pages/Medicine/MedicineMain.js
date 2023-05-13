@@ -110,10 +110,11 @@ function MedicineMain({navigation}) {
         <Loading /> // 로딩 중인 동안 로딩 스피너 표시
       ) : (
         <ScrollView style={{margin:10}}>
-          <Card medicinedata={medicinedata} />
-        </ScrollView>
-      )}
-      <View style={{flexDirection: 'row',justifyContent:"space-between", alignItems:'center'}}>
+          <Card 
+            medicinedata={medicinedata} 
+            onPress={(medicinename) => navigation.navigate('Detail', { medicinename })}
+          />
+          <View style={{flexDirection: 'row',justifyContent:"space-between", alignItems:'center'}}>
          <TouchableRipple onPress={()=>{page > 1 && handlePageChange(page -1)}}>
            <Button mode="Outlined">이전 페이지</Button>
          </TouchableRipple>
@@ -122,6 +123,9 @@ function MedicineMain({navigation}) {
            <Button mode="Outlined">다음 페이지</Button>
          </TouchableRipple>
       </View>
+        </ScrollView>
+      )}
+      
     </View>
   );
 }
