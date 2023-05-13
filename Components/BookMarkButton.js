@@ -7,7 +7,9 @@ import bookmarkedImage from '../assets/binstar.png';
 // <TouchableOpacity onPress={handleBookmark}> -> 여기 누르면 handleBookmark실행됨
 // <Image source={bookmarked ? bookmarkedImage : bookmarkImage} style={styles.image} /> -> bookmarked값이 없으면 빈별보여주고 bookmarked값이 있으면 별보여주기 
 
-const BookMarkButton = () => {
+function BookMarkButton ({navigation, route}){
+  // const {medicinedatitemSeq} = route.params;//다른 컴포넌트에서 넘겨받은 약 고유값
+  // console.log("bookmark값 잘 넘어오나요?",medicinedatitemSeq)
   const [bookmarked, setBookmarked] = useState(true); //useState를 사용해서 즐겨찾기 했는지 안 했는지 알려줌 초기설정은 true임 
 
   const handleBookmark = () => { //bookmark핸들러
