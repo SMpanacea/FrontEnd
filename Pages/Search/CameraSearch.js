@@ -235,12 +235,12 @@ const IP = ServerPort();
 
 
 function CameraSearch({ navigation }) {
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [image, setImage] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(null);//카메라 권한
+  const [image, setImage] = useState(null);//이미지
   const [isFirstPictureTaken, setIsFirstPictureTaken] = useState(false);
-  const [photos, setPhotos] = useState([]);
-  const [type, setType] = useState(Camera.Constants.Type.back);
-  const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+  const [photos, setPhotos] = useState([]);//이미지 저장할 배열
+  const [type, setType] = useState(Camera.Constants.Type.back);//사진 type지정
+  const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);//불 켜져랏!
   const cameraRef = useRef(null);
 
   //카메라 권한 물어보기
@@ -252,6 +252,22 @@ function CameraSearch({ navigation }) {
       setHasCameraPermission(cameraStatus.status === 'granted');
     })();
     alert('첫번째 사진을 찍어주세요!');
+    // const unsubscribe = navigation.addListener('focus', () => {
+    //   // 다시 focus 될 때 실행될 코드
+    //   // 예를 들어, 사진 찍는 화면으로 이동하기 전에 초기화할 상태를 초기화할 수 있습니다.
+    //   useEffect();
+    // });
+    // return navigation.addListener('focus',async () => {
+    //   // 다시 focus 될 때 실행될 코드
+    //   // 예를 들어, 사진 찍는 화면으로 이동하기 전에 초기화할 상태를 초기화할 수 있습니다.
+    //   alert('다시 focus 되었습니다! 첫번째 사진 찍으실?');
+    //   if (cameraRef.current) {
+    //     if (!cameraRef.current._isMounted) {
+    //       await cameraRef.current.resumePreview();
+    //     }
+    //     CameraSearch();
+    //   }
+    // });
   }, [])
 
   const options = {
@@ -301,7 +317,7 @@ function CameraSearch({ navigation }) {
   //   }
   // };
 
-    //사진 찍기 버튼(alert 수정 중,,,)
+    //사진 찍기 버튼(alert 수정 완료, 다시 돌아왔을 때는 수정전)
     const takePicture = async () => {
       if (cameraRef.current) {
         try {
@@ -343,6 +359,7 @@ function CameraSearch({ navigation }) {
         }
       }
     };
+
 
   //사진 저장하기 버튼
   const saveImage = async (saveImage) => {
