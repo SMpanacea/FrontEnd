@@ -217,6 +217,16 @@ function BottomTab() {
           ),
         }}
       />
+      <Tab.Screen
+        name="GPT"
+        component={GPT}
+        options={{
+          tabBarLabel: '카메라결과목록',
+          tabBarIcon: ({ color }) => (
+            <Icon2 name="chat" color={color} size={26} />
+          ),
+        }}
+      />
       </Tab.Navigator>
 
    
