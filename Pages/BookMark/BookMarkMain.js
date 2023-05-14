@@ -50,10 +50,10 @@ function BookMarkMain({navigation}) {
         </View>
        </ScrollView> 
 
-      <View style={styles.medimodal}>
-        {/* <MediModal /> */}
+      {/* <View style={styles.medimodal}>
+        <MediModal />
         <BookMarkModal/>
-      </View>
+      </View> */}
       
     </View>
     

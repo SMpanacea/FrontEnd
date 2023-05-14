@@ -43,11 +43,15 @@ import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 // 아이콘
 import Icon from 'react-native-vector-icons/FontAwesome';
+import noimage from '../assets/noimage.png';
+
 
 const LeftContent = props => <Avatar.Icon {...props} icon="pill" />
 
-const MyComponent = ({medicinedata}) => {
+const MyComponent = ({medicinedata, bookmark}) => {
   const navigation = useNavigation();
+
+  console.log("여기가 마지노선?",bookmark)
   
   const handlePress = (itemSeq) => {
     console.log("itemSeq나와라@", itemSeq)
@@ -57,20 +61,24 @@ const MyComponent = ({medicinedata}) => {
   return (
     <View>
       {medicinedata.map((item, idx) => (
-        <Card key={idx} style={{marginBottom:30}}>
+        <Card key={idx} style={{marginBottom:30}} onPress={() => handlePress(medicinedata[idx].itemSeq)}>
           <Card.Title title={medicinedata[idx].itemName} subtitle={medicinedata[idx].updateDe} left={LeftContent} />
           <Card.Content>
             {/* <Text variant="titleLarge">{medicinedata[idx].updateDe}</Text> */}
             {/* <Text variant="bodyMedium">{medicinedata[idx].updateDe}</Text> */}
-          </Card.Content>
-            {
+          </Card.Content >
+            {/* {
                 medicinedata[idx].itemImage === null?<Icon style={styles.mediicon} name="medkit" size={70} color="black" />:
+                <Card.Cover source={{uri : medicinedata[idx].itemImage}}/>
+            } */}
+            {
+                medicinedata[idx].itemImage === null?<Card.Cover source={noimage}/>:
                 <Card.Cover source={{uri : medicinedata[idx].itemImage}}/>
             }
           {/* <Card.Cover source={{ uri: item.imageUri }} /> */}
           <Card.Actions>
             {/* <Button onPress={() => console.log("취소")}>Cancel</Button> */}
-            <Button onPress={() => handlePress(medicinedata[idx].itemSeq)}>약 보러가기</Button>
+            {/* <Button onPress={() => handlePress(medicinedata[idx].itemSeq)}>약 보러가기</Button> */}
           </Card.Actions>
         </Card>
       ))}

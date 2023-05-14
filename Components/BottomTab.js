@@ -155,24 +155,15 @@ const Tab = createMaterialBottomTabNavigator(); //createBottomTabNavigator을 Ta
 
 function BottomTab() {
   return (
-    <SafeAreaView style={{ flex: 1}}>
+    
       <Tab.Navigator
         initialRouteName="BookMarkMain"
         // animationEasing={Easing.linear}
         barStyle={{
           backgroundColor: '#FFFFFF',
-          paddingBottom: Platform.OS === 'ios' ? 20 : 0, // 안전 영역 고려
-          ...Platform.select({
-            android: {
-              elevation: 10, // 안드로이드에서 그림자 추가
-            },
-          }),
+          paddingBottom: Platform.OS === 'ios' ? 20 : 0, // 안전 영역 고려          
           // height:50
         }}
-        // barStyle={{ 
-        //   backgroundColor: '#FFFFFF',
-        //   height: 50, // 탭 바 높이 조절 
-        // }}
         activeColor="#6200EE"
         inactiveColor="#95A5A6"
       >
@@ -181,7 +172,7 @@ function BottomTab() {
         component={BookMarkScreen}
         options={{
           tabBarLabel: '알림',
-          tabBarIcon: ({ color }) => (
+          tabBarIcon: ({ color, size }) => (
             <Icon name="notifications" color={color} size={26} />
           ),
         }}
@@ -197,6 +188,16 @@ function BottomTab() {
         }}
       />
       <Tab.Screen
+        name="CameraSearch"
+        component={CameraSearch}
+        options={{
+          tabBarLabel: '카메라 사진찍어!!',
+          tabBarIcon: ({ color }) => (
+            <Icon2 name="camera" color={color} size={26} />
+          ),
+        }}
+      />
+      {/* <Tab.Screen
         name="NoMyPage"
         component={NoMemberMyPage}
         options={{
@@ -205,7 +206,7 @@ function BottomTab() {
             <Icon3 name="people-outline" color={color} size={26} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="MedicineCamera"
         component={MedicineCamera}
@@ -216,9 +217,19 @@ function BottomTab() {
           ),
         }}
       />
+      <Tab.Screen
+        name="GPT"
+        component={GPT}
+        options={{
+          tabBarLabel: '카메라결과목록',
+          tabBarIcon: ({ color }) => (
+            <Icon2 name="chat" color={color} size={26} />
+          ),
+        }}
+      />
       </Tab.Navigator>
 
-    </SafeAreaView>
+   
     
     
   );

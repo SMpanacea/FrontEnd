@@ -6,53 +6,74 @@ import {StyleSheet, Text, View, ScrollView, TouchableOpacity , Button} from 'rea
 // navigation
 import 'react-native-gesture-handler';
 
-// 외부에서 불러온 것들
-import Icon from 'react-native-vector-icons/FontAwesome';
-import BookMarkModal from '../BookMark/BookMarkModal';
+
 // 약목록 보여주는 component
-import List from '../../Components/Lists';
 import Card from '../../Components/Card'
+
+// 화면 비율
+import { Dimensions } from 'react-native'; 
+const { width, height } = Dimensions.get('window');
+
+// 로딩
+import Loading from '../../Components/Loading';
+
 
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
 const IP = ServerPort();
 
 function MedicineCamera({navigation}) {
-
+  // // 카메라 이미지 잘 넘어오는지 테스트용으로 한번 해보는 거임
+  // const image = navigation.getParam('image', []);
+  // console.log("image배열 잘 받아오냐?", image)
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
-
+  const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
+  // console.log("야@!!@!@!@!!@잘 오냐?",props); // 확인하려는 props 로그 출력
   React.useEffect(()=>{
     const setData = async () =>{
-      await axios.get(`${IP}/medicine/search`,{
-      })
-      .then(function(res){
-        // console.log("res데이터 잘 받아왔나요?: ", res.data);
-        // console.log("페이지", page)
+      setIsLoading(true); // 로딩 상태 true 로 변경
+      try{
+        const res = await axios.get(`${IP}/medicine/search`,{
+        });
         setMedicinedata(res.data.items);
-      })
-      .catch(function(error){
+      } catch(error){
         console.log("Medicin 목록 가져오기 실패,,,", error)
-      })
+      } finally {
+        setIsLoading(false); // 로딩 상태 false 로 변경
+      }
     }
     setData();
-    // console.log("랜더링 되나?")
   },[]);
 
   return (
+
+  //   <View style={styles.container}>
+  //   {photos.map((photo, index) => (
+  //     <Image key={index} source={{ uri: photo }} style={styles.image} />
+  //   ))}
+  // </View>
     <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>카메라 결과 확인할 수 있는 곳</Text>
+      {isLoading ? (
+        <Loading /> // 로딩 중인 동안 로딩 스피너 표시
+      ) : (
+        <ScrollView style={{margin:10}}>
           <Card medicinedata={medicinedata}/>
-      </ScrollView> 
+        </ScrollView> 
+      )}
+      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    width: width,
+    height: height,
     flex: 1,
-    padding: 24,
-    backgroundColor: '#eaeaea',
+    paddingTop:20,
+    paddingRight:20,
+    paddingLeft:20,
+    backgroundColor:'#eaeaea'
   },
   title: {
     borderBottomWidth:1,
