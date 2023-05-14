@@ -30,6 +30,7 @@ function MedicineMain({navigation}) {
   const [page, setPage] = React.useState(1);//다음 page 번호
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
 
+
   // React.useEffect(()=>{
   //   const setData = async () =>{
   //     await axios.get(`${IP}/medicine/search`,{
@@ -49,6 +50,9 @@ function MedicineMain({navigation}) {
   //   setData();
   //   // console.log("랜더링 되나?")
   // },[page]);//페이지 번호가 변경될 때마다 실행되도록 해줌
+
+ 
+
 
   React.useEffect(() => {
     const setData = async () => {
@@ -112,7 +116,7 @@ function MedicineMain({navigation}) {
         <ScrollView style={{margin:10}}>
           <Card 
             medicinedata={medicinedata} 
-            onPress={(medicinename) => navigation.navigate('Detail', { medicinename })}
+            onPress={(medicinename, bookmark) => navigation.navigate('Detail', { medicinename, bookmark })}
           />
           <View style={{flexDirection: 'row',justifyContent:"space-between", alignItems:'center'}}>
          <TouchableRipple onPress={()=>{page > 1 && handlePageChange(page -1)}}>
