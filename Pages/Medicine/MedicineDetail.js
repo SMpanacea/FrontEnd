@@ -12,8 +12,8 @@ import Medi from '../../assets/medi.png';
 // 즐겨찾기 icon
 import BookMarkButton from '../../Components/BookMarkButton';
 
-//약 정보
-import Meditext from '../../Components/MediText';
+// //약 정보
+// import Meditext from '../../Components/MediText';
 
 // 로딩
 import Loading from '../../Components/Loading';
