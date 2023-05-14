@@ -13,7 +13,7 @@ import Medi from '../../assets/medi.png';
 import BookMarkButton from '../../Components/BookMarkButton';
 
 //약 정보
-// import Meditext from '../../Components/MediText';
+import Meditext from '../../Components/MediText';
 
 // 로딩
 import Loading from '../../Components/Loading';
@@ -152,7 +152,7 @@ function MedicineDetail({navigation, route}) {
             <View style={styles.meditextbox}>
               <View>
               {/* 약 데이터 정보 뿌리는 화면 */}
-                <View style={{flex:1,paddingBottom:10,}}>
+                <View style={{flex:1,}}>
                   <Text style={{margin:10,}}>효능</Text>
                   {medicinedetail&&medicinedetail.efcyQesitm ? (
                     <View style={{
@@ -163,7 +163,6 @@ function MedicineDetail({navigation, route}) {
                       height:90,
                       padding:10, 
                       borderRadius:20,
-                      paddingBottom:10,
                       }}
                     >
                       <Text style={{ textAlignVertical: 'center' }}>{medicinedetail.efcyQesitm}</Text> 
@@ -172,19 +171,10 @@ function MedicineDetail({navigation, route}) {
                       <Text>값이 없어!</Text>
                     )}
                 </View>
-                <View style={{flex:1,paddingBottom:10,}}>
-                  <Text style={{margin:10,}}>사용법</Text>
+                <View>
+                  <Text>사용법</Text>
                   {medicinedetail&&medicinedetail.useMethodQesitm ? (
-                      <Text style={{
-                        flex:1, 
-                        backgroundColor:'red', 
-                        alignItems:"center", 
-                        justifyContent: "center",
-                        height:90,
-                        padding:10, 
-                        borderRadius:20,
-                        paddingBottom:10,
-                        }}>{medicinedetail.useMethodQesitm}</Text>
+                      <Text>{medicinedetail.useMethodQesitm}</Text>
                     ) : (
                       <Text>값이 없어!</Text>
                     )}
