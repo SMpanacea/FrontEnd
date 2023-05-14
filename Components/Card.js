@@ -45,10 +45,13 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import noimage from '../assets/noimage.png';
 
+
 const LeftContent = props => <Avatar.Icon {...props} icon="pill" />
 
-const MyComponent = ({medicinedata}) => {
+const MyComponent = ({medicinedata, bookmark}) => {
   const navigation = useNavigation();
+
+  console.log("여기가 마지노선?",bookmark)
   
   const handlePress = (itemSeq) => {
     console.log("itemSeq나와라@", itemSeq)
