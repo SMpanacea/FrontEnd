@@ -1,6 +1,7 @@
 // 비회원 mypage화면
 import React from 'react';
-import {StyleSheet, Text, View, ScrollView, TouchableOpacity, Modal, Image, Button, Animated} from 'react-native';
+import {StyleSheet, View, ScrollView, TouchableOpacity, Modal, Image, Animated} from 'react-native';
+import { Text, Button, Title, Surface } from 'react-native-paper';
 
 // navigation
 import 'react-native-gesture-handler';
@@ -8,66 +9,62 @@ import 'react-native-gesture-handler';
 // 외부에서 불러온 것들
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BookMarkModal from '../BookMark/BookMarkModal';
+
 // 약목록 보여주는 component
 import List from '../../Components/Lists';
-
+import MemberMyPage from './MemberMyPage';
 
 function NoMemberMyPage({navigation}) {
-  return (
-
-    <View style={styles.container}>
-        <Text style={styles.title}>my page</Text>
-        
-        <View style={styles.warningbox}>
-          <Text style={styles.warningtext}>
-            로그인 후 사용 가능한 기능입니다.
-          </Text>
-        </View>
-
-        <View style={styles.loginbox}>
-
-          <View style={styles.loginsbox}>
-            <View style={styles.login}>
-              <TouchableOpacity style={{borderBottomWidth:1,}}>
-                <Text>
-                  로그인 하러가기
-                </Text>
-
-              </TouchableOpacity>
-            </View>
-
-            <View style={{flex:1,}}>
-              <TouchableOpacity style={{borderBottomWidth:1,}}>
-                <Text>
-                  회원가입 하러가기
-                </Text>
-              </TouchableOpacity>
-            </View>
-
+    return (
+      <View style={styles.container}>
+          
+          <View style={styles.warningbox}>
+            <Text style={styles.warningtext}>
+              로그인 후 사용 가능한 기능입니다.
+            </Text>
           </View>
-
-          <View style={styles.easy}>
-            <View style={styles.easybox}>
-              <Text >
-                  가편 회원가입 & 로그인
-              </Text>
+  
+          <View style={styles.loginbox}>
+            <View style={styles.loginsbox}>
+              <View style={styles.login}>
+                <TouchableOpacity style={{borderBottomWidth:1,}}>
+                  <Text onPress={()=>{navigation.navigate("Login")}}>
+                    로그인 하러가기
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{flex:1,}}>
+                <TouchableOpacity style={{borderBottomWidth:1,}}>
+                  <Text onPress={()=>{navigation.navigate("Join")}}>
+                    회원가입 하러가기
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity style={styles.kakaobutton}>
-                <Text>
-                    kakao
+  
+            <View style={styles.easy}>
+              <View style={styles.easybox}>
+                <Text >
+                    간편 회원가입 & 로그인
                 </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.googlebutton}>
-                <Text>
-                    google
-                </Text>
-            </TouchableOpacity>
-          </View>
-           
-        </View> 
-    </View>
-    
-  );
+              </View>
+              <Button
+                  mode="outlined"
+                  style={styles.down}
+                  contentStyle={{ height: 60, alignItems: 'center', justifyContent: 'center' }}
+                  labelStyle={{ fontSize: 16 }}
+                  // onPress={() => {navigation.navigate("Kakao")}}
+                  >카카오 로그인</Button>
+              <Button
+                  mode="outlined"
+                  contentStyle={{ height: 60, alignItems: 'center', justifyContent: 'center' }}
+                  labelStyle={{ fontSize: 16 }}
+                  // onPress={() => {navigation.navigate("Google")}}
+                  >구글 로그인</Button>
+            </View>
+          </View> 
+      </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -116,36 +113,18 @@ const styles = StyleSheet.create({
     borderBottomColor:'red',
     marginBottom:10,
   },
-
+  down: {
+    marginBottom: 10
+},
   easy:{
     flex:2,
   },
   easybox:{
     flex:1,
     borderBottomWidth:1,
-    marginBottom:20,
+    marginBottom:0,
     justifyContent: "center",
   },
-  kakaobutton:{
-    flex:1,
-    borderWidth:1,
-    backgroundColor:'yellow',
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius:30,
-    marginBottom:20,
-  },
-  googlebutton:{
-    flex:1,
-    borderWidth:1,
-    backgroundColor:'blue',
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius:30,
-    marginBottom:20
-  }
-  
-  
 });
 
 export default NoMemberMyPage;

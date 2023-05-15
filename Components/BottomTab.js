@@ -123,7 +123,9 @@
 
 // export default BottomTab;
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 // npm install @react-navigation/native -- save
 // npm install @react-navigation/bottom-tabs --save
 import {NavigationContainer} from '@react-navigation/native';
@@ -146,6 +148,9 @@ import CameraSearch from '../Pages/Search/CameraSearch';
 import GPT from '../Pages/GPT/Gpt';
 import MedicineCamera from '../Pages/Medicine/MedicineCamera';
 
+import Main from '../Pages/Main/Main';  
+import Login from '../Pages/SignUp/Login';
+
 // import { Easing } from 'react-native-reanimated';
 
 
@@ -154,10 +159,34 @@ const Tab = createMaterialBottomTabNavigator(); //createBottomTabNavigator을 Ta
 //<Tab.Navigator initialRouteName="BookMarkMain"> -> 바텀탭에 제이 처음에 뜨는 곳 지정해줌 BookMarkMain이 제일 먼저 나옴
 
 function BottomTab() {
-  return (
-    
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [token,setToken] =useState(null)
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const getToken = await AsyncStorage.getItem('token');
+      setToken(getToken)
+      console.log("token : ", getToken);
+      const res = await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/tokenlogin', {
+        token: getToken
+      });
+      console.log("bottomTab res data : ", res.data);
+      console.log("bottomTab res data type : ", typeof(res.data));
+      if (res.data === true) {            //1. 로그인 되어 있는 경우 - 아이디 반환
+        setLoggedIn(true);
+      } else if ( res.data === "false") {   //2. 로그인 되어 있지 않은 경우 - false 반환
+        setLoggedIn(false);
+       } else {                             //3. 토큰 유효기간이 만료된 경우 - 아이디, 토큰 반환
+        setLoggedIn(false);
+       }
+      console.log("bottomTab loggedIn : ", loggedIn);
+    };
+    checkLoginStatus();
+  }, [loggedIn]);
+
+  return (  
       <Tab.Navigator
-        initialRouteName="BookMarkMain"
+        initialRouteName="Main"
         // animationEasing={Easing.linear}
         barStyle={{
           backgroundColor: '#FFFFFF',
@@ -167,16 +196,6 @@ function BottomTab() {
         activeColor="#6200EE"
         inactiveColor="#95A5A6"
       >
-      <Tab.Screen
-        name="BookMark"
-        component={BookMarkScreen}
-        options={{
-          tabBarLabel: '알림',
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="notifications" color={color} size={26} />
-          ),
-        }}
-      />
       <Tab.Screen
         name="MedicineMain"
         component={MedicineMain}
@@ -197,16 +216,30 @@ function BottomTab() {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="NoMyPage"
-        component={NoMemberMyPage}
+      <Tab.Screen
+        name="Main"
+        component={Main}
         options={{
-          tabBarLabel: 'NoMyPage',
+          tabBarLabel: '홈',
+          tabBarIcon: ({ color }) => (
+            <Icon name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="NoMyPage"
+        component={loggedIn ? MemberMyPage : Login}
+        initialParams={{
+          token:token,
+          setLoggedIn:setLoggedIn
+        }}
+        options={{
+          tabBarLabel: '마이페이지',
           tabBarIcon: ({ color }) => (
             <Icon3 name="people-outline" color={color} size={26} />
           ),
         }}
-      /> */}
+      />
       <Tab.Screen
         name="MedicineCamera"
         component={MedicineCamera}
@@ -221,17 +254,13 @@ function BottomTab() {
         name="GPT"
         component={GPT}
         options={{
-          tabBarLabel: '카메라결과목록',
+          tabBarLabel: 'GPT',
           tabBarIcon: ({ color }) => (
             <Icon2 name="chat" color={color} size={26} />
           ),
         }}
       />
       </Tab.Navigator>
-
-   
-    
-    
   );
 }
 
