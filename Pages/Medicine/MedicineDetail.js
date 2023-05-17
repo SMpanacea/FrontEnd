@@ -4,16 +4,17 @@ import React,{useLayoutEffect} from 'react';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StyleSheet, Text, View, ScrollView, TouchableOpacity, Modal, Image, Button, Animated} from 'react-native';
+import { Card } from 'react-native-paper';
 import { StatusBar } from 'react-native';
+
+//아이콘
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // image import
 import Medi from '../../assets/medi.png';
 
 // 즐겨찾기 icon
 import BookMarkButton from '../../Components/BookMarkButton';
-
-// //약 정보
-// import Meditext from '../../Components/MediText';
 
 // 로딩
 import Loading from '../../Components/Loading';
@@ -129,7 +130,7 @@ function MedicineDetail({navigation, route}) {
 
 
 
-  
+  const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
   
 
  
@@ -147,113 +148,334 @@ function MedicineDetail({navigation, route}) {
                 <Image
             source={{ uri: 'https://panacea.s3.ap-northeast-2.amazonaws.com/default/medicine_default.jpg' }}
             style={styles.image}
-          /> : <Image source={Medi} resizeMode="contain" style={styles.image} />)}          
+          /> : <Image source={Medi} resizeMode="contain" style={styles.image} />)}   
           </View>
+
             <View style={styles.meditextbox}>
               <View>
               {/* 약 데이터 정보 뿌리는 화면 */}
-                <View style={{flex:1,}}>
-                  <Text style={{margin:10,}}>효능</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                     <Icon style={styles.InfoIcon} name="plus" size={20} color="black" />
+                    <Text style={styles.InfoTitle}>효과 · 효능</Text>
+                  </View>
                   {medicinedetail&&medicinedetail.efcyQesitm ? (
-                    <View style={{
-                      flex:1, 
-                      backgroundColor:'red', 
-                      alignItems:"center", 
-                      justifyContent: "center",
-                      height:90,
-                      padding:10, 
-                      borderRadius:20,
-                      }}
-                    >
-                      <Text style={{ textAlignVertical: 'center' }}>{medicinedetail.efcyQesitm}</Text> 
-                    </View>
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.efcyQesitm}</Text>
+                      </Card.Content>
+                    </Card>
+                    
+                    // <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>{medicinedetail.efcyQesitm}</Text> 
+                    // </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
+                     
+                    //   <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>값이 없어!</Text>
+                    // </View>
                     )}
                 </View>
-                <View>
-                  <Text>사용법</Text>
-                  {medicinedetail&&medicinedetail.useMethodQesitm ? (
-                      <Text>{medicinedetail.useMethodQesitm}</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="question-circle" size={20} color="black" />
+                    <Text style={styles.InfoTitle}>사용법</Text>
+                  </View>
+                    {medicinedetail&&medicinedetail.useMethodQesitm ? (
+                      <Card>
+                        <Card.Content>
+                          {/* <Text variant="titleLarge"></Text> */}
+                          <Text variant="bodyMedium">{medicinedetail.useMethodQesitm}</Text>
+                        </Card.Content>
+                      </Card>
+                      // <View style={styles.Infocontent}>
+                      //   <Text style={styles.Infotext}>{medicinedetail.useMethodQesitm}</Text>
+                      // </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
                     )}
                 </View>
-                <View>
-                  <Text>주의사항 - 경고</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="exclamation-triangle" size={20} color="black" />
+                    <Text style={styles.InfoTitle}>주의사항 - 경고</Text>
+                  </View>
                   {medicinedetail && medicinedetail.atpnWarnQesitm ? (
-                      <Text>{medicinedetail.atpnWarnQesitm}</Text>
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.atpnWarnQesitm}</Text>
+                      </Card.Content>
+                    </Card>
+                    // <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>{medicinedetail.atpnWarnQesitm}</Text>
+                    // </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
+                      // <View style={styles.Infocontent}>
+                      //   <Text style={styles.Infotext}>값이 없어!</Text>
+                      // </View>
                     )}
                 </View>
-                <View>
-                  <Text> 주의사항</Text>
-                  {medicinedetail && medicinedetail.atpnWarnQesitm ? (
-                      <Text>{medicinedetail.atpnWarnQesitm}</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="exclamation-circle" size={20} color="black" />
+                    <Text style={styles.InfoTitle}> 주의사항</Text>
+                  </View>
+                  {medicinedetail && medicinedetail.atpnQesitm ? (
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.atpnQesitm}</Text>
+                      </Card.Content>
+                    </Card>
+                    // <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infocontent}>{medicinedetail.atpnQesitm}</Text>
+                    // </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
+                    //   <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>값이 없어!</Text>
+                    // </View>
                     )}
-                  <Text>{medicinedetail&&medicinedetail.atpnQesitm}</Text>
+                  {/* <Text style={styles.Infotext}>{medicinedetail&&medicinedetail.atpnQesitm}</Text> */}
                 </View>
-                <View>
-                  <Text> 상호작용</Text>
-                  {medicinedetail && medicinedetail.atpnWarnQesitm ? (
-                      <Text>{medicinedetail.atpnWarnQesitm}</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="refresh" size={20} color="black" />
+                    <Text style={styles.InfoTitle}> 상호작용</Text>
+                  </View>
+                  {medicinedetail && medicinedetail.intrcQesitm ? (
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.intrcQesitm}</Text>
+                      </Card.Content>
+                    </Card>
+                      // <View style={styles.Infocontent}>
+                      //   <Text style={styles.Infocontent}>{medicinedetail.intrcQesitm}</Text>
+                      // </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
+                      // <View style={styles.Infocontent}>
+                      //   <Text style={styles.Infotext}>값이 없어!</Text>
+                      // </View>
                     )}
-                  <Text>{medicinedetail&&medicinedetail.intrcQesitm}</Text>
+                  {/* <Text style={styles.Infotext}>{medicinedetail&&medicinedetail.intrcQesitm}</Text> */}
                 </View>
-                <View>
-                  <Text> 부작용</Text>
-                  {medicinedetail && medicinedetail.atpnWarnQesitm ? (
-                      <Text>{medicinedetail.atpnWarnQesitm}</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="shield" size={20} color="black" />
+                    <Text style={styles.InfoTitle}> 부작용</Text>
+                  </View>
+                  {medicinedetail && medicinedetail.seQesitm ? (
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.seQesitm}</Text>
+                      </Card.Content>
+                    </Card>
+                    // <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infocontent}>{medicinedetail.seQesitm}</Text>
+                    //   </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                    //   <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>값이 없어!</Text>
+                    // </View>
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                        {null}
+                      </Card.Content>
+                    </Card>
                     )}
-                  <Text>{medicinedetail&&medicinedetail.seQesitm}</Text>
+                  {/* <Text style={styles.Infotext}>{medicinedetail&&medicinedetail.seQesitm}</Text> */}
                 </View>
-                <View>
-                  <Text> 보관법</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="archive" size={20} color="black" />
+                    <Text style={styles.InfoTitle}> 보관법</Text>
+                  </View>
                   {medicinedetail&&medicinedetail.depositMethodQesitm ? (
-                      <Text>{medicinedetail.depositMethodQesitm}</Text>
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.depositMethodQesitm}</Text>
+                      </Card.Content>
+                    </Card>
+                    // <View style={styles.Infocontent}>
+                    //   <Text>{medicinedetail.depositMethodQesitm}</Text>
+                    //   </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                    //   <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>값이 없어!</Text>
+                    // </View>
+                    <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
                     )}
                 </View>
-                <View>
-                  <Text> 업체명</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                  <Icon style={styles.InfoIcon} name="building" size={20} color="black" />
+                    <Text style={styles.InfoTitle}> 업체명</Text>
+                  </View>
                   {medicinedetail&&medicinedetail.entpName ? (
-                      <Text>{medicinedetail.entpName}</Text>
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.entpName}</Text>
+                      </Card.Content>
+                    </Card>
+                    // <View style={styles.Infocontent}>
+                    //   <Text>{medicinedetail.entpName}</Text>
+                    //   </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
+                    //   <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>값이 없어!</Text>
+                    // </View>
                     )}
                 </View>
-                <View>
-                  <Text> 품목기준코드</Text>
+                
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="list-ul" size={20} color="black" />
+                    <Text style={styles.InfoTitle}> 품목기준코드</Text>
+                  </View>
                   {medicinedetail&&medicinedetail.itemSeq ? (
-                      <Text>{medicinedetail.itemSeq}</Text>
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.itemSeq}</Text>
+                      </Card.Content>
+                    </Card>
+                    // <View style={styles.Infocontent}>
+                    //   <Text>{medicinedetail.itemSeq}</Text>
+                    //   </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
+                    //   <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>값이 없어!</Text>
+                    // </View>
                     )}
                 </View>
-                <View>
-                  <Text> 공개일자</Text>
+
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="check-square-o" size={20} color="black" />
+                    <Text style={styles.InfoTitle}> 공개일자</Text>
+                  </View>
                   {medicinedetail&&medicinedetail.openDe ? (
-                      <Text>{medicinedetail.openDe}</Text>
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.openDe}</Text>
+                      </Card.Content>
+                    </Card>
+                    // <View style={styles.Infocontent}>
+                    //   <Text>{medicinedetail.openDe}</Text>
+                    //   </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
+                      // <View style={styles.Infocontent}>
+                      //   <Text style={styles.Infotext}>값이 없어!</Text>
+                      // </View>
                     )}
                 </View>
-                <View>
-                  <Text> 수정일자</Text>
+
+                <View style={styles.Informationcontainer}>
+                  <View style={styles.Info}>
+                    <Icon style={styles.InfoIcon} name="edit" size={20} color="black" />
+                    <Text style={styles.InfoTitle}> 수정일자</Text>
+                  </View>
                   {medicinedetail&&medicinedetail.updateDe ? (
-                      <Text>{medicinedetail.updateDe}</Text>
+                    <Card>
+                      <Card.Content>
+                        {/* <Text variant="titleLarge"></Text> */}
+                        <Text variant="bodyMedium">{medicinedetail.updateDe}</Text>
+                      </Card.Content>
+                    </Card>
+                    // <View style={styles.Infocontent}>
+                    //   <Text>{medicinedetail.updateDe}</Text>
+                    //   </View>
                     ) : (
-                      <Text>값이 없어!</Text>
+                      <Card>
+                         <Card.Content>
+                            {/* <Text variant="titleLarge"></Text> */}
+                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
+                            {null}
+                          </Card.Content>
+                      </Card>
+                    //   <View style={styles.Infocontent}>
+                    //   <Text style={styles.Infotext}>값이 없어!</Text>
+                    // </View>
                     )}
                 </View>
+
               </View>
             </View>
         </ScrollView> 
@@ -296,7 +518,7 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderColor:'#eaeaea',
     width: '100%',
-    height: 400, // 원하는 세로 크기로 변경해주세요
+    height: 350, // 원하는 세로 크기로 변경해주세요
     borderBottomLeftRadius:50,
     borderBottomRightRadius:50,
     // borderRadius:50,
@@ -310,15 +532,50 @@ const styles = StyleSheet.create({
     width:width,
     padding:20,
   },
-  meditexttitle:{
-    // borderWidth:1,
-    // borderColor:'#800000',
-    marginBottom:'5%',
+  Informationcontainer:{
+    flex:1,
+    marginBottom:40,
   },
-  meditextcontent:{
+  Info:{
+    flex:1,
+    flexDirection: 'row',
     // borderWidth:1,
-    // borderColor:'#B22222',
-  }
+    alignItems:"center", 
+    // justifyContent: "center",
+  },
+  InfoTitle:{
+    marginTop:10,
+    marginBottom:15,
+  },
+  InfoIcon:{
+    borderWidth:1,
+    borderColor:'#F2F2F2',
+    padding:10,
+  },
+  Infocontent:{
+    flex:1,  
+    backgroundColor:'red', 
+    alignItems:"center", 
+    justifyContent: "center",
+    height:90,
+    padding:10, 
+    borderRadius:20,
+  },
+  Infotext:{
+    textAlignVertical: 'center'
+  },
+
+
+
+  // meditexttitle:{
+  //   // borderWidth:1,
+  //   // borderColor:'#800000',
+  //   marginBottom:'5%',
+  // },
+  // meditextcontent:{
+  //   // borderWidth:1,
+  //   // borderColor:'#B22222',
+  // }
   
 });
 
