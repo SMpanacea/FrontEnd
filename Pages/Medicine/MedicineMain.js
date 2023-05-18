@@ -50,10 +50,32 @@ function MedicineMain({navigation}) {
   //   setData();
   //   // console.log("랜더링 되나?")
   // },[page]);//페이지 번호가 변경될 때마다 실행되도록 해줌
-
  
 
 
+  // React.useEffect(() => {
+  //   const setData = async () => {
+  //     setIsLoading(true); // 로딩 상태 true 로 변경
+  //     try {
+  //       const res = await axios.get(`${IP}/medicine/search`, {
+  //         params: {
+  //           pageNo: page,
+  //         },
+  //       });
+  //       setMedicinedata(res.data.items);
+  //     } catch (error) {
+  //       console.log('Medicine 목록 가져오기 실패', error);
+  //     } finally {
+  //       setIsLoading(false); // 로딩 상태 false 로 변경
+  //     }
+  //   };
+  //   setData();
+  // }, [page]);
+
+  // const handlePageChange = (newPage) => {
+  //   // console.log("페이지 바뀜?",newPage)
+  //   setPage(newPage);
+  // }
   React.useEffect(() => {
     const setData = async () => {
       setIsLoading(true); // 로딩 상태 true 로 변경
@@ -64,19 +86,16 @@ function MedicineMain({navigation}) {
           },
         });
         setMedicinedata(res.data.items);
+        setTimeout(() => {
+          setIsLoading(false); // 3초 후 로딩 상태 false 로 변경
+        }, 4000); // 3초의 지연 시간 설정
       } catch (error) {
         console.log('Medicine 목록 가져오기 실패', error);
-      } finally {
-        setIsLoading(false); // 로딩 상태 false 로 변경
+        setIsLoading(false); // 에러 발생 시에도 로딩 상태 false 로 변경
       }
     };
     setData();
   }, [page]);
-
-  const handlePageChange = (newPage) => {
-    // console.log("페이지 바뀜?",newPage)
-    setPage(newPage);
-  }
 
 //  // 로딩 스피너를 호출하는 함수
 //  const renderLoadingIndicator = () => {
@@ -109,11 +128,12 @@ function MedicineMain({navigation}) {
   //   </View>
   // );
   return (
-    <View style={styles.container}>
+    <View style={styles.c}>
       {isLoading ? (
         <Loading /> // 로딩 중인 동안 로딩 스피너 표시
       ) : (
-        <ScrollView style={{margin:10}}>
+        <View style={styles.container}>
+          <ScrollView style={{margin:10}}>
           <Card 
             medicinedata={medicinedata} 
             onPress={(medicinename, bookmark) => navigation.navigate('Detail', { medicinename, bookmark })}
@@ -128,6 +148,9 @@ function MedicineMain({navigation}) {
          </TouchableRipple>
       </View>
         </ScrollView>
+
+        </View>
+        
       )}
       
     </View>
@@ -135,6 +158,9 @@ function MedicineMain({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  c:{
+    flex: 1,
+  },
   container: {
     width: width,
     height: height,
