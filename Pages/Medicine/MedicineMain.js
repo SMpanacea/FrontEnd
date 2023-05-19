@@ -30,12 +30,12 @@ function MedicineMain({navigation}) {
   const [page, setPage] = React.useState(1);//다음 page 번호
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
 
+
+
   const [screenReaderEnabled, setScreenReaderEnabled] = React.useState(false);
   const [reduceMotionEnabled, setReduceMotionEnabled] = React.useState(false);
-  const myRef = React.useRef(null);
 
   React.useEffect(() => {
-    setFocus();
     const reduceMotionChangedSubscription = AccessibilityInfo.addEventListener(
       'reduceMotionChanged',
       isReduceMotionEnabled => {
@@ -64,16 +64,6 @@ function MedicineMain({navigation}) {
     
   }, []);
 
-  const setFocus = () => {
-    console.log('setFocus');
-    const reactTag = findNodeHandle(myRef.current);
-    if (reactTag) {
-      UIManager.sendAccessibilityEvent(
-        reactTag,
-        UIManager.AccessibilityEventTypes.typeViewFocused
-      );
-    }
-  };
 
 
   // React.useEffect(()=>{
@@ -148,6 +138,28 @@ function MedicineMain({navigation}) {
     setData();
   }, [page]);
 
+  //북마크 리스트 가져오는 AXIOS
+  const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
+  React.useEffect(()=>{
+    const Bookmark = () => {
+      axios.post(`${IP}/medicine/bookmarklist`,{
+        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
+      })
+      .then(function(res){
+        console.log("북마크 잘 가져왔나요?", res.data);
+        setBookmark(res.data);
+        console.log("test",bookmark);
+      })
+      .catch(function(e){
+        console.log("즐겨찾기 리스트 못 가져옴,,,", e)
+      })
+
+    };
+    Bookmark();
+    // console.log("bookmark배열 값 잘 가져오나요?",bookmark)
+  },[]);
+ 
+
 //  // 로딩 스피너를 호출하는 함수
 //  const renderLoadingIndicator = () => {
 //   if (isLoading) {
@@ -183,10 +195,12 @@ function MedicineMain({navigation}) {
       {isLoading ? (
         <Loading /> // 로딩 중인 동안 로딩 스피너 표시
       ) : (
-        <View style={styles.container} ref={this.myRef} >
+        <View style={styles.container} >
           <ScrollView style={{margin:10}}>
           <Card 
             medicinedata={medicinedata} 
+            bookmark = {bookmark} //bookmark list넘겨줌
+            setBookmark = {setBookmark} //bookmark list를 변경하는 함수 넘겨줌
             onPress={(medicinename, bookmark) => {
               AccessibilityInfo.announceForAccessibility(medicinename+"을 선택하셨습니다!");
               navigation.navigate('Detail', { medicinename, bookmark })
