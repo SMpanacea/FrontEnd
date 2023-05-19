@@ -12,6 +12,15 @@ const IP = ServerPort();
 
 function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, setBookmark}){
   const [bookmarked2, setBookmark2] = useState(bookmarked) //bookmared를 받았으니 별활성화 할지 안 할지의 값을 받은거임 그래서 초기값으로 설정해줬으니 자기값임(부모값을 자식값으로 넣어줌)
+  const [showImage, setShowImage] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowImage(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const click = (data) => {
     setBookMarked(data)//부모의 클릭함수를 실행시킴
@@ -27,36 +36,10 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
     console.log('cliked 컴포넌트가 재랜더링되었습니다.');
   }, [bookmarked2]);
 
-
-//   console.log("두근두근",bookmark) //배열 잘 가져와 근데 뭐가 문제임
-//   const [bookmarked, setBookmarked] = useState(true); //useState를 사용해서 즐겨찾기 했는지 안 했는지 알려줌 초기설정은 true임 
-//   const [foundMedicine,setFoundMedicine] = useState()
-//  // const foundMedicine = bookmark && bookmark.find((item) => item === medicinedetail.itemSeq);
-
-
-//   console.log("도키도키", foundMedicine)
-//   const handleBookmark = () => { //bookmark핸들러
-//     const check = !bookmarked
-//     setBookmarked(check); //bookmarked의 반대값을 setBookmarked에 저장해줌
-   
-//     const checkFoundMedicine = check // && bookmark.find((item) => item === medicinedetail.itemSeq);
-//     setFoundMedicine(checkFoundMedicine)
-//     console.log("checkFoundMedicine", checkFoundMedicine)
-
-
-
-
-
-  
   console.log("두근두근",bookmark) //배열 잘 가져와 근데 뭐가 문제임
-  // const [bookmarked, setBookmarked] = useState(); //useState를 사용해서 즐겨찾기 했는지 안 했는지 알려줌 초기설정은 []임 
-  // const foundMedicine = bookmark && bookmark.find((item) => item === medicinedetail.itemSeq);
-
 
   console.log("도키도키", bookmarked)
   const handleBookmark = () => { //bookmark핸들러
-  // setBookmarked(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
-  // console.log("넌 누구냐 진짜!!!!!!!!!",bookmarked)
     
     const res = {
       itemSeq: medicinedetail.itemSeq,
@@ -73,8 +56,7 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
         console.log("??")
         console.log('즐겨찾기 해제 성공:', response.data); 
         if(response.data !== "false"){
-          setBookmark(response.data) //최상위 부모(MedicinMain)의 booklist를 변경시켜줌
-          // setRender(!render)     
+          setBookmark(response.data) //최상위 부모(MedicinMain)의 booklist를 변경시켜줌    
           click(response.data) //BookMarkButton의 click함수를 실행, 이름 바꿔라
         }
       })
@@ -90,7 +72,6 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
         console.log('즐겨찾기 등록 성공:', response.data);
         if(response.data !== "false"){
           setBookmark(response.data)//최상위 부모(MedicinMain)의 booklist를 변경시켜줌
-          // setRender(!render)
           click(response.data)//BookMarkButton의 click함수를 실행, 이름 바꿔라
         }
       })
@@ -104,9 +85,9 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
   return (
     <TouchableOpacity onPress={handleBookmark}> 
       <View style={styles.bookmarkbutton}>
-        <Image source={bookmarked2 ?  bookmarkImage : bookmarkedImage} style={styles.image} /> 
+        {showImage && <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />}
+        {/* <Image source={bookmarked2 ?  bookmarkImage : bookmarkedImage} style={styles.image} />  */}
         {/*bookmarked에 값이 있으면 색별, 아니면 빈별 뜨게 해줌*/}
-        <Text>{bookmarked2 ?  "bookmarkImage" : "bookmarkedImage"}</Text>
       </View>
     </TouchableOpacity>
   );
