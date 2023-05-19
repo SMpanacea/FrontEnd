@@ -79,37 +79,20 @@ function MedicineDetail({navigation, route }) {
     
   },[]);
 
-  // React.useEffect(() => {
-  //   console.log("bookmark1 배열:", bookmark);
-  // }, [bookmark]);
-
-  // console.log(medicinname);
-
-  // // 렌더링 과정 이후에도 console.log(bookmark) 호출 가능
-  // React.useEffect(() => {
-  //   console.log("bookmark2 배열:", bookmark);
-  // });
-
-  // console.log("medicineDetail까지 들어오나요?", bookmark)
   // navigation 기본 제공 header이름 수정
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: medicinname, //header 약 이름 출력
-      // headerRight: () => <BookMarkButton medicinedetail={medicinedetail} bookmark={bookmark}/> //header오른쪽에 bookMarkbutton component 불러오기
       headerRight: () => (
         <View style={styles.headerRightContainer}>
-           {/* <BookMarkButton medicinedetail={medicinedetail} bookmark={bookmark} /> */}
           <BookMarkButton medicinedetail={medicinedetail} bookmarked= {bookmarked} setBookMarked = {click} bookmark={bookmark} setBookmark = {setBookmark}/> 
-          {/*값이랑 함수들 다 넘겨줌*/}
+          {/*//header오른쪽에 bookMarkbutton component 불러오기 //값이랑 함수들 다 넘겨줌*/}
         </View>
       ),
     });
   }, [medicinname])
 
-  const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
-
   return (
-      // <CustomHeader title={medicinname} route={{ params: { medicinedetail } }} />
       <View style={styles.container} > 
         {isLoading ? (
           <Loading /> //로딩 중인 동안 로딩 스피너
@@ -130,7 +113,7 @@ function MedicineDetail({navigation, route }) {
               {/* 약 데이터 정보 뿌리는 화면 */}
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                      <Icon style={styles.InfoIcon} name="plus" size={20} color="black" />
                     <Text style={styles.InfoTitle} >효과 · 효능</Text>
                   </View>
@@ -150,7 +133,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="question-circle" size={20} color="black" />
                     <Text style={styles.InfoTitle}>사용법</Text>
                   </View>
@@ -170,7 +153,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="exclamation-triangle" size={20} color="black" />
                     <Text style={styles.InfoTitle}>주의사항 - 경고</Text>
                   </View>
@@ -190,7 +173,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="exclamation-circle" size={20} color="black" />
                     <Text style={styles.InfoTitle}> 주의사항</Text>
                   </View>
@@ -211,7 +194,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="refresh" size={20} color="black" />
                     <Text style={styles.InfoTitle}> 상호작용</Text>
                   </View>
@@ -232,7 +215,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="shield" size={20} color="black" />
                     <Text style={styles.InfoTitle}> 부작용</Text>
                   </View>
@@ -252,7 +235,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="archive" size={20} color="black" />
                     <Text style={styles.InfoTitle}> 보관법</Text>
                   </View>
@@ -272,7 +255,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                   <Icon style={styles.InfoIcon} name="building" size={20} color="black" />
                     <Text style={styles.InfoTitle}> 업체명</Text>
                   </View>
@@ -292,7 +275,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
                 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="list-ul" size={20} color="black" />
                     <Text style={styles.InfoTitle}> 품목기준코드</Text>
                   </View>
@@ -312,7 +295,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="check-square-o" size={20} color="black" />
                     <Text style={styles.InfoTitle}> 공개일자</Text>
                   </View>
@@ -332,7 +315,7 @@ function MedicineDetail({navigation, route }) {
                 </View>
 
                 <View style={styles.Informationcontainer}>
-                  <View style={styles.Info}>
+                  <View style={styles.Info} accessible ={true}>
                     <Icon style={styles.InfoIcon} name="edit" size={20} color="black" />
                     <Text style={styles.InfoTitle}> 수정일자</Text>
                   </View>
