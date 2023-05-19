@@ -3,7 +3,7 @@ import axios from 'axios';
 import React,{useLayoutEffect} from 'react';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet, Text, View, ScrollView, TouchableOpacity, Modal, Image, Button, Animated} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, TouchableOpacity, Modal, Image, Button, Animated, AccessibilityInfo,UIManager,findNodeHandle  } from 'react-native';
 import { Card } from 'react-native-paper';
 import { StatusBar } from 'react-native';
 
@@ -36,6 +36,20 @@ function MedicineDetail({navigation, route}) {
   const [medicinname, setMedicinName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
   const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
+
+  // initialFocusRef = React.useRef(null);
+  // const tag = findNodeHandle(this.initialFocusRef.current);
+  // UIManager.sendAccessibilityEvent(tag, UIManager.AccessibilityEventTypes.typeViewFocused);
+
+
+  // const setInitFocus = (component) => {
+  //   const elementId = findNodeHandle(component);
+  //   AccessibilityInfo.setAccessibilityFocus(elementId);
+  //   AccessibilityInfo.setAccessibilityFocus(elementId);
+  // }
+
+  
+  // AccessibilityInfo.setAccessibilityFocus(UIManager.AccessibilityEventTypes.typeViewFocused);
 
   // const [data, setDat] = React.useState([]);//
 
@@ -136,7 +150,7 @@ function MedicineDetail({navigation, route}) {
  
   return (
       // <CustomHeader title={medicinname} route={{ params: { medicinedetail } }} />
-      <View style={styles.container}> 
+      <View style={styles.container} > 
         {isLoading ? (
           <Loading /> //로딩 중인 동안 로딩 스피너
         ) : (
@@ -158,7 +172,7 @@ function MedicineDetail({navigation, route}) {
                 <View style={styles.Informationcontainer}>
                   <View style={styles.Info}>
                      <Icon style={styles.InfoIcon} name="plus" size={20} color="black" />
-                    <Text style={styles.InfoTitle}>효과 · 효능</Text>
+                    <Text style={styles.InfoTitle} >효과 · 효능</Text>
                   </View>
                   {medicinedetail&&medicinedetail.efcyQesitm ? (
                     <Card>

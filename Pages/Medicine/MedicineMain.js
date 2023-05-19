@@ -1,7 +1,7 @@
 // 모든 약 정보 볼 수 있는 메인화면
 import axios from 'axios';
 import React from 'react';
-import {StyleSheet,  View, ScrollView, TouchableOpacity } from 'react-native';
+import {StyleSheet,  View, ScrollView, TouchableOpacity, AccessibilityInfo, UIManager, findNodeHandle} from 'react-native';
 import { Text, TouchableRipple, Button  } from 'react-native-paper';
 // 화면 비율
 import { Dimensions } from 'react-native'; 
@@ -29,6 +29,51 @@ function MedicineMain({navigation}) {
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
   const [page, setPage] = React.useState(1);//다음 page 번호
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
+
+  const [screenReaderEnabled, setScreenReaderEnabled] = React.useState(false);
+  const [reduceMotionEnabled, setReduceMotionEnabled] = React.useState(false);
+  const myRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setFocus();
+    const reduceMotionChangedSubscription = AccessibilityInfo.addEventListener(
+      'reduceMotionChanged',
+      isReduceMotionEnabled => {
+        setReduceMotionEnabled(isReduceMotionEnabled);
+      },
+    );
+    const screenReaderChangedSubscription = AccessibilityInfo.addEventListener(
+      'screenReaderChanged',
+      isScreenReaderEnabled => {
+        setScreenReaderEnabled(isScreenReaderEnabled);
+      },
+    );
+
+    AccessibilityInfo.isReduceMotionEnabled().then(isReduceMotionEnabled => {
+      setReduceMotionEnabled(isReduceMotionEnabled);
+    });
+    AccessibilityInfo.isScreenReaderEnabled().then(isScreenReaderEnabled => {
+      setScreenReaderEnabled(isScreenReaderEnabled);
+    });
+
+    return () => {
+      reduceMotionChangedSubscription.remove();
+      screenReaderChangedSubscription.remove();
+    };
+
+    
+  }, []);
+
+  const setFocus = () => {
+    console.log('setFocus');
+    const reactTag = findNodeHandle(myRef.current);
+    if (reactTag) {
+      UIManager.sendAccessibilityEvent(
+        reactTag,
+        UIManager.AccessibilityEventTypes.typeViewFocused
+      );
+    }
+  };
 
 
   // React.useEffect(()=>{
@@ -76,6 +121,11 @@ function MedicineMain({navigation}) {
   //   // console.log("페이지 바뀜?",newPage)
   //   setPage(newPage);
   // }
+
+  const speak = () => {
+    AccessibilityInfo.announceForAccessibility(selectedDate+"를 선택하셨습니다!");
+  };
+
   React.useEffect(() => {
     const setData = async () => {
       setIsLoading(true); // 로딩 상태 true 로 변경
@@ -132,11 +182,14 @@ function MedicineMain({navigation}) {
       {isLoading ? (
         <Loading /> // 로딩 중인 동안 로딩 스피너 표시
       ) : (
-        <View style={styles.container}>
+        <View style={styles.container} ref={this.myRef} >
           <ScrollView style={{margin:10}}>
           <Card 
             medicinedata={medicinedata} 
-            onPress={(medicinename, bookmark) => navigation.navigate('Detail', { medicinename, bookmark })}
+            onPress={(medicinename, bookmark) => {
+              AccessibilityInfo.announceForAccessibility(medicinename+"을 선택하셨습니다!");
+              navigation.navigate('Detail', { medicinename, bookmark })
+            }}
           />
           <View style={{flexDirection: 'row',justifyContent:"space-between", alignItems:'center'}}>
          <TouchableRipple onPress={()=>{page > 1 && handlePageChange(page -1)}}>
