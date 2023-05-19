@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, Switch, Text, View, Dimensions, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Modal, Text } from 'react-native';
 
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
-import { launchImageLibrary, ImageLibraryOptions } from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { Button } from 'react-native-paper';
 
 
 import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
-import { DBRConfig, decode, TextResult } from 'vision-camera-dynamsoft-barcode-reader';
+import { decode } from 'vision-camera-dynamsoft-barcode-reader';
 import * as REA from 'react-native-reanimated';
-import { Polygon, Svg, Rect, Defs, Mask } from 'react-native-svg';
 import axios from 'axios';
 
 
@@ -35,6 +34,8 @@ export default function Barcode() {
     const devices = useCameraDevices();
     //후면 카메라 선택
     const device = devices.back;
+
+    const [modalVisible, setModalVisible] = React.useState(false);
 
 
 
@@ -70,7 +71,7 @@ export default function Barcode() {
             // console.log(results[0].barcodeText);
 
             console.log("axios 호출")
-            axios.get("https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/barcode/search",
+            axios.get("http://172.16.37.98:5000/barcode/search",
                 {
                     params: {
                         // 약이름, page번호 요청
@@ -79,7 +80,17 @@ export default function Barcode() {
                 })
                 .then(response => {
                     console.log(response.data);
-                    setBarcodeResults("");
+                    setBarcodeResults(response.data[0]);
+                    setModalVisible(true);
+                    alert(
+                        // JSON.stringify(response.data[0])
+                        Object.entries(response.data[0])
+                        .map(([key, value]) => `${key}: ${value}`)
+                        .join("\n")
+                        );
+                    // modal_view(response.data[0], true);
+
+
                 })
                 .catch(error => {
                     console.error(error);
@@ -126,8 +137,66 @@ export default function Barcode() {
     }
 
 
+    const modal_view = (data, boolean_data) => {
+        console.log("modal_view 호출");
+        console.log(data);
+        if (boolean_data) {
+            console.log("modalVisible true");
+            return (
+                <View>
+                    <Text>들어옴!</Text>
+                    <Modal
+                        presentationStyle={"formSheet"}
+                        animationType="slide"  // 모달 애니메이션 지정
+                        visible={boolean_data}  // 모달 표시 여부 지정
+                        onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
+                    >
+                        <View>
+                            <Text>상품 정보</Text>
+                            {Object.entries(data).map(([key, value]) => (
+                                <View key={key}>
+                                    <Text>{key}</Text>
+                                    <Text>{value}</Text>
+                                </View>
+                            ))}
+                            <Button
+                                title="Close"
+                                onPress={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 모달을 닫습니다
+                            />
+                        </View>
+                    </Modal>
+                </View>
+            );
+        }
+    }
+
+
+
     return (
         <SafeAreaView style={styles.container}>
+            {/* {modalVisible && (
+                <Modal
+                    style={{ height: 300 }}
+                    presentationStyle= "formSheet"
+                    animationType="fade"  // 모달 애니메이션 지정
+                    visible={modalVisible}  // 모달 표시 여부 지정
+                    onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
+                >
+                    <View  style={{ height: 300 }}>
+                        <Text>상품 정보</Text>
+                        {Object.entries(barcodeResults).map(([key, value]) => (
+                            <View key={key}>
+                                <Text>{key}</Text>
+                                <Text>{value}</Text>
+                            </View>
+                        ))}
+                        <Button
+                            title="Close"
+                            onPress={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 모달을 닫습니다
+                        />
+                    </View>
+                </Modal>
+            )} */}
             {/* 카메라 사용중일때 띄우는 화면 */}
             {useCamera && (
                 <>
