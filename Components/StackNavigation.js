@@ -44,6 +44,7 @@ import MyBoardsList from '../Pages/MyPage/MyBoardsList';
 import MemberInfoEdit from '../Pages/MyPage/MenberInfoEdit';
 import MyLikesList from '../Pages/MyPage/MyLikesList';
 import MyCommentsList from '../Pages/MyPage/MyCommentsList';
+import BarcodeCamera from '../Pages/Search/BarcodeCamera'
 
 const Auth = () => {
   return (
@@ -76,6 +77,7 @@ const Auth = () => {
       <Stack.Screen name="MemberInfoEdit" component={MemberInfoEdit} />
       <Stack.Screen name="MyLikesList" component={MyLikesList} />
       <Stack.Screen name="MyCommentsList" component={MyCommentsList} />
+      <Stack.Screen name="BarcodeCamera" component={BarcodeCamera} />
     </Stack.Navigator>
   );
 };
