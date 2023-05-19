@@ -72,10 +72,10 @@ function MedicineMain({navigation}) {
   //   setData();
   // }, [page]);
 
-  // const handlePageChange = (newPage) => {
-  //   // console.log("페이지 바뀜?",newPage)
-  //   setPage(newPage);
-  // }
+  const handlePageChange = (newPage) => {
+    // console.log("페이지 바뀜?",newPage)
+    setPage(newPage);
+  }
   React.useEffect(() => {
     const setData = async () => {
       setIsLoading(true); // 로딩 상태 true 로 변경
