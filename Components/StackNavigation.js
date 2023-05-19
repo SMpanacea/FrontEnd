@@ -44,7 +44,7 @@ import MyBoardsList from '../Pages/MyPage/MyBoardsList';
 import MemberInfoEdit from '../Pages/MyPage/MenberInfoEdit';
 import MyLikesList from '../Pages/MyPage/MyLikesList';
 import MyCommentsList from '../Pages/MyPage/MyCommentsList';
-import pillDetectionMain from '../Pages/PillDetection/PillDetectionMain';
+import PillDetectionMain from '../Pages/PillDetection/PillDetectionMain';
 
 const Auth = () => {
   return (
@@ -77,7 +77,7 @@ const Auth = () => {
       <Stack.Screen name="MemberInfoEdit" component={MemberInfoEdit} />
       <Stack.Screen name="MyLikesList" component={MyLikesList} />
       <Stack.Screen name="MyCommentsList" component={MyCommentsList} />
-      <Stack.Screen name="pillDetectionMain" component={pillDetectionMain} />
+      <Stack.Screen name="PillDetectionMain" component={PillDetectionMain} />
     </Stack.Navigator>
   );
 };

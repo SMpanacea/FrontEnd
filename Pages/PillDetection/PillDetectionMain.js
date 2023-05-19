@@ -23,7 +23,7 @@ const ScreenStates = {
   RESULTS: 2,
 };
 let imgArray = [];
-export default function pillDetectionMain({ }) {
+export default function PillDetectionMain({ }) {
   const [image, setImage] = useState(null);
   const [boundingBoxes, setBoundingBoxes] = useState(null);
   const [screenState, setScreenState] = useState(ScreenStates.CAMERA);

@@ -14,7 +14,7 @@ export default function Main({ navigation }) {
                 style={styles.down}
                 contentStyle={styles.button}
                 labelStyle={{ fontSize: 20 }}
-                onPress={() => navigation.navigate('pillDetectionMain') }>카메라로 알약 검색</Button>
+                onPress={() => navigation.navigate('PillDetectionMain') }>카메라로 알약 검색</Button>
             <Button
                 mode="outlined"
                 style={styles.down}
