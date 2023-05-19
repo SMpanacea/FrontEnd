@@ -5,6 +5,10 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView, TouchableOpacity, Modal, Image, Animated, Alert } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 
+// 서버 포트
+import ServerPort from '../../Components/ServerPort';
+const IP = ServerPort();
+
 export default function MemberInfo({ navigation, route }) {
   const { userData } = route.params;
 
@@ -29,7 +33,7 @@ export default function MemberInfo({ navigation, route }) {
     try {
       const getToken = await AsyncStorage.getItem('token');
       console.log("getToken : ", getToken);
-      const res = await axios.post('http://172.16.36.15:5000/user/withdrawal', {
+      const res = await axios.post(`${IP}/user/withdrawal`, {
         token: getToken
       })
       console.log("res : ", res.data);
@@ -42,7 +46,9 @@ export default function MemberInfo({ navigation, route }) {
           [
             {
               text: '확인',
-              onPress: () => { navigation.navigate("Login"); route.params.setLoggedIn(false); }
+              onPress: () => { 
+                navigation.navigate("Login"); 
+                route.params.setLoggedIn(false); }
             }
           ],
           { cancelable: false }
@@ -93,7 +99,7 @@ export default function MemberInfo({ navigation, route }) {
         </View>
       </View>
       <TouchableOpacity style={{ alignItems: "flex-end", marginBottom: 40 }} onPress={chkDel}>
-        <Text variant="titleMedium">회원탈퇴</Text>
+        <Text style={{marginRight: 10, borderBottomWidth: 0.5, fontSize:15, marginTop:10 }}>회원탈퇴</Text>
       </TouchableOpacity>
       <View style={styles.profileInfo}>
         <Button
@@ -111,18 +117,17 @@ export default function MemberInfo({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#F7F7F7',
+    backgroundColor: '#F7F7F7',
   },
   profileContainer: {
     alignItems: 'center',
     paddingVertical: 30,
-    borderBottomWidth: 1,
     borderBottomColor: '#ECECEC',
   },
   profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
     marginBottom: 20,
   },
   profileInfo: {
@@ -137,26 +142,26 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     paddingHorizontal: 20,
     paddingTop: 20,
-    marginBottom: 40
+    marginBottom: 10
   },
   userInfoItem: {
     flexDirection: 'row',
-    marginBottom: 35,
+    marginBottom: 45,
   },
   userInfoItem2: {
     flexDirection: 'row',
   },
   label: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#4A4A4A',
-    marginLeft: 5
+      flex: 1,
+      fontSize: 19,
+      fontWeight: 'bold',
+      color: '#4A4A4A',
+      marginLeft: 5
   },
   content: {
-    flex: 3,
-    fontSize: 18,
-    color: '#4A4A4A',
-    marginLeft: 20
+      flex: 3,
+      fontSize: 18,
+      color: '#4A4A4A',
+      marginLeft: 25
   },
 });

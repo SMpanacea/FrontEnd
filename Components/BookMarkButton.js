@@ -37,14 +37,28 @@ function BookMarkButton ({medicinedetail, bookmark}){
 
   
   console.log("두근두근",bookmark) //배열 잘 가져와 근데 뭐가 문제임
-  const [bookmarked, setBookmarked] = useState([]); //useState를 사용해서 즐겨찾기 했는지 안 했는지 알려줌 초기설정은 []임 
+  const [bookmarked, setBookmarked] = useState(true); //useState를 사용해서 즐겨찾기 했는지 안 했는지 알려줌 초기설정은 true임 
   const foundMedicine = bookmark && bookmark.find((item) => item === medicinedetail.itemSeq);
 
 
   console.log("도키도키", foundMedicine)
   const handleBookmark = () => { //bookmark핸들러
   setBookmarked(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
-  console.log("넌 누구냐 진짜!!!!!!!!!",bookmarked)
+
+
+
+
+
+  
+  // console.log("두근두근",bookmark) //배열 잘 가져와 근데 뭐가 문제임
+  // const [bookmarked, setBookmarked] = useState([]); //useState를 사용해서 즐겨찾기 했는지 안 했는지 알려줌 초기설정은 true임 
+  // const foundMedicine = bookmark && bookmark.find((item) => item === medicinedetail.itemSeq);
+
+
+  // console.log("도키도키", foundMedicine)
+  // const handleBookmark = () => { //bookmark핸들러
+  // setBookmarked(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
+  
   const res = {
     itemSeq: medicinedetail.itemSeq,
     itemName: medicinedetail.itemName, 

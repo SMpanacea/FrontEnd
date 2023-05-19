@@ -1,8 +1,12 @@
 // 회원가입 화면
 import axios from 'axios';
 import React, { useRef, useState, Component } from "react";
-import { View, Text, SafeAreaView, StyleSheet, Alert } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, View, Text, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import { RadioButton, TextInput, Button } from 'react-native-paper';
+
+// 서버 포트
+import ServerPort from '../../Components/ServerPort';
+const IP = ServerPort();
 
 export default function Join({ navigation }) {
     const [id, setId] = useState('');
@@ -190,7 +194,7 @@ export default function Join({ navigation }) {
 
     // 엑시오스 통신
     const idDupCheck = async () => { // 아이디 중복 검사
-        await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/idcheck', {
+        await axios.post(`${IP}/user/idcheck`, {
             uid: id
         })
             .then(res => {
@@ -208,7 +212,7 @@ export default function Join({ navigation }) {
     };
     const emailCheck = async () => { //이메일 중복
         if (regEmail === true) {
-            await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/emailcheck', {
+            await axios.post(`${IP}/user/emailcheck`, {
                 email: email
             })
                 .then(res => {
@@ -239,21 +243,20 @@ export default function Join({ navigation }) {
     }
     const emailNumCheck = async () => { // 이메일 인증
         setIsShown(true);
-        await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/sendemail', {
+        await axios.post(`${IP}/user/sendemail`, {
             email: email
         })
             .then(res => {
-                console.log("res.data : ", res.data);
                 const parsedEmailNum = res.data; // 숫자를 문자열로 변환
-                console.log("parsedEmailNum : ", parsedEmailNum.toString());
-                setCEmailNum(parsedEmailNum);
+                const num = parsedEmailNum.toString();
+                setCEmailNum(num);
             })
             .catch(function (err) {
                 console.log(err);
             });
     };
-    const nickDupCheck = async (e) => { // 닉네임 중복 검사
-        await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/nicknamecheck', {
+    const nickDupCheck = async () => { // 닉네임 중복 검사
+        await axios.post(`${IP}/user/nicknamecheck`, {
             nickname: nickname
         })
             .then(res => {
@@ -273,7 +276,7 @@ export default function Join({ navigation }) {
     //서버에 값 송신
     const handleSubmit = async () => {
         try {
-            const res = await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/register', {
+            const res = await axios.post(`${IP}/user/register`, {
                 uid: id,
                 upw: pw,
                 email: email,
@@ -282,11 +285,7 @@ export default function Join({ navigation }) {
                 gender: gender
             })
             console.log("res.data : ", res.data);
-            if (res.data === true) {
-                // 회원가입 성공 시 실행할 코드
-                console.log("됨");
-                navigation.navigate("Login")
-            } else {
+            if (res.data === false) {
                 // 회원가입 실패 시 실행할 코드
                 console.log("안됨");
                 Alert.alert(
@@ -295,6 +294,19 @@ export default function Join({ navigation }) {
                     [
                         {
                             text: '확인',
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            } else {
+                // 회원가입 성공 시 실행할 코드
+                Alert.alert(
+                    '',
+                    '회원가입 성공하였습니다',
+                    [
+                        {
+                            text: '확인',
+                            onPress: ()=>{ navigation.navigate("Login") }
                         }
                     ],
                     { cancelable: false }
@@ -408,150 +420,179 @@ export default function Join({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={styles.box} keyboardShouldPersistTaps="handled">
-            <Text style={styles.text}>계정 만들기</Text>
-            <TextInput
-                label={"아이디"}
-                placeholder="영문 소문자/숫자, 6~14자"
-                onChangeText={setId}
-                onEndEditing={handleInputId}
-                maxLength={14}
-            />
-            <Text style={styles.error}>{mIdError}</Text>
-            <TextInput
-                label={"비밀번호"}
-                ref={pwRef}
-                placeholder="영문 대소문자/숫자/특수문자, 8자~16자"
-                onChangeText={setPw}
-                onEndEditing={handleInputPw}
-                secureTextEntry={!isPasswordVisible}
-                autoCapitalize="none"
-                textContentType="password"
-                right={<TextInput.Icon icon="eye" onPress={() => setPasswordVisibility(!isPasswordVisible)} />}
-                maxLength={16}
-            />
-            <Text style={styles.error}>{mPwError}</Text>
-            <TextInput
-                ref={cpwRef}
-                placeholder="비밀번호 확인"
-                onChangeText={setCpw}
-                onEndEditing={handleInputCpw}
-                secureTextEntry={!isPasswordVisible2}
-                autoCapitalize="none"
-                textContentType="password"
-                right={<TextInput.Icon icon="eye" onPress={() => setPasswordVisibility2(!isPasswordVisible2)} />}
-                maxLength={16}
-            />
-            <Text style={styles.error}>{mCpwError}</Text>
-            <View style={[styles.row]}>
-                <TextInput
-                    label={"이메일"}
-                    style={[styles.dateInput]}
-                    onChangeText={setEmail}
-                    onEndEditing={handleInputEmail}
-                    maxLength={40}
-                />
-                <Button
-                    mode="outlined"
-                    contentStyle={{ height: 50, alignItems: 'center' }}
-                    labelStyle={{ fontSize: 15 }}
-                    onPress={emailCheck}
-                >인증</Button>
-            </View>
-            <Text style={styles.error}>{mEmailError}</Text>
-            {isShown && (
-                <View>
-                    <View style={[styles.row]}>
+        <SafeAreaView style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+                    <View style={styles.box}>
+                        <Text style={styles.text}>계정 만들기</Text>
                         <TextInput
-                            label={"이메일 인증번호"}
-                            style={[styles.dateInput]}
-                            onChangeText={setEmailNum}
-                            onEndEditing={handleInputEmailNum}
-                            keyboardType="numeric"
-                            maxLength={6}
+                            label={"아이디"}
+                            style={styles.input}
+                            placeholder="영문 소문자/숫자, 6~14자"
+                            onChangeText={setId}
+                            onEndEditing={handleInputId}
+                            maxLength={14}
                         />
+                        <Text style={styles.error}>{mIdError}</Text>
+                        <TextInput
+                            label={"비밀번호"}
+                            style={styles.input}
+                            ref={pwRef}
+                            placeholder="영문 대소문자/숫자/특수문자, 8자~16자"
+                            onChangeText={setPw}
+                            onEndEditing={handleInputPw}
+                            secureTextEntry={!isPasswordVisible}
+                            autoCapitalize="none"
+                            textContentType="password"
+                            right={<TextInput.Icon icon="eye" onPress={() => setPasswordVisibility(!isPasswordVisible)} />}
+                            maxLength={16}
+                        />
+                        <Text style={styles.error}>{mPwError}</Text>
+                        <TextInput
+                            ref={cpwRef}
+                            style={styles.input}
+                            placeholder="비밀번호 확인"
+                            onChangeText={setCpw}
+                            onEndEditing={handleInputCpw}
+                            secureTextEntry={!isPasswordVisible2}
+                            autoCapitalize="none"
+                            textContentType="password"
+                            right={<TextInput.Icon icon="eye" onPress={() => setPasswordVisibility2(!isPasswordVisible2)} />}
+                            maxLength={16}
+                        />
+                        <Text style={styles.error}>{mCpwError}</Text>
+                        <View style={[styles.row]}>
+                            <TextInput
+                                label={"이메일"}
+                                style={[styles.dateInput, styles.input]}
+                                onChangeText={setEmail}
+                                onEndEditing={handleInputEmail}
+                                maxLength={40}
+                            />
+                            <Button
+                                mode="outlined"
+                                contentStyle={{ height: 50, alignItems: 'center' }}
+                                labelStyle={{ fontSize: 15 }}
+                                onPress={emailCheck}
+                            >인증</Button>
+                        </View>
+                        <Text style={styles.error}>{mEmailError}</Text>
+
+                        {isShown && (
+                            <View>
+                                <View style={[styles.row]}>
+                                    <TextInput
+                                        label={"이메일 인증번호"}
+                                        style={[styles.dateInput, styles.input]}
+                                        onChangeText={setEmailNum}
+                                        onEndEditing={handleInputEmailNum}
+                                        keyboardType="numeric"
+                                        maxLength={6}
+                                    />
+                                    <Button
+                                        mode="outlined"
+                                        contentStyle={{ height: 50, alignItems: 'center' }}
+                                        labelStyle={{ fontSize: 15 }}
+                                        onPress={handleCheckEmailNum}
+                                    >확인</Button>
+                                </View>
+                                <Text style={styles.error}>{mEmailNumError}</Text>
+                            </View>
+                        )}
+                        <TextInput
+                            label={"닉네임"}
+                            style={styles.input}
+                            placeholder="영문 소문자/한글/숫자, 2~12자"
+                            onChangeText={setNickname}
+                            onEndEditing={handleInputNickName}
+                            maxLength={12}
+                        />
+                        <Text style={[styles.error]}>{mNickError}</Text>
+                        <TextInput
+                            label={"생년월일"}
+                            style={styles.input}
+                            placeholder="예시) 1990-01-01"
+                            onChangeText={setBirth}
+                            onEndEditing={handleInputBirth}
+                            keyboardType='numeric'
+                            maxLength={10}
+                        />
+                        <Text style={[styles.error]}>{mBirthError}</Text>
+                        <View style={[styles.row, styles.down]}>
+                            <Text style={{ fontSize: 16, marginLeft: 20, marginRight: 40 }}>성별</Text>
+                            <RadioButton
+                                value="남성"
+                                status={checked === '남성' ? 'checked' : 'unchecked'}
+                                onPress={() => { { setChecked('남성'); setGender('남성'); } }}
+                            />
+                            <Text style={{ fontSize: 16, marginRight: 40 }}>남자</Text>
+                            <RadioButton
+                                value="여성"
+                                status={checked === '여성' ? 'checked' : 'unchecked'}
+                                onPress={() => { { setChecked('여성'); setGender('여성'); } }}
+                            />
+                            <Text style={{ fontSize: 16 }}>여자</Text>
+                        </View>
                         <Button
                             mode="outlined"
-                            contentStyle={{ height: 50, alignItems: 'center' }}
-                            labelStyle={{ fontSize: 15 }}
-                            onPress={handleCheckEmailNum}
+                            contentStyle={styles.buttonContent}
+                            labelStyle={styles.buttonLabel}
+                            onPress={onFinish}
                         >확인</Button>
                     </View>
-                    <Text style={styles.error}>{mEmailNumError}</Text>
-                </View>
-            )}
-            <TextInput
-                label={"닉네임"}
-                placeholder="영문 소문자/한글/숫자, 2~12자"
-                onChangeText={setNickname}
-                onEndEditing={handleInputNickName}
-                maxLength={12}
-            />
-            <Text style={[styles.error]}>{mNickError}</Text>
-            <TextInput
-                label={"생년월일"}
-                placeholder="예시) 1990-01-01"
-                onChangeText={setBirth}
-                onEndEditing={handleInputBirth}
-                keyboardType='numeric'
-                maxLength={10}
-            />
-            <Text style={[styles.error]}>{mBirthError}</Text>
-            <View style={[styles.row, styles.down]}>
-                <Text>성별</Text>
-                <RadioButton
-                    value="남성"
-                    status={checked === '남성' ? 'checked' : 'unchecked'}
-                    onPress={() => { { setChecked('남성'); setGender('남성'); } }}
-                />
-                <Text>남자</Text>
-                <RadioButton
-                    value="여성"
-                    status={checked === '여성' ? 'checked' : 'unchecked'}
-                    onPress={() => { { setChecked('여성'); setGender('여성'); } }}
-                />
-                <Text>여자</Text>
-            </View>
-            <Button
-                mode="outlined"
-                contentStyle={{ height: 50, alignItems: 'center' }}
-                labelStyle={{ fontSize: 15 }}
-                onPress={onFinish}
-            >확인</Button>
+                </KeyboardAvoidingView>
+            </ScrollView>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+    },
+    keyboardAvoidingView: {
+        flex: 1,
+    },
     box: {
         flex: 1,
-        justifyContent: "center",
+        justifyContent: 'center',
         marginHorizontal: 30,
-    },
-    text: {
-        fontSize: 24,
-        marginBottom: 20,
     },
     row: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginTop: 5,
     },
     dateInput: {
         flex: 1,
         marginRight: 10,
         color: 'black'
     },
+    text: {
+        fontSize: 24,
+        marginBottom: 20,
+    },
+    input: {
+        backgroundColor: '#f5f5f5',
+        borderEndColor: '#ffffff'
+    },
     error: {
         color: 'red',
         fontSize: 15,
         marginBottom: 5,
     },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
+    buttonContent: {
+        height: 50,
         alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonLabel: {
+        fontSize: 15,
     },
     down: {
-        marginBottom: 20
+        marginBottom: 15
     }
 });
