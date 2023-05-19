@@ -1,13 +1,17 @@
 import * as React from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View, AccessibilityInfo } from "react-native";
 
 export default function LoadingScreen() {
+
+
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="orange" />
-      <Text style={styles.loadingText}>Processing...</Text>
+      <ActivityIndicator size="large" color="orange" accessible={true}
+        accessibilityLabel="사진을 촬영 하였습니다   로딩 중" />
+      <Text style={styles.loadingText}>loding</Text>
     </View>
   );
+
 }
 
 const styles = StyleSheet.create({

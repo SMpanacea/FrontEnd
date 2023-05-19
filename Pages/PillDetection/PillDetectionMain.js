@@ -1,7 +1,8 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import {
   SafeAreaView,
-  StyleSheet
+  StyleSheet,
+  AccessibilityInfo
 } from 'react-native';
 import {
   ImageUtil
@@ -28,8 +29,17 @@ export default function PillDetectionMain({ }) {
   const [boundingBoxes, setBoundingBoxes] = useState(null);
   const [screenState, setScreenState] = useState(ScreenStates.CAMERA);
 
-
-
+  const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+  useEffect(() => {
+    const screenReaderChangedSubscription = AccessibilityInfo.addEventListener('screenReaderChanged', isScreenReaderEnabled => {
+      setScreenReaderEnabled(isScreenReaderEnabled);
+    },);
+    AccessibilityInfo.isScreenReaderEnabled().then(isScreenReaderEnabled => { setScreenReaderEnabled(isScreenReaderEnabled) });
+    return () => {
+      screenReaderChangedSubscription.remove();
+    };
+  }, []);
+  imgArray = [];//이미지 base64 데이터 배열
   // 리셋 핸들러 함수
   const handleReset = useCallback(async () => {
     setScreenState(ScreenStates.CAMERA);
@@ -38,7 +48,7 @@ export default function PillDetectionMain({ }) {
     }
     setImage(null);
     setBoundingBoxes(null);
-    imgArray = [];
+
     console.log('imgArray.length', imgArray.length)
   }, [image, setScreenState]);
 
@@ -86,9 +96,9 @@ export default function PillDetectionMain({ }) {
     imgArray = [];
   };
 
-
   // 카메라에서 캡처 이벤트를 처리하는 함수
   async function handleImage(capturedImage) {
+
     setImage(capturedImage);
     // YOLOv5 모델을 통해 이미지 처리 및 결과 이미지 그리기를 기다립니다
     setScreenState(ScreenStates.LOADING);
@@ -101,12 +111,17 @@ export default function PillDetectionMain({ }) {
       // 결과 화면으로 전환하여 감지된 객체를 표시합니다
       setScreenState(ScreenStates.RESULTS);
     } catch (err) {
+
       // 객체가 검줄 되지 않거나 오류가 발생한 경우 새로운 사진을 찍기 위해 카메라 화면으로 돌아갑니다
       console.log(err);
       handleReset();
     }
   }
-
+  if (screenState === 0) {
+    const speak = (() => {
+      AccessibilityInfo.announceForAccessibility(`총 두 장의 사진 중 ${imgArray.length} 장의 사진을 촬영하였습니다.`);
+    })();
+  }
   return (
     <SafeAreaView style={styles.container}>
       {screenState === ScreenStates.CAMERA && (
