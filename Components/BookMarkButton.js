@@ -10,10 +10,22 @@ import ServerPort from './ServerPort';
 const IP = ServerPort();
 
 
-function BookMarkButton ({medicinedetail, bookmark}){
+function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, setBookmark}){
+  const [bookmarked2, setBookmark2] = useState(bookmarked) //bookmared를 받았으니 별활성화 할지 안 할지의 값을 받은거임 그래서 초기값으로 설정해줬으니 자기값임(부모값을 자식값으로 넣어줌)
 
+  const click = (data) => {
+    setBookMarked(data)//부모의 클릭함수를 실행시킴
+    setBookmark2(!bookmarked2)//나의 bookmark활성화 비활성화 값을 변경(나는 BookMarkButton임)
+  }
 
-  
+  // React.useEffect(()=>{
+
+  // },[])
+  // const [rander, setRender] = React.useState(false);
+
+  useEffect(() => {
+    console.log('cliked 컴포넌트가 재랜더링되었습니다.');
+  }, [bookmarked2]);
 
 
 //   console.log("두근두근",bookmark) //배열 잘 가져와 근데 뭐가 문제임
@@ -37,27 +49,34 @@ function BookMarkButton ({medicinedetail, bookmark}){
 
   
   console.log("두근두근",bookmark) //배열 잘 가져와 근데 뭐가 문제임
-  const [bookmarked, setBookmarked] = useState([]); //useState를 사용해서 즐겨찾기 했는지 안 했는지 알려줌 초기설정은 []임 
-  const foundMedicine = bookmark && bookmark.find((item) => item === medicinedetail.itemSeq);
+  // const [bookmarked, setBookmarked] = useState(); //useState를 사용해서 즐겨찾기 했는지 안 했는지 알려줌 초기설정은 []임 
+  // const foundMedicine = bookmark && bookmark.find((item) => item === medicinedetail.itemSeq);
 
 
-  console.log("도키도키", foundMedicine)
+  console.log("도키도키", bookmarked)
   const handleBookmark = () => { //bookmark핸들러
-  setBookmarked(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
-  console.log("넌 누구냐 진짜!!!!!!!!!",bookmarked)
-  const res = {
-    itemSeq: medicinedetail.itemSeq,
-    itemName: medicinedetail.itemName, 
-    itemImage: medicinedetail.itemImage, 
-    updateDe:medicinedetail.updateDe,
-    token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
-  };
+  // setBookmarked(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
+  // console.log("넌 누구냐 진짜!!!!!!!!!",bookmarked)
+    
+    const res = {
+      itemSeq: medicinedetail.itemSeq,
+      itemName: medicinedetail.itemName, 
+      itemImage: medicinedetail.itemImage, 
+      updateDe:medicinedetail.updateDe,
+      token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
+    };
 
-    if(foundMedicine){
+    if(bookmarked2){
       axios.post(`${IP}/medicine/bookmarkoff`, res) // 별 색 있는 거 find했을 때 있으면 색 있는 거
       .then(response => {
         // 통신 성공 시 처리할 로직
-        console.log('즐겨찾기 해제 성공:', response.data);
+        console.log("??")
+        console.log('즐겨찾기 해제 성공:', response.data); 
+        if(response.data !== "false"){
+          setBookmark(response.data) //최상위 부모(MedicinMain)의 booklist를 변경시켜줌
+          // setRender(!render)     
+          click(response.data) //BookMarkButton의 click함수를 실행, 이름 바꿔라
+        }
       })
       .catch(error => {
         // 통신 실패 시 처리할 로직
@@ -69,6 +88,11 @@ function BookMarkButton ({medicinedetail, bookmark}){
       .then(response => {
         // 통신 성공 시 처리할 로직
         console.log('즐겨찾기 등록 성공:', response.data);
+        if(response.data !== "false"){
+          setBookmark(response.data)//최상위 부모(MedicinMain)의 booklist를 변경시켜줌
+          // setRender(!render)
+          click(response.data)//BookMarkButton의 click함수를 실행, 이름 바꿔라
+        }
       })
       .catch(error => {
         // 통신 실패 시 처리할 로직
@@ -80,8 +104,9 @@ function BookMarkButton ({medicinedetail, bookmark}){
   return (
     <TouchableOpacity onPress={handleBookmark}> 
       <View style={styles.bookmarkbutton}>
-        <Image source={bookmarked ?  bookmarkImage : bookmarkedImage} style={styles.image} /> 
+        <Image source={bookmarked2 ?  bookmarkImage : bookmarkedImage} style={styles.image} /> 
         {/*bookmarked에 값이 있으면 색별, 아니면 빈별 뜨게 해줌*/}
+        <Text>{bookmarked2 ?  "bookmarkImage" : "bookmarkedImage"}</Text>
       </View>
     </TouchableOpacity>
   );
