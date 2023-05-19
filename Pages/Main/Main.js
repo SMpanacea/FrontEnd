@@ -7,6 +7,21 @@ import { Text, Button } from 'react-native-paper';
 export default function Main({ navigation }) {
 
     return (
+        // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        //     <Button
+        //         mode="outlined"
+        //         style={styles.down}
+        //         contentStyle={styles.button}
+        //         labelStyle={{ fontSize: 20 }}
+        //         onPress={console.log("카머라 버튼 눌림")}>바코드 검색</Button>
+        //     <Button
+        //         mode="outlined"
+        //         style={styles.down}
+        //         contentStyle={styles.button}
+        //         labelStyle={{ fontSize: 20 }}
+        //         onPress={console.log("얼역 버튼 눌림")}>알약 검색</Button>
+
+        // </View>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Button
                 mode="outlined"
