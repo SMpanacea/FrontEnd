@@ -4,6 +4,11 @@ import React, { useState } from "react";
 import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 
+// 서버 포트
+import ServerPort from '../../../Components/ServerPort';
+const IP = ServerPort();
+
+
 export default function ReissuanceId() {
     const [id, setId] = useState('');
     const [email, setEmail] = useState('');
@@ -75,7 +80,7 @@ export default function ReissuanceId() {
             setTempEmail(email);
             console.log("이멜 : ", tempEmail);
             try {
-                const res = await axios.post('http://172.16.36.15:5000/user/findid', {
+                const res = await axios.post(`${IP}/user/findid`, {
                   email: tempEmail
                 });
                 console.log("res.data : ", res.data);
@@ -99,7 +104,7 @@ export default function ReissuanceId() {
     
     const emailNumCheck = async () => { // 이메일 인증
         setIsShown(true);
-        await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/sendemail', {
+        await axios.post(`${IP}/user/sendemail`, {
             email: email
         })
             .then(res => {
@@ -115,7 +120,7 @@ export default function ReissuanceId() {
             });
     };
     const emailCheck = async () => { // 이메일 중복
-            await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/emailcheck', {
+            await axios.post(`${IP}/user/emailcheck`, {
                 email: email
             })
                 .then(res => {
@@ -142,7 +147,7 @@ export default function ReissuanceId() {
             <View style={[styles.row]}>
                 <TextInput
                     label={"이메일"}
-                    style={[styles.dateInput]}
+                    style={styles.dateInput}
                     onChangeText={setEmail}
                     maxLength={40}
                 />
@@ -198,7 +203,8 @@ const styles = StyleSheet.create({
     dateInput: {
         flex: 1,
         marginRight: 10,
-        color: 'black'
+        color: 'black',
+        backgroundColor: '#f5f5f5',
     },
     error: {
         color: 'red',

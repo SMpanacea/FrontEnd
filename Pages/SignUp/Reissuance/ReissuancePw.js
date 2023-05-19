@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 
+// 서버 포트
+import ServerPort from '../../../Components/ServerPort';
+const IP = ServerPort();
+
 export default function ReissuancePw({ navigation }) {
     const [id, setId] = useState('');
     const [tempId, setTempId] = useState('');
@@ -30,16 +34,16 @@ export default function ReissuancePw({ navigation }) {
             );
         } else {
             try {
-                const res = await axios.post('http://172.16.36.15:5000/user/findpw', {
+                const res = await axios.post(`${IP}/user/findpw`, {
                     uid: tempId,
                     email: tempEmail
                 });
                 console.log("res.data : ", res.data);
-                console.log("res.data type : ", typeof(res.data));
+                console.log("res.data type : ", typeof (res.data));
                 const bool = res.data;
-                if(bool){
+                if (bool) {
                     setTempId(id);
-                    navigation.navigate("ResetPw", {id});
+                    navigation.navigate("ResetPw", { id });
                 } else {
                     Alert.alert(
                         '',
@@ -129,7 +133,7 @@ export default function ReissuancePw({ navigation }) {
         }
     }
     const emailCheck = async () => { // 이메일 중복
-        await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/emailcheck', {
+        await axios.post(`${IP}/user/emailcheck`, {
             email: email
         })
             .then(res => {
@@ -151,7 +155,7 @@ export default function ReissuancePw({ navigation }) {
     }
     const emailNumCheck = async () => { // 이메일 인증
         setIsShown(true);
-        await axios.post('https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/user/sendemail', {
+        await axios.post(`${IP}/user/sendemail`, {
             email: email
         })
             .then(res => {
@@ -169,48 +173,53 @@ export default function ReissuancePw({ navigation }) {
     return (
         <SafeAreaView style={styles.box}>
             <Text style={styles.text}>비밀번호 찾기</Text>
-            
+
             <TextInput
+                style={{ marginBottom: 10, 
+                    backgroundColor: '#f5f5f5' }}
                 label={"아이디"}
                 placeholder="영문 소문자/숫자, 6~14자"
                 onChangeText={setId}
                 maxLength={14}
             />
 
-            <View style={[styles.row]}>
-                <TextInput
-                    label={"이메일"}
-                    style={[styles.dateInput]}
-                    onChangeText={setEmail}
-                    maxLength={40}
-                />
-                <Button
-                    mode="outlined"
-                    contentStyle={{ height: 50, alignItems: 'center' }}
-                    labelStyle={{ fontSize: 15 }}
-                    onPress={handleInputEmail}
-                >인증</Button>
-            </View>
-
-            {isShown && (
-                <View>
-                    <View style={[styles.row]}>
-                        <TextInput
-                            label={"이메일 인증번호"}
-                            style={[styles.dateInput]}
-                            onChangeText={setEmailNum}
-                            keyboardType="numeric"
-                            maxLength={6}
-                        />
-                        <Button
-                            mode="outlined"
-                            contentStyle={{ height: 50, alignItems: 'center' }}
-                            labelStyle={{ fontSize: 15 }}
-                            onPress={handleInputEmailNum}
-                        >확인</Button>
-                    </View>
+            <View
+                style={{ marginBottom: 25 }}>
+                <View style={[styles.row]}>
+                    <TextInput
+                        label={"이메일"}
+                        style={[styles.dateInput]}
+                        onChangeText={setEmail}
+                        maxLength={40}
+                    />
+                    <Button
+                        mode="outlined"
+                        contentStyle={{ height: 50, alignItems: 'center' }}
+                        labelStyle={{ fontSize: 15 }}
+                        onPress={handleInputEmail}
+                    >인증</Button>
                 </View>
-            )}
+
+                {isShown && (
+                    <View>
+                        <View style={[styles.row]}>
+                            <TextInput
+                                label={"이메일 인증번호"}
+                                style={[styles.dateInput]}
+                                onChangeText={setEmailNum}
+                                keyboardType="numeric"
+                                maxLength={6}
+                            />
+                            <Button
+                                mode="outlined"
+                                contentStyle={{ height: 50, alignItems: 'center' }}
+                                labelStyle={{ fontSize: 15 }}
+                                onPress={handleInputEmailNum}
+                            >확인</Button>
+                        </View>
+                    </View>
+                )}
+            </View>
             <Button
                 mode="outlined"
                 contentStyle={{ height: 50, alignItems: 'center' }}
@@ -241,7 +250,8 @@ const styles = StyleSheet.create({
     dateInput: {
         flex: 1,
         marginRight: 10,
-        color: 'black'
+        color: 'black',
+        backgroundColor: '#f5f5f5',
     },
     error: {
         color: 'red',
