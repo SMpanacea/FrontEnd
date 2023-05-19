@@ -30,47 +30,32 @@ const screenWidth = Dimensions.get('window').width;
 
 
 
-function MedicineDetail({navigation, route}) {
+function MedicineDetail({navigation, route }) {
   const {medicinedatitemSeq} = route.params;//다른 컴포넌트에서 넘겨받은 약 고유값
+  const [bookmark, setBookmark2 ] = React.useState(route.params.bookmark); //bookmarklist를 받아서 bookmarklist로 초기값 설정해줌
+  const {setBookmark} = route.params; //부모의 booklist를 변경해주는 함수
+  const [bookmarked, setBookMarked] = React.useState(bookmark.includes(medicinedatitemSeq)); //별표를 성화할지 비활성화 해줄 true, false값
+  
+
   const [medicinedetail, setMedicinedetail] = React.useState(null);
   const [medicinname, setMedicinName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
-  const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
-
-  // initialFocusRef = React.useRef(null);
-  // const tag = findNodeHandle(this.initialFocusRef.current);
-  // UIManager.sendAccessibilityEvent(tag, UIManager.AccessibilityEventTypes.typeViewFocused);
-
-
-  // const setInitFocus = (component) => {
-  //   const elementId = findNodeHandle(component);
-  //   AccessibilityInfo.setAccessibilityFocus(elementId);
-  //   AccessibilityInfo.setAccessibilityFocus(elementId);
-  // }
-
+  const [render, setRender] = React.useState(false);
   
-  // AccessibilityInfo.setAccessibilityFocus(UIManager.AccessibilityEventTypes.typeViewFocused);
+  // const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
 
-  // const [data, setDat] = React.useState([]);//
+  React.useEffect(() => {
+    console.log('cliked 재랜더링되었습니다.');
+    console.log("bo", bookmark);
+  }, [bookmarked]);
 
-  React.useEffect(()=>{
-    const Bookmark = () => {
-      axios.post(`${IP}/medicine/bookmarklist`,{
-        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
-      })
-      .then(function(res){
-        console.log("북마크 잘 가져왔나요?", res.data);
-        setBookmark(res.data);
-      })
-      .catch(function(e){
-        console.log("즐겨찾기 리스트 못 가져옴,,,", e)
-      })
-
-    };
-    Bookmark();
-  },[]);
+  const click = (data) => { //setBookMarked라는 이름으로 BookMarkButton으로 넘겨줌
+    setBookmark2(data) //click 자신의 booklist(bookmark)를 변경해줌
+    setBookMarked(!bookmarked)//별표에 활성 비활성화를 변경해줌()
+  }
 
   React.useEffect(()=>{
+    // console.log("bookmark123123배열 잘 가져오나요?", bookmark)
     const setData = async () =>{
       setIsLoading(true); // 로딩 상태 true로 변경
       try{
@@ -90,8 +75,20 @@ function MedicineDetail({navigation, route}) {
     };
     setData();
     console.log(medicinname)
+    console.log("bookmarklist 잘 가져오냐??? ㅋㅋ 제발 떠라,,",bookmark)
+    
   },[]);
 
+  // React.useEffect(() => {
+  //   console.log("bookmark1 배열:", bookmark);
+  // }, [bookmark]);
+
+  // console.log(medicinname);
+
+  // // 렌더링 과정 이후에도 console.log(bookmark) 호출 가능
+  // React.useEffect(() => {
+  //   console.log("bookmark2 배열:", bookmark);
+  // });
 
   // console.log("medicineDetail까지 들어오나요?", bookmark)
   // navigation 기본 제공 header이름 수정
@@ -101,7 +98,9 @@ function MedicineDetail({navigation, route}) {
       // headerRight: () => <BookMarkButton medicinedetail={medicinedetail} bookmark={bookmark}/> //header오른쪽에 bookMarkbutton component 불러오기
       headerRight: () => (
         <View style={styles.headerRightContainer}>
-          <BookMarkButton medicinedetail={medicinedetail} bookmark={bookmark} />
+           {/* <BookMarkButton medicinedetail={medicinedetail} bookmark={bookmark} /> */}
+          <BookMarkButton medicinedetail={medicinedetail} bookmarked= {bookmarked} setBookMarked = {click} bookmark={bookmark} setBookmark = {setBookmark}/> 
+          {/*값이랑 함수들 다 넘겨줌*/}
         </View>
       ),
     });
