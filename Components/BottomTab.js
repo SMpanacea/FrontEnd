@@ -147,6 +147,7 @@ import TextSearch from '../Pages/Search/TextSearch';
 import CameraSearch from '../Pages/Search/CameraSearch';
 import GPT from '../Pages/GPT/Gpt';
 import MedicineCamera from '../Pages/Medicine/MedicineCamera';
+import BarcodeCamera from '../Pages/Search/BarcodeCamera';
 
 import Main from '../Pages/Main/Main';  
 import Login from '../Pages/SignUp/Login';
@@ -208,7 +209,7 @@ function BottomTab() {
       />
       <Tab.Screen
         name="CameraSearch"
-        component={CameraSearch}
+        component={BarcodeCamera}
         options={{
           tabBarLabel: '카메라 사진찍어!!',
           tabBarIcon: ({ color }) => (
