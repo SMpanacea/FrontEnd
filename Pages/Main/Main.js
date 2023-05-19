@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Text, Button } from 'react-native-paper';
+// import pillDetectionMain from '../PillDetection/PillDetectionMain';
 
 export default function Main({ navigation }) {
 
@@ -13,7 +14,7 @@ export default function Main({ navigation }) {
                 style={styles.down}
                 contentStyle={styles.button}
                 labelStyle={{ fontSize: 20 }}
-                onPress={console.log("카머라 버튼 눌림")}>카메라로 알약 검색</Button>
+                onPress={() => navigation.navigate('pillDetectionMain') }>카메라로 알약 검색</Button>
             <Button
                 mode="outlined"
                 style={styles.down}
