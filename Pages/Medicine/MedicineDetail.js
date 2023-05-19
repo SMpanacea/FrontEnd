@@ -42,10 +42,10 @@ function MedicineDetail({navigation, route}) {
   React.useEffect(()=>{
     const Bookmark = () => {
       axios.post(`${IP}/medicine/bookmarklist`,{
-        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYWRtaW4yIiwiZXhwIjoxNjg0MDUxMDQxLCJpYXQiOjE2ODM0NDYyNDF9.BuFZu4A5VHSJHCqM89rpfWD2PzfKisITWLv9zexoefY"//걍 지정해줌
+        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
       })
       .then(function(res){
-        // console.log("잘 가져왔나요?", res.data);
+        console.log("북마크 잘 가져왔나요?", res.data);
         setBookmark(res.data);
       })
       .catch(function(e){
@@ -67,28 +67,12 @@ function MedicineDetail({navigation, route}) {
           });
           setMedicinedetail(res.data);
           setMedicinName(res.data.itemName);
-          console.log("모든 데이터 출력:", JSON.stringify(res.data, null, 2));
+          // console.log("모든 데이터 출력:", JSON.stringify(res.data, null, 2));
         } catch(error){
           console.log("Medicindetail 목록 가져오기 실패,,,", error)
         } finally {
           setIsLoading(false); //로딩 상태 false로 변경
         }
-      // await axios.get(`${IP}/medicine/detail`,{
-      //   params: {
-      //     itemSeq: medicinedatitemSeq, // 약 고유 번호 서버로 보내서 그값만 보여줌
-      //   },
-      // })
-      // .then(function(res){
-      //   // console.log("res데이터 잘 받아왔나요?: ", res.data);
-      //   // console.log("1",res.data);
-      //   const data = res.data;
-      //   console.log(`Data:\n${JSON.stringify(data, null, 2)}`);
-      //   setMedicinedetail(res.data);
-      //   setMedicinName(res.data.itemName);
-      // })
-      // .catch(function(error){
-      //   console.log("Medicindetail 목록 가져오기 실패,,,", error)
-      // })
     };
     setData();
     console.log(medicinname)
@@ -100,40 +84,17 @@ function MedicineDetail({navigation, route}) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: medicinname, //header 약 이름 출력
-      headerRight: () => <BookMarkButton medicinedetail={medicinedetail} bookmark={bookmark}/> //header오른쪽에 bookMarkbutton component 불러오기
+      // headerRight: () => <BookMarkButton medicinedetail={medicinedetail} bookmark={bookmark}/> //header오른쪽에 bookMarkbutton component 불러오기
+      headerRight: () => (
+        <View style={styles.headerRightContainer}>
+          <BookMarkButton medicinedetail={medicinedetail} bookmark={bookmark} />
+        </View>
+      ),
     });
   }, [medicinname])
 
-  // // 로딩 화면 넣기 전 코드
-  // React.useEffect(()=>{
-  //   const setData = async () =>{
-  //     await axios.get(`${IP}/medicine/detail`,{
-  //       params: {
-  //         itemSeq: medicinedatitemSeq, // 약 고유 번호 서버로 보내서 그값만 보여줌
-  //       },
-  //     })
-  //     .then(function(res){
-  //       // console.log("res데이터 잘 받아왔나요?: ", res.data);
-  //       // console.log("1",res.data);
-  //       const data = res.data;
-  //       console.log(`Data:\n${JSON.stringify(data, null, 2)}`);
-  //       setMedicinedetail(res.data);
-  //       setMedicinName(res.data.itemName);
-  //     })
-  //     .catch(function(error){
-  //       console.log("Medicindetail 목록 가져오기 실패,,,", error)
-  //     })
-  //   }
-  //   setData();
-  //   console.log(medicinname)
-  // },[]);
-
-
-
   const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
-  
 
- 
   return (
       // <CustomHeader title={medicinname} route={{ params: { medicinedetail } }} />
       <View style={styles.container}> 
@@ -163,26 +124,15 @@ function MedicineDetail({navigation, route}) {
                   {medicinedetail&&medicinedetail.efcyQesitm ? (
                     <Card>
                       <Card.Content>
-                        {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.efcyQesitm}</Text>
                       </Card.Content>
                     </Card>
-                    
-                    // <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>{medicinedetail.efcyQesitm}</Text> 
-                    // </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
-                     
-                    //   <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>값이 없어!</Text>
-                    // </View>
                     )}
                 </View>
                 
@@ -194,18 +144,12 @@ function MedicineDetail({navigation, route}) {
                     {medicinedetail&&medicinedetail.useMethodQesitm ? (
                       <Card>
                         <Card.Content>
-                          {/* <Text variant="titleLarge"></Text> */}
                           <Text variant="bodyMedium">{medicinedetail.useMethodQesitm}</Text>
                         </Card.Content>
                       </Card>
-                      // <View style={styles.Infocontent}>
-                      //   <Text style={styles.Infotext}>{medicinedetail.useMethodQesitm}</Text>
-                      // </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
@@ -220,24 +164,15 @@ function MedicineDetail({navigation, route}) {
                   {medicinedetail && medicinedetail.atpnWarnQesitm ? (
                     <Card>
                       <Card.Content>
-                        {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.atpnWarnQesitm}</Text>
                       </Card.Content>
                     </Card>
-                    // <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>{medicinedetail.atpnWarnQesitm}</Text>
-                    // </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
-                      // <View style={styles.Infocontent}>
-                      //   <Text style={styles.Infotext}>값이 없어!</Text>
-                      // </View>
                     )}
                 </View>
                 
@@ -253,22 +188,13 @@ function MedicineDetail({navigation, route}) {
                         <Text variant="bodyMedium">{medicinedetail.atpnQesitm}</Text>
                       </Card.Content>
                     </Card>
-                    // <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infocontent}>{medicinedetail.atpnQesitm}</Text>
-                    // </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
-                    //   <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>값이 없어!</Text>
-                    // </View>
                     )}
-                  {/* <Text style={styles.Infotext}>{medicinedetail&&medicinedetail.atpnQesitm}</Text> */}
                 </View>
                 
                 <View style={styles.Informationcontainer}>
@@ -283,22 +209,13 @@ function MedicineDetail({navigation, route}) {
                         <Text variant="bodyMedium">{medicinedetail.intrcQesitm}</Text>
                       </Card.Content>
                     </Card>
-                      // <View style={styles.Infocontent}>
-                      //   <Text style={styles.Infocontent}>{medicinedetail.intrcQesitm}</Text>
-                      // </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
-                      // <View style={styles.Infocontent}>
-                      //   <Text style={styles.Infotext}>값이 없어!</Text>
-                      // </View>
                     )}
-                  {/* <Text style={styles.Infotext}>{medicinedetail&&medicinedetail.intrcQesitm}</Text> */}
                 </View>
                 
                 <View style={styles.Informationcontainer}>
@@ -309,26 +226,16 @@ function MedicineDetail({navigation, route}) {
                   {medicinedetail && medicinedetail.seQesitm ? (
                     <Card>
                       <Card.Content>
-                        {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.seQesitm}</Text>
                       </Card.Content>
                     </Card>
-                    // <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infocontent}>{medicinedetail.seQesitm}</Text>
-                    //   </View>
                     ) : (
-                    //   <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>값이 없어!</Text>
-                    // </View>
                     <Card>
                       <Card.Content>
-                        {/* <Text variant="titleLarge"></Text> */}
-                        {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                         {null}
                       </Card.Content>
                     </Card>
                     )}
-                  {/* <Text style={styles.Infotext}>{medicinedetail&&medicinedetail.seQesitm}</Text> */}
                 </View>
                 
                 <View style={styles.Informationcontainer}>
@@ -339,21 +246,12 @@ function MedicineDetail({navigation, route}) {
                   {medicinedetail&&medicinedetail.depositMethodQesitm ? (
                     <Card>
                       <Card.Content>
-                        {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.depositMethodQesitm}</Text>
                       </Card.Content>
                     </Card>
-                    // <View style={styles.Infocontent}>
-                    //   <Text>{medicinedetail.depositMethodQesitm}</Text>
-                    //   </View>
                     ) : (
-                    //   <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>값이 없어!</Text>
-                    // </View>
                     <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
@@ -368,24 +266,15 @@ function MedicineDetail({navigation, route}) {
                   {medicinedetail&&medicinedetail.entpName ? (
                     <Card>
                       <Card.Content>
-                        {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.entpName}</Text>
                       </Card.Content>
                     </Card>
-                    // <View style={styles.Infocontent}>
-                    //   <Text>{medicinedetail.entpName}</Text>
-                    //   </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
-                    //   <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>값이 없어!</Text>
-                    // </View>
                     )}
                 </View>
                 
@@ -397,24 +286,15 @@ function MedicineDetail({navigation, route}) {
                   {medicinedetail&&medicinedetail.itemSeq ? (
                     <Card>
                       <Card.Content>
-                        {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.itemSeq}</Text>
                       </Card.Content>
                     </Card>
-                    // <View style={styles.Infocontent}>
-                    //   <Text>{medicinedetail.itemSeq}</Text>
-                    //   </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
-                    //   <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>값이 없어!</Text>
-                    // </View>
                     )}
                 </View>
 
@@ -426,24 +306,15 @@ function MedicineDetail({navigation, route}) {
                   {medicinedetail&&medicinedetail.openDe ? (
                     <Card>
                       <Card.Content>
-                        {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.openDe}</Text>
                       </Card.Content>
                     </Card>
-                    // <View style={styles.Infocontent}>
-                    //   <Text>{medicinedetail.openDe}</Text>
-                    //   </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
-                      // <View style={styles.Infocontent}>
-                      //   <Text style={styles.Infotext}>값이 없어!</Text>
-                      // </View>
                     )}
                 </View>
 
@@ -459,20 +330,12 @@ function MedicineDetail({navigation, route}) {
                         <Text variant="bodyMedium">{medicinedetail.updateDe}</Text>
                       </Card.Content>
                     </Card>
-                    // <View style={styles.Infocontent}>
-                    //   <Text>{medicinedetail.updateDe}</Text>
-                    //   </View>
                     ) : (
                       <Card>
                          <Card.Content>
-                            {/* <Text variant="titleLarge"></Text> */}
-                            {/* <Text variant="bodyMedium">값이 없어!!</Text> */}
                             {null}
                           </Card.Content>
                       </Card>
-                    //   <View style={styles.Infocontent}>
-                    //   <Text style={styles.Infotext}>값이 없어!</Text>
-                    // </View>
                     )}
                 </View>
 
@@ -489,6 +352,9 @@ function MedicineDetail({navigation, route}) {
 }
 
 const styles = StyleSheet.create({
+  headerRightContainer:{
+    marginRight:20
+  },
   container: {
     flex: 1,
     // padding: 24,

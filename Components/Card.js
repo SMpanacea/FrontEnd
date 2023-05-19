@@ -48,10 +48,8 @@ import noimage from '../assets/noimage.png';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="pill" />
 
-const MyComponent = ({medicinedata, bookmark}) => {
+const MyComponent = ({medicinedata}) => {
   const navigation = useNavigation();
-
-  console.log("여기가 마지노선?",bookmark)
   
   const handlePress = (itemSeq) => {
     console.log("itemSeq나와라@", itemSeq)

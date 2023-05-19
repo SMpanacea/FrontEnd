@@ -50,7 +50,7 @@ const Loading = ({navigation}) => {
   return (
     <View style={styles.container}>
        <LottieView 
-          source={require('../../FrontEnd/assets/pillloading.json') /** 움직이는 LottieView */
+          source={require('../../FrontEnd/assets/pill.json') /** 움직이는 LottieView */
           }
           autoPlay loop
         />
