@@ -4,6 +4,10 @@ import React, { useState, useRef } from "react";
 import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert  } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 
+// 서버 포트
+import ServerPort from '../../../Components/ServerPort';
+const IP = ServerPort();
+
 export default function ResetPw({ navigation, route }) {
     const { id } = route.params;
 
@@ -35,7 +39,7 @@ export default function ResetPw({ navigation, route }) {
         } 
         if (cpwError === true) {
             try {
-                const res = await axios.post('http://172.16.36.15:5000/user/update', {
+                const res = await axios.post(`${IP}/user/update`, {
                   uid: id,
                   upw: pw
                 });
@@ -193,7 +197,8 @@ const styles = StyleSheet.create({
     dateInput: {
         flex: 1,
         marginRight: 10,
-        color: 'black'
+        color: 'black',
+        backgroundColor: '#f5f5f5',
     },
     error: {
         color: 'red',

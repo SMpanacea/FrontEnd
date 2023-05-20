@@ -28,22 +28,7 @@ function MedicineCamera({navigation}) {
   // console.log("image배열 잘 받아오냐?", image)
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
-  // console.log("야@!!@!@!@!!@잘 오냐?",props); // 확인하려는 props 로그 출력
-  // React.useEffect(()=>{
-  //   const setData = async () =>{
-  //     setIsLoading(true); // 로딩 상태 true 로 변경
-  //     try{
-  //       const res = await axios.get(`${IP}/medicine/search`,{
-  //       });
-  //       setMedicinedata(res.data.items);
-  //     } catch(error){
-  //       console.log("Medicin 목록 가져오기 실패,,,", error)
-  //     } finally {
-  //       setIsLoading(false); // 로딩 상태 false 로 변경
-  //     }
-  //   }
-  //   setData();
-  // },[]);
+
   React.useEffect(() => {
     const setData = async () => {
       setIsLoading(true); // 로딩 상태 true 로 변경
@@ -53,7 +38,7 @@ function MedicineCamera({navigation}) {
         setMedicinedata(res.data.items);
         setTimeout(() => {
           setIsLoading(false); // 3초 후 로딩 상태 false 로 변경
-        }, 4000); // 3초의 지연 시간 설정
+        }, 4000); // 4초의 지연 시간 설정
       } catch (error) {
         console.log('Medicine 목록 가져오기 실패', error);
         setIsLoading(false); // 에러 발생 시에도 로딩 상태 false 로 변경
@@ -61,6 +46,27 @@ function MedicineCamera({navigation}) {
     };
     setData();
   }, []);
+
+  //북마크 리스트 가져오는 AXIOS
+  const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
+  React.useEffect(()=>{
+    const Bookmark = () => {
+      axios.post(`${IP}/medicine/bookmarklist`,{
+        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
+      })
+      .then(function(res){
+        console.log("북마크 잘 가져왔나요?", res.data);
+        setBookmark(res.data);
+        console.log("test",bookmark);
+      })
+      .catch(function(e){
+        console.log("즐겨찾기 리스트 못 가져옴,,,", e)
+      })
+
+    };
+    Bookmark();
+    // console.log("bookmark배열 값 잘 가져오나요?",bookmark)
+  },[]);
 
   return (
 
@@ -75,7 +81,11 @@ function MedicineCamera({navigation}) {
       ) : (
         <View style={styles.container}>
           <ScrollView style={{margin:10}}>
-            <Card medicinedata={medicinedata}/>
+            <Card
+              medicinedata={medicinedata} 
+              bookmark = {bookmark} //bookmark list넘겨줌
+              setBookmark = {setBookmark} //bookmark list를 변경하는 함수 넘겨줌
+            />
           </ScrollView> 
         </View>
       

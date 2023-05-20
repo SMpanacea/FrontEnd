@@ -48,18 +48,19 @@ import noimage from '../assets/noimage.png';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="pill" />
 
-const MyComponent = ({medicinedata}) => {
+const MyComponent = ({medicinedata,bookmark, setBookmark}) => {
   const navigation = useNavigation();
-  
-  const handlePress = (itemSeq) => {
+  console.log("bookmarkjksadhk",bookmark)
+  const handlePress = (itemSeq, bookmark) => {
     console.log("itemSeq나와라@", itemSeq)
-    navigation.navigate('Detail', {medicinedatitemSeq: itemSeq})
+    console.log("bookmark13kjsd",bookmark)
+    navigation.navigate('Detail', {medicinedatitemSeq: itemSeq, bookmark: bookmark, setBookmark: setBookmark})// bookmark, bookmarklist 변경하는 함수 그대로 MedicineDetail로 넘겨주는 통로임!!!!!! 
   }
 
   return (
     <View>
       {medicinedata.map((item, idx) => (
-        <Card key={idx} style={{marginBottom:30}} onPress={() => handlePress(medicinedata[idx].itemSeq)}>
+        <Card key={idx} style={{marginBottom:30}} onPress={() => handlePress(medicinedata[idx].itemSeq, bookmark)}>
           <Card.Title title={medicinedata[idx].itemName} subtitle={medicinedata[idx].updateDe} left={LeftContent} />
           <Card.Content>
             {/* <Text variant="titleLarge">{medicinedata[idx].updateDe}</Text> */}
