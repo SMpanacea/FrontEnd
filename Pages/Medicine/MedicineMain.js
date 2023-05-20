@@ -4,7 +4,7 @@ import React from 'react';
 import {StyleSheet,  View, ScrollView, TouchableOpacity, AccessibilityInfo, UIManager, findNodeHandle} from 'react-native';
 import { Text, TouchableRipple, Button  } from 'react-native-paper';
 // 화면 비율
-import { Dimensions } from 'react-native'; 
+import { RefreshControl, Dimensions } from 'react-native'; 
 const { width, height } = Dimensions.get('window');
 
 // navigation
@@ -61,6 +61,29 @@ function MedicineMain({navigation}) {
 
     
   }, []);
+
+  // 사용자에게 새로고침이 잘되고 있는지 인지시키기 위해 멈추는 함수
+  // wait 함수를 정의합니다. 이 함수는 입력받은 시간만큼 대기한 후 Promise를 resolve합니다.
+  const wait = (timeout) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
+  // 새로고침이 일어나야 하는지  
+  // 기본값은 false입니다.
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  // useCallback 훅을 이용하여 onRefresh 함수를 최적화합니다.
+  // onRefresh 함수에서는 setRefreshing(true)를 호출한 후 wait 함수를 사용하여 2초 동안 대기합니다.
+  // 2초 후 setRefreshing(false)를 호출하여 refreshing 값을 다시 false로 변경합니다.
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    // TODO: 새로고침 시 필요한 비동기 로직 작성
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+
 
   const handlePageChange = (newPage) => {
     // console.log("페이지 바뀜?",newPage)
@@ -119,7 +142,9 @@ function MedicineMain({navigation}) {
         <Loading /> // 로딩 중인 동안 로딩 스피너 표시
       ) : (
         <View style={styles.container} >
-          <ScrollView style={{margin:10}}>
+          <ScrollView style={{margin:10}}  refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
           <Card 
             medicinedata={medicinedata} 
             bookmark = {bookmark} //bookmark list넘겨줌
