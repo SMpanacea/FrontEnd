@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 
-export default function Main({ navigation }) {
+export default function CameraSearchMain({ navigation }) {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -19,7 +19,7 @@ export default function Main({ navigation }) {
                 style={styles.down}
                 contentStyle={styles.button}
                 labelStyle={{ fontSize: 20 }}
-                onPress={console.log("얼역 버튼 눌림")}>이름으로 알약 검색</Button>
+                onPress={() => navigation.navigate('TextSearch')}>이름으로 알약 검색</Button>
             <Button
                 mode="outlined"
                 style={styles.down}
