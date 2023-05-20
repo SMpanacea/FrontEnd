@@ -35,6 +35,7 @@ import Navigation from './Components/StackNavigation';
 // import Test from './Test';
 
 export default function App() {
+  console.disableYellowBox =true;
   return (
     <View style={styles.container}>
       <NavigationContainer>
