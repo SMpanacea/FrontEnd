@@ -117,11 +117,7 @@ export default function PillDetectionMain({ }) {
       handleReset();
     }
   }
-  if (screenState === 0) {
-    const speak = (() => {
-      AccessibilityInfo.announceForAccessibility(`총 두 장의 사진 중 ${imgArray.length} 장의 사진을 촬영하였습니다.`);
-    })();
-  }
+
   return (
     <SafeAreaView style={styles.container}>
       {screenState === ScreenStates.CAMERA && (

@@ -1,15 +1,40 @@
 import * as React from 'react';
-import { useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { useRef, useEffect } from 'react';
+import { StyleSheet, View, findNodeHandle, AccessibilityInfo, InteractionManager } from 'react-native';
 import { Camera } from 'react-native-pytorch-core';
 import { Button, IconButton, MD3Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { A11yModule } from "react-native-a11y";
 export default function CameraScreen({ onCapture }) {
   const cameraRef = useRef(null);
-  const buttonRef = useRef(null);//button focus
-  const MyIcon = <Icon name="camera-retro" size={100} color="#fff" />;
+  const ref = useRef(null);
+  // useEffect(() => {
+  //   const delay = 1500; // 3초
+  //   setTimeout(() => {
+  //     // 3초 후에 실행될 작업
+  //     console.log('함수실행')
+  //     // A11yModule.setA11yFocus(ref1)
+  //     const reactTag = findNodeHandle(ref.current);
 
+  //     if (reactTag) {
+  //       console.log('함수실행3')
+  //       AccessibilityInfo.setAccessibilityFocus(reactTag);
+  //     }
+  //   }, delay);
+  // }, []);
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {//모든 레이아웃과 애니메이션이 완료된 후에 코드 실행
+      // 3초 후에 실행될 작업
+      console.log('함수실행')
+      // A11yModule.setA11yFocus(ref1)
+      const reactTag = findNodeHandle(ref.current);
+
+      if (reactTag) {
+        console.log('함수실행3')
+        AccessibilityInfo.setAccessibilityFocus(reactTag);
+      }
+    })
+  }, []);
   function handleTakePicture() {
     const camera = cameraRef.current;
     if (camera != null) {
@@ -17,7 +42,8 @@ export default function CameraScreen({ onCapture }) {
     }
   }
   return (
-    <View style={styles.container} accessible>
+
+    <View style={styles.container}>
       <Camera
         ref={cameraRef}
         onCapture={onCapture}
@@ -26,11 +52,11 @@ export default function CameraScreen({ onCapture }) {
         hideFlipButton={true}
         targetResolution={{ width: 1080, height: 1920 }}
       />
-      <View style={styles.buttonContainer}>
+      <View style={styles.buttonContainer} ref={ref} accessible={true} accessibilityLabel="사진촬영버튼"  >
         <IconButton
+          importantForAccessibility="no-hide-descendants"
           icon="camera-outline"
           iconColor="#fff"
-          accessibilityLabel="사진촬영버튼"
           size={100}
           onPress={handleTakePicture}
         />

@@ -1,13 +1,14 @@
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import {
-  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
   Platform,
   AccessibilityInfo,
+  findNodeHandle,
+  InteractionManager
 } from "react-native";
 import { Canvas } from "react-native-pytorch-core";
 
@@ -19,9 +20,17 @@ const objectColors = [
 const textBaselineAdjustment = Platform.OS == "ios" ? 7 : 4;
 
 export default function ResultsScreen({ image, boundingBoxes, onReset, onNextImg }) {
-  const speak = (() => {
-    AccessibilityInfo.announceForAccessibility("알 약이 감지되었습니다");
-  })();
+  const ref = useRef(null);
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      // A11yModule.setA11yFocus(ref1)
+      const reactTag = findNodeHandle(ref.current);
+      if (reactTag) {
+        console.log("findNodeHandle")
+        AccessibilityInfo.setAccessibilityFocus(reactTag);
+      }
+    })
+  }, []);
   const [ctx, setCtx] = useState(null);  // canvas의 컨텍스트를 저장할 state입니다.
   const [layout, setLayout] = useState(null);  // canvas의 레이아웃 정보를 저장할 state입니다.
 
@@ -100,14 +109,14 @@ export default function ResultsScreen({ image, boundingBoxes, onReset, onNextImg
         }}
         onContext2D={setCtx}
       />
-      <View style={styles.pictureContainer}>
-        <TouchableOpacity onPress={onNextImg} style={styles.continueButton}>
-          <Text style={styles.buttonLabel} accessibilityLabel="다음 사진 촬영">Continue</Text>
+      <View style={styles.pictureContainer} ref={ref} accessibilityRole="button" accessible={true} accessibilityLabel="알 약이 감지되었습니다" accessibilityHint="사진 촬영"  >
+        <TouchableOpacity onPress={onNextImg} style={styles.continueButton} importantForAccessibility="no-hide-descendants">
+          <Text style={styles.buttonLabel} >Continue</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.bottomContainer}>
-        <TouchableOpacity onPress={onReset} style={styles.resetButton}>
-          <Text style={styles.buttonLabel} accessibilityLabel="다시 촬영">Try again picture</Text>
+      <View style={styles.bottomContainer} accessibilityRole="button" accessible={true} accessibilityLabel="다시 촬영">
+        <TouchableOpacity onPress={onReset} style={styles.resetButton} importantForAccessibility="no-hide-descendants">
+          <Text style={styles.buttonLabel} >Try again picture</Text>
         </TouchableOpacity>
       </View>
     </View>
