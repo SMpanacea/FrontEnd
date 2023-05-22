@@ -198,12 +198,12 @@ function BottomTab() {
         inactiveColor="#95A5A6"
       >
       <Tab.Screen
-        name="MedicineMain"
-        component={MedicineMain}
+        name="BookMarkScreen"
+        component={BookMarkScreen}
         options={{
-          tabBarLabel: '모든 약 확인',
+          tabBarLabel: '즐겨찾기',
           tabBarIcon: ({ color }) => (
-            <Icon2 name="pill" color={color} size={26} />
+            <Icon2 name="bell" color={color} size={26} />
           ),
         }}
       />
