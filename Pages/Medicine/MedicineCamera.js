@@ -36,6 +36,7 @@ function MedicineCamera({navigation}) {
         const res = await axios.get(`${IP}/medicine/search`, {
         });
         setMedicinedata(res.data.items);
+        console.log("히히", medicinedata)
         setTimeout(() => {
           setIsLoading(false); // 3초 후 로딩 상태 false 로 변경
         }, 4000); // 4초의 지연 시간 설정
