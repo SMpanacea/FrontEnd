@@ -401,8 +401,6 @@ function TextSearch({navigation}) {
 
   const handleClearInput = async () => {
     setInput("");
-    setMedicinedata([]);
-    await search("", 1);
   };
   
   const handlePageChange = async (newPage) => {
