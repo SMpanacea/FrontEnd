@@ -163,12 +163,12 @@ export default function Join({ navigation }) {
         if (regExp4.test(nickname)) {
             setRegNickName(true);
             setNickError(true);
-            setMEmailError('');
+            setMNickError('');
             nickDupCheck(nickname);
         } else {
             setRegNickName(false)
             setNickError(false);
-            setMEmailError('닉네임 형식에 맞춰 입력해 주세요');
+            setMNickError('닉네임 형식에 맞춰 입력해 주세요');
             return;
         }
     }

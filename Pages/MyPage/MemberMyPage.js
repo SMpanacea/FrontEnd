@@ -1,8 +1,9 @@
 // 회원가입한 후 보이는 mypage화면
 import axios from 'axios';
-import React, {useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Image, Alert, useIsFocused } from 'react-native';
 import { Text, TextInput, Button, Title, Surface } from 'react-native-paper';
+import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // navigation
@@ -20,7 +21,7 @@ import List from '../../Components/Lists';
 import ServerPort from '../../Components/ServerPort';
 const IP = ServerPort();
 
-function MemberMyPage({ route,navigation}) {
+function MemberMyPage({ route, navigation }) {
   const { data } = route.params;
   console.log("data : ", data);
 
@@ -33,6 +34,7 @@ function MemberMyPage({ route,navigation}) {
 
   const fetchUserData = async () => {
     const getToken = await AsyncStorage.getItem('token');
+    console.log("fetchUserData getToken : ", getToken)
     const res = await axios.post(`${IP}/user/info`, {
       token: getToken
     });
@@ -40,17 +42,7 @@ function MemberMyPage({ route,navigation}) {
     console.log("flag : ", flag)
     console.log("flag profile : ", flag.profile);
     if (res.data === false) {
-      Alert.alert(
-        '',
-        '로그인을 완료해 주세요',
-        [
-          {
-            text: '확인',
-            onPress: () => { navigation.navigate("Login") }
-          }
-        ],
-        { cancelable: false }
-      );
+      console.log("왜안됨")
     } else {
       setId(flag.uid);
       setEmail(flag.email);
@@ -63,6 +55,7 @@ function MemberMyPage({ route,navigation}) {
 
   useEffect(() => {
     const { data } = route.params;
+    console.log("data : ", data);
     if (data) {
       setId(data.id);
       setEmail(data.email);
@@ -77,44 +70,45 @@ function MemberMyPage({ route,navigation}) {
   }, [route.params]);
 
   const handleLogout = async () => {    //로그아웃
-    const token = await AsyncStorage.getItem('token');
+    const loginType = await AsyncStorage.getItem('loginType');
     await AsyncStorage.removeItem('token'); // 로컬 스토리지에서 토큰을 삭제
-    if(token === null) {
-      Alert.alert(
-        '',
-        '로그아웃 되었습니다',
-        [
-          {
-            text: '확인',
-            onPress: () => { navigation.navigate("bottom"); route.params.setLoggedIn(false); }
-          }
-        ],
-        { cancelable: false }
-      );
+    if (loginType === "Ka") {
+      KakaoLogin.logout()
+        .then(() => {
+          console.log("Logout Success");
+        })
+        .catch((error) => {
+          console.log("Logout Fail", error.message);
+        });
     }
+    await AsyncStorage.removeItem('loginType'); // 로컬 스토리지에서 토큰을 삭제
+    route.params.setLoggedIn(false);
+    navigation.navigate("bottom");
   }
 
   return (
     <SafeAreaView style={styles.box}>
       <Surface style={styles.memberbox}>
-        <View style={{ flex: 1, marginBottom:10, marginTop:10 }}>
-        <Image source={{ uri: img }} style={{flex: 1}} />
+        <View style={{ flex: 1, marginBottom: 10, marginTop: 10 }}>
+          <Image source={{ uri: img }} style={{ flex: 1 }} />
         </View>
         <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
           <Button
             mode="outlined"
             style={[styles.button, styles.down]}
             labelStyle={{ fontSize: 18, color: '#ffffff' }}
-            onPress={() => { navigation.navigate("MemberInfo", {
-              userData: {
-                id,
-                email,
-                nickname,
-                birth,
-                gender,
-                img
-              }
-            }) }}>프로필 관리</Button>
+            onPress={() => {
+              navigation.navigate("MemberInfo", {
+                userData: {
+                  id,
+                  email,
+                  nickname,
+                  birth,
+                  gender,
+                  img
+                }
+              })
+            }}>프로필 관리</Button>
           <Button
             mode="outlined"
             style={styles.button}
@@ -141,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: 8,
     backgroundColor: '#F7F7F7'
-},
+  },
   myinfocontainer: {
     backgroundColor: '#fff',
     justifyContent: 'center',
@@ -208,7 +202,7 @@ const styles = StyleSheet.create({
     },
   },
   button: {
-    padding:10,
+    padding: 10,
     backgroundColor: '#74cbd4',
     borderColor: 'transparent',
     width: 160,

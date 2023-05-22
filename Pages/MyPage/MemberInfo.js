@@ -1,9 +1,10 @@
 // 회원정보 확인 화면
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, Modal, Image, Animated, Alert } from 'react-native';
-import { Text, TextInput, Button } from 'react-native-paper';
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity, Image, Alert } from 'react-native';
+import { Text, Button } from 'react-native-paper';
+import * as KakaoLogin from '@react-native-seoul/kakao-login';
 
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
@@ -31,28 +32,28 @@ export default function MemberInfo({ navigation, route }) {
 
   const delData = async () => {
     try {
+      const loginType = await AsyncStorage.getItem('loginType');
       const getToken = await AsyncStorage.getItem('token');
-      console.log("getToken : ", getToken);
+
       const res = await axios.post(`${IP}/user/withdrawal`, {
         token: getToken
       })
-      console.log("res : ", res.data);
-      console.log("res type : ", typeof (res.data));
+
       if (res.data === true) {
+
+        if (loginType === "Ka") { //카카오 세션 삭제
+          KakaoLogin.unlink().then((result) => {
+            console.log('Withdrawal Success', JSON.stringify(result));
+          }).catch((error) => {
+            console.log(`Withdrawal Failed (code: ${error.code})`, error.message);
+          });
+        }
+
         await AsyncStorage.removeItem('token'); // 로컬 스토리지에서 토큰을 삭제
-        Alert.alert(
-          '탈퇴 처리 되었습니다',
-          '이용해 주셔서 감사합니다',
-          [
-            {
-              text: '확인',
-              onPress: () => { 
-                navigation.navigate("Login"); 
-                route.params.setLoggedIn(false); }
-            }
-          ],
-          { cancelable: false }
-        );
+        await AsyncStorage.removeItem('loginType');
+        route.params.setLoggedIn(false);
+        navigation.navigate("bottom");
+        
       } else {
         Alert.alert(
           '탈퇴에 실패하였습니다',
@@ -76,6 +77,7 @@ export default function MemberInfo({ navigation, route }) {
       <View style={styles.profileContainer}>
         <Image source={{ uri: userData.img }} style={styles.profileImage} />
       </View>
+
       <View style={styles.userInfoContainer}>
         <View style={styles.userInfoItem}>
           <Text style={styles.label}>아이디</Text>
@@ -93,14 +95,17 @@ export default function MemberInfo({ navigation, route }) {
           <Text style={styles.label}>생년월일</Text>
           <Text style={styles.content}>{userData.birth}</Text>
         </View>
+
         <View style={styles.userInfoItem2}>
           <Text style={styles.label}>성별</Text>
           <Text style={styles.content}>{userData.gender}</Text>
         </View>
       </View>
+
       <TouchableOpacity style={{ alignItems: "flex-end", marginBottom: 40 }} onPress={chkDel}>
-        <Text style={{marginRight: 10, borderBottomWidth: 0.5, fontSize:15, marginTop:10 }}>회원탈퇴</Text>
+        <Text style={{ marginRight: 10, borderBottomWidth: 0.5, fontSize: 15, marginTop: 10 }}>회원탈퇴</Text>
       </TouchableOpacity>
+
       <View style={styles.profileInfo}>
         <Button
           mode="contained"
@@ -152,16 +157,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   label: {
-      flex: 1,
-      fontSize: 19,
-      fontWeight: 'bold',
-      color: '#4A4A4A',
-      marginLeft: 5
+    flex: 1,
+    fontSize: 19,
+    fontWeight: 'bold',
+    color: '#4A4A4A',
+    marginLeft: 5
   },
   content: {
-      flex: 3,
-      fontSize: 18,
-      color: '#4A4A4A',
-      marginLeft: 25
+    flex: 3,
+    fontSize: 18,
+    color: '#4A4A4A',
+    marginLeft: 25
   },
 });

@@ -100,11 +100,6 @@ export default function ResetPw({ navigation, route }) {
                 { cancelable: false }
             );
         }
-
-        if (pwError === true && cpwError === true) {
-            // **TODO : 아이디, 비번 보내줄 것 -> 성공 시 navigation.navigate("Login");
-            // 비밀번호 찾기에서 아이디를 받아와야겟지..
-        }
     }
 
     const handleInputPw = () => {
@@ -148,6 +143,7 @@ export default function ResetPw({ navigation, route }) {
                 ref={pwRef}
                 placeholder="영문 대소문자/숫자/특수문자, 8자~16자"
                 onChangeText={setPw}
+                style={styles.dateInput}
                 onEndEditing={handleInputPw}
                 secureTextEntry={!isPasswordVisible}
                 autoCapitalize="none"
@@ -160,6 +156,7 @@ export default function ResetPw({ navigation, route }) {
                 ref={cpwRef}
                 placeholder="비밀번호 확인"
                 onChangeText={setCpw}
+                style={[styles.dateInput, styles.down]}
                 secureTextEntry={!isPasswordVisible2}
                 autoCapitalize="none"
                 textContentType="password"
@@ -195,8 +192,8 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     dateInput: {
-        flex: 1,
-        marginRight: 10,
+        // flex: 1,
+        marginBottom: 10,
         color: 'black',
         backgroundColor: '#f5f5f5',
     },
@@ -204,5 +201,8 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 15,
         marginBottom: 5,
+    },
+    down: {
+        marginBottom: 40
     },
 });
