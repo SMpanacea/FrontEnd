@@ -4,7 +4,6 @@ import { StyleSheet, View, findNodeHandle, AccessibilityInfo, InteractionManager
 import { Camera } from 'react-native-pytorch-core';
 import { Button, IconButton, MD3Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { A11yModule } from "react-native-a11y";
 export default function CameraScreen({ onCapture }) {
   const cameraRef = useRef(null);
   const ref = useRef(null);

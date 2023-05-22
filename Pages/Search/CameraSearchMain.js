@@ -1,8 +1,10 @@
 // main에서 알약 검색 누르면 보이는 화면
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
-import {Image, StyleSheet, View,ImageBackground, TouchableOpacity, InteractionManager, findNodeHandle,AccessibilityInfo } from 'react-native';
+import { Image, StyleSheet, View, ImageBackground, TouchableOpacity, InteractionManager, findNodeHandle, AccessibilityInfo } from 'react-native';
 import { Text, Button } from 'react-native-paper';
+import { MainButtonStyle } from '../css/MainButtonCSS'
+import LottieView from 'lottie-react-native';
 export default function CameraSearchMain({ navigation }) {
     const screanReaderFocus = useRef(null);
     useEffect(() => {
@@ -16,56 +18,34 @@ export default function CameraSearchMain({ navigation }) {
     }, []);
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <TouchableOpacity ref={screanReaderFocus}   style={[styles.button, styles.down]}   onPress={() => navigation.navigate('PillDetectionMain')}>
-            {/* <ImageBackground 
-                    source={require('../../assets/animation_640_lhwuujpi.gif')}
-                    // style={{width: '100%', height: '100%', justifyContent: 'center'}}
-                    style={styles.imageBackground}
-                    resizeMode="cover"
+
+            <TouchableOpacity  style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('PillDetectionMain')}>
+                {/* <ImageBackground
+                    source={require('../../assets/animation_640_lhwuc4ir.gif')}
+                    style={[styles.imageBackground,StyleSheet.absoluteFill]}
                 > */}
-                {/* <Button
-                    mode="outlined"
-                    contentStyle={styles.button}
-                    labelStyle={{ fontSize: 20 }}
-                  >카메라로 알약 검색</Button> */}
-            {/* </ImageBackground> */}
-            <Image
-    source={require('../../assets/animation_640_lhwuujpi.gif')}
-    style={styles.image}
-  />
+                <View style={MainButtonStyle.textContainer}>
+                    <Text style={MainButtonStyle.text}>카메라로 알약 검색하기 &gt; </Text>
+                    <Text style={MainButtonStyle.subText}>카메라를 알약을 촬영하여 검색</Text>
+                </View>
+                <Image
+                    source={require('../../assets/animation_640_lhwuujpi.gif')}
+                    style={MainButtonStyle.image}
+                />
+                {/* </ImageBackground> */}
             </TouchableOpacity>
-            <Button
-                mode="outlined"
-                style={styles.down}
-                contentStyle={styles.button}
-                labelStyle={{ fontSize: 20 }}
-                onPress={() => navigation.navigate('TextSearch')}>이름으로 알약 검색</Button>
+            <TouchableOpacity ref={screanReaderFocus}style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
+
+                <View style={MainButtonStyle.textContainer}>
+                    <Text style={MainButtonStyle.text}>이름으로 알약 검색 &gt; </Text>
+                    <Text style={MainButtonStyle.subText}>의약품이름으로 검색</Text>
+                </View>
+                <Image
+                    source={require('../../assets/searchButton.gif')}
+                    style={MainButtonStyle.image}
+                />
+            </TouchableOpacity>
         </View>
     )
 }
 
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: 'white',
-        borderRadius: 10,
-        height: 230,
-        width: 300,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    down: {
-        marginBottom: 60
-    },
-    imageBackground: {
-        flex: 1,
-        justifyContent: 'center', // Center button vertically
-        alignItems: 'center', // Center button horizontally
-      },
-      image: {
-        width: 180, // or whatever size you want
-        height: 120, // or whatever size you want
-        position: 'absolute',
-        right: 0,
-        bottom: 0
-      }
-});
