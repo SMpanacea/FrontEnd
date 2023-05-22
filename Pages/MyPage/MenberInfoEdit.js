@@ -15,127 +15,12 @@ export default function MemberInfoEdit({ navigation, route }) {
     const { userData } = route.params;
 
     const [img, setImg] = useState(userData.img);
-    const [id, setId] = useState(userData.id);
     const [email, setEmail] = useState(userData.email);
     const [nickname, setNickname] = useState(userData.nickname);
     const [birth, setBirth] = useState(userData.birth);
     const [gender, setGender] = useState(userData.gender);
 
     const [checked, setChecked] = useState(gender);  //라디오버튼 체크 여부
-
-    const handleEmailChange = (text) => {
-        const regExp3 = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
-        if (regExp3.test(text)) {
-            emailCheck(text);
-        } else {
-            Alert.alert(
-                '',
-                '이메일 형식에 맞춰 입력해 주세요',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
-                { cancelable: false }
-            );
-        }
-    }
-    const emailCheck = async (text) => { //이메일 중복
-        if (regEmail === true) {
-            await axios.post(`${IP}/user/emailcheck`, {
-                email: text
-            })
-                .then(res => {
-                    if (res.data === false) {
-                        Alert.alert(
-                            '',
-                            '이미 존재하는 이메일 입니다',
-                            [
-                                {
-                                    text: '확인',
-                                },
-                            ],
-                            { cancelable: false }
-                        );
-                    } else {
-                        setEmail(text);
-                    }
-                })
-                .catch(function (err) {
-                    console.log(err);
-                })
-        } else {
-            Alert.alert(
-                '',
-                '이메일 유효성 검사에 맞게 입력해 주세요',
-                [
-                    {
-                        text: '확인',
-                    }
-                ],
-                { cancelable: false }
-            );
-        }
-    }
-    const handleNicknameChange = (text) => {
-        const regExp4 = /^[a-zA-Z0-9가-힣]{2,12}$/
-        if (regExp4.test(text)) {
-            nickDupCheck(text);
-        } else {
-            Alert.alert(
-                '',
-                '닉네임 형식에 맞춰 입력해 주세요',
-                [
-                    {
-                        text: '확인',
-                    }
-                ],
-                { cancelable: false }
-            );
-            return;
-        }
-    }
-    const nickDupCheck = async (text) => { // 닉네임 중복 검사
-        await axios.post(`${IP}/user/nicknamecheck`, {
-            nickname: text
-        })
-            .then(res => {
-                if (res.data === false) {
-                    Alert.alert(
-                        '',
-                        '이미 존재하는 닉네임 입니다',
-                        [
-                            {
-                                text: '확인',
-                            },
-                        ],
-                        { cancelable: false }
-                    );
-                } else {
-                    setNickname(text);
-                }
-            })
-            .catch(function (err) {
-                console.log(err);
-            })
-    };
-    const handleBirthChange = (text) => {
-        const regExp5 = /^(19\d{2}|200[0-9])-(0[1-9]|1[0-2])-(0[1-9]|1\d|2[0-9]|3[0-1])$/;
-        if (regExp5.test(text)) {
-            setBirth(text);
-        } else {
-            Alert.alert(
-                '',
-                '생년월일 형식에 맞춰 입력해 주세요',
-                [
-                    {
-                        text: '확인',
-                    }
-                ],
-                { cancelable: false }
-            );
-        }
-    }
 
     const handleImagePicker = () => {
         Alert.alert(
@@ -193,7 +78,7 @@ export default function MemberInfoEdit({ navigation, route }) {
             }
         });
     };
-    //   const resizeImage = async (url, maxWidth, maxHeight) => {
+    //   const resizeImage = async (url, maxWidth, maxHeight) => {  //이미지 리사이징
     //     try {
     //       const resizedImage = await ImageResizer.createResizedImage(
     //         url,
@@ -275,7 +160,7 @@ export default function MemberInfoEdit({ navigation, route }) {
             })
             console.log("res.data : ", res.data);
             if (res.data == false) {
-                // 회원가입 실패 시 실행할 코드
+                // 유저 수정 실패 시 실행할 코드
                 Alert.alert(
                     '회원 정보 수정에 실패하였습니다',
                     '다시 시도해 주세요',
@@ -287,7 +172,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                     { cancelable: false }
                 );
             } else {
-                //회원가입 성공 시 실행할 코드
+                //유저 수정 성공 시 실행할 코드
                 Alert.alert(
                     '',
                     '변경되었습니다',
@@ -329,7 +214,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                     <View style={styles.userInfoContainer}>
                         <View style={styles.userInfoItem}>
                             <Text style={styles.label}>아이디</Text>
-                            <Text style={styles.content}>{id}</Text>
+                            <Text style={styles.content}>{userData.id}</Text>
                         </View>
 
                         <View style={styles.userInfoItem}>
@@ -339,7 +224,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                                 value={email}
                                 maxLength={40}
                                 onChangeText={setEmail}
-                                onEndEditing={handleEmailChange}
+                                // onEndEditing={handleEmailChange}
                             />
                         </View>
 
@@ -349,7 +234,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                                 style={styles.input}
                                 value={nickname}
                                 onChangeText={setNickname}
-                                onEndEditing={handleNicknameChange}
+                                // onEndEditing={handleNicknameChange}
                                 maxLength={12}
                             />
                         </View>
@@ -359,7 +244,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                                 style={styles.input}
                                 value={birth}
                                 onChangeText={setBirth}
-                                onEndEditing={handleBirthChange}
+                                // onEndEditing={handleBirthChange}
                                 keyboardType='numeric'
                                 maxLength={10}
                             />
