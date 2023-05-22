@@ -27,25 +27,24 @@ const IP = ServerPort();
 function BookMarkMain({navigation}) {
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
   const [bookmarkmedicine, setBookmarkmedicine] = React.useState([]);//즐겨찾기한 약 정보
+  const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
 
-  //로딩 추가해서 다시 만들어라
+  //즐겨찾기한 약 가져오는 axios인데 로딩페이지 넣어서 다시 만들어라!
   React.useEffect(()=>{
-    const Bookmarked = () => {
-      axios.post(`${IP}/medicine/bookmarklist`,{
+    const Bookmarklsit = () => {
+      axios.post(`${IP}/medicine/bookmarkall`,{
         //토큰만 보내면 즐겨찾기 가져올 수 있는 건가 아님 더 보내야 되는 건가
         token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
       })
       .then(function(res){
-        console.log("북마크 잘 가져왔나요?", res.data);
-        setBookmarkmedicine(res.data);
-        console.log("test",bookmarkmedicine);
+        setMedicinedata(res.data);
+        console.log("bookmarkall에서 가져온 놈임",medicinedata);
       })
       .catch(function(e){
-        console.log("즐겨찾기 리스트 못 가져옴,,,", e)
+        console.log("즐겨찾기 목록 못 가져옴,,,", e)
       })
-
     };
-    Bookmarked();
+    Bookmarklsit();
     // console.log("bookmark배열 값 잘 가져오나요?",bookmark)
   },[]);
 
@@ -57,9 +56,8 @@ function BookMarkMain({navigation}) {
     ) : (
       <View style={styles.container}>
         <ScrollView>
-          <Text style={styles.title}>즐겨찾기한 약 확인하는 곳</Text>
           <TouchableOpacity onPress={()=>{navigation.navigate("MedicineDetail")}}>
-            {/* <Card /> */}
+            <Card medicinedata={medicinedata} />
             {/* <List /> */}
           </TouchableOpacity>
         </ScrollView> 
