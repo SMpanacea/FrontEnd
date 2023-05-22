@@ -20,12 +20,6 @@ export default function CameraSearchMain({ navigation }) {
                 contentStyle={styles.button}
                 labelStyle={{ fontSize: 20 }}
                 onPress={() => navigation.navigate('TextSearch')}>이름으로 알약 검색</Button>
-            <Button
-                mode="outlined"
-                style={styles.down}
-                contentStyle={[styles.button]}
-                labelStyle={{ fontSize: 20 }}
-                onPress={console.log("카머라 버튼 눌림")}>카메라로 알약 검색</Button>
         </View>
     )
 }

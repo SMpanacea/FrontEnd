@@ -1,9 +1,12 @@
 // 약 즐겨찾기 후 보이는 화면 -> 약 정보 보려면 MedicineDetail.js로 넘어가야 돼!!
 
+import axios from 'axios';
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet, Text, View, ScrollView, TouchableOpacity, Modal, Image, Button, Animated} from 'react-native';
-
+import {StyleSheet,  View, ScrollView, TouchableOpacity, AccessibilityInfo, UIManager, findNodeHandle} from 'react-native';
+import { Text, TouchableRipple, Button  } from 'react-native-paper';
+// 화면 비율
+import { Dimensions } from 'react-native'; 
+const { width, height } = Dimensions.get('window');
 // navigation
 import 'react-native-gesture-handler';
 
@@ -12,55 +15,65 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import BookMarkModal from './BookMarkModal';
 // 약목록 보여주는 component
 import List from '../../Components/Lists';
+import Card from '../../Components/Card';
 
-// 화면 비율
-import { Dimensions } from 'react-native'; 
-const { width, height } = Dimensions.get('window');
+// 로딩
+import Loading from '../../Components/Loading';
 
+// 서버 포트
+import ServerPort from '../../Components/ServerPort';
+const IP = ServerPort();
 
 function BookMarkMain({navigation}) {
+  const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
+  const [bookmarkmedicine, setBookmarkmedicine] = React.useState([]);//즐겨찾기한 약 정보
+
+  //로딩 추가해서 다시 만들어라
+  React.useEffect(()=>{
+    const Bookmarked = () => {
+      axios.post(`${IP}/medicine/bookmarklist`,{
+        //토큰만 보내면 즐겨찾기 가져올 수 있는 건가 아님 더 보내야 되는 건가
+        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
+      })
+      .then(function(res){
+        console.log("북마크 잘 가져왔나요?", res.data);
+        setBookmarkmedicine(res.data);
+        console.log("test",bookmarkmedicine);
+      })
+      .catch(function(e){
+        console.log("즐겨찾기 리스트 못 가져옴,,,", e)
+      })
+
+    };
+    Bookmarked();
+    // console.log("bookmark배열 값 잘 가져오나요?",bookmark)
+  },[]);
+
+
   return (
-
-    <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>즐겨찾기한 약 확인하는 곳</Text>
-
-        
-        
-      <TouchableOpacity onPress={()=>{navigation.navigate("MedicineDetail")}}>
-        <List />
-      </TouchableOpacity>
-
-      {/* 밑에 있는 것들 나중에 지울 예정 -> 위에 있는걸로 반복문 만들어서 서버에서 값 있으면 계속 출력되게 수정해야 됌!! */}
-        
-        <View style={styles.medibox}>
-          <Icon name="medkit" size={80} color="black" />
-        </View>
-
-        <View style={styles.medibox}>
-          <Icon name="medkit" size={80} color="black" />
-        </View>
-
-        <View style={styles.medibox}>
-          <Icon name="medkit" size={80} color="black" />
-        </View>
-
-        <View style={styles.medibox}>
-          <Icon name="medkit" size={80} color="black" />
-        </View>
-       </ScrollView> 
-
-      {/* <View style={styles.medimodal}>
-        <MediModal />
-        <BookMarkModal/>
-      </View> */}
-      
-    </View>
+  <View style={styles.c}>
+    {isLoading ? (
+      <Loading /> // 로딩 중인 동안 로딩 3초간 스피너 표시
+    ) : (
+      <View style={styles.container}>
+        <ScrollView>
+          <Text style={styles.title}>즐겨찾기한 약 확인하는 곳</Text>
+          <TouchableOpacity onPress={()=>{navigation.navigate("MedicineDetail")}}>
+            {/* <Card /> */}
+            {/* <List /> */}
+          </TouchableOpacity>
+        </ScrollView> 
+      </View>
+    )}
+  </View>
     
   );
 }
 
 const styles = StyleSheet.create({
+  c:{
+    flex: 1,
+  },
   container: {
     width: width-15,
     // height: height,
