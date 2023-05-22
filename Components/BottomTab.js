@@ -74,7 +74,7 @@ function BottomTab() {
         activeColor="#6200EE"
         inactiveColor="#95A5A6"
       >
-      <Tab.Screen
+      {/* <Tab.Screen
         name="BookMarkScreen"
         component={BookMarkScreen}
         options={{
@@ -83,14 +83,24 @@ function BottomTab() {
             <Icon2 name="bell" color={color} size={26} />
           ),
         }}
-      />
-      <Tab.Screen
+      /> */}
+      {/* <Tab.Screen
         name="CameraSearch"
         component={BarcodeCamera}
         options={{
           tabBarLabel: '카메라 사진찍어!!',
           tabBarIcon: ({ color }) => (
             <Icon2 name="camera" color={color} size={26} />
+          ),
+        }}
+      /> */}
+      <Tab.Screen
+        name="GPT"
+        component={GPT}
+        options={{
+          tabBarLabel: 'GPT',
+          tabBarIcon: ({ color }) => (
+            <Icon2 name="chat" color={color} size={26} />
           ),
         }}
       />
@@ -118,7 +128,7 @@ function BottomTab() {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="MedicineCamera"
         component={MedicineCamera}
         options={{
@@ -127,17 +137,8 @@ function BottomTab() {
             <Icon2 name="pill" color={color} size={26} />
           ),
         }}
-      />
-      <Tab.Screen
-        name="GPT"
-        component={GPT}
-        options={{
-          tabBarLabel: 'GPT',
-          tabBarIcon: ({ color }) => (
-            <Icon2 name="chat" color={color} size={26} />
-          ),
-        }}
-      />
+      /> */}
+      
       </Tab.Navigator>
   );
 }
