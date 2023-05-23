@@ -11,6 +11,9 @@ npm-debug.*
 *.orig.*
 web-build/
 
+#BarcodeLicense 올리면 안 돼!
+BarcodeLicense.js
+
 # macOS
 .DS_Store
 
