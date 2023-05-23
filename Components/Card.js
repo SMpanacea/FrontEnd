@@ -39,7 +39,7 @@
 
 import * as React from 'react';
 import { Avatar, Button, Card, Text } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, AccessibilityInfo } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 // 아이콘
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -61,9 +61,15 @@ const MyComponent = ({medicinedata,bookmark, setBookmark}) => {
     <View>
       
       {medicinedata.map((item, idx) => (
-        <Card key={idx} style={{marginBottom:30}} onPress={() => handlePress(medicinedata[idx].itemSeq, bookmark)}>
-          <Card.Title title={medicinedata[idx].itemName} subtitle={medicinedata[idx].updateDe} left={LeftContent} />
-          <Card.Content>
+        <Card key={idx} style={{marginBottom:30}} onPress={() => handlePress(medicinedata[idx].itemSeq, bookmark)}
+        accessible={true}
+        accessibilityElementsHidden={true}>
+          <View 
+          accessibilityLabel={`${medicinedata[idx].itemName.split("(")[0]}`}
+          accessible={true}>
+          <Card.Title title={medicinedata[idx].itemName} subtitle={medicinedata[idx].updateDe} left={LeftContent} accessible={false}
+          />
+          <Card.Content accessible={false}>
             {/* <Text variant="titleLarge">{medicinedata[idx].updateDe}</Text> */}
             {/* <Text variant="bodyMedium">{medicinedata[idx].updateDe}</Text> */}
           </Card.Content >
@@ -73,13 +79,14 @@ const MyComponent = ({medicinedata,bookmark, setBookmark}) => {
             } */}
             {
                 medicinedata[idx].itemImage === null?<Card.Cover  source={{ uri: 'https://panacea.s3.ap-northeast-2.amazonaws.com/default/medicine_default.jpg' }}  style={{ width:'100%'}}/>:
-                <Card.Cover source={{uri : medicinedata[idx].itemImage}}/>
+                <Card.Cover source={{uri : medicinedata[idx].itemImage}} accessible={false}/>
             }
           {/* <Card.Cover source={{ uri: item.imageUri }} /> */}
-          <Card.Actions>
+          <Card.Actions accessible={false}>
             {/* <Button onPress={() => console.log("취소")}>Cancel</Button> */}
             {/* <Button onPress={() => handlePress(medicinedata[idx].itemSeq)}>약 보러가기</Button> */}
           </Card.Actions>
+          </View>
         </Card>
       ))}
     </View>

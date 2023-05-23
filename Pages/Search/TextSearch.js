@@ -1,8 +1,8 @@
 // 글로 검색할 때 보이는 화면
 import React from 'react';
 import axios from 'axios';
-import {StyleSheet, View, ScrollView, Modal, Image, Animated, TextInput, TouchableOpacity} from 'react-native';
-import { Text, TouchableRipple, Button,  } from 'react-native-paper';
+import { StyleSheet, View, ScrollView, Modal, Image, Animated, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
+import { Text, TouchableRipple, Button, } from 'react-native-paper';
 // navigation
 import 'react-native-gesture-handler';
 
@@ -16,7 +16,7 @@ import Card from '../../Components/Card';
 import Loading from '../../Components/Loading';
 
 
-import {theme} from '../../theme';
+import { theme } from '../../theme';
 
 // 서버
 import ServerPort from '../../Components/ServerPort';
@@ -92,7 +92,7 @@ let count = 0
 //     }
 //   };
 
-  
+
 //   React.useEffect(() => {
 //     // 초기 페이지 로딩 시 데이터 가져오기
 //     if (input) {
@@ -108,7 +108,7 @@ let count = 0
 //     await search();
 //   }
 
-  
+
 //   //로딩 useEffect
 //   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
 
@@ -183,7 +183,7 @@ let count = 0
 //                         <Icon4 name="times" color='black' size={25}style={{ marginRight:20 }} />
 //                       </TouchableOpacity>
 //                   </View>   
-                  
+
 //                   <View>
 //                     <TouchableOpacity onPress={()=>{handleButtonPress()}}>
 //                       <Icon4 name="search" color='black' size={25} />
@@ -191,7 +191,7 @@ let count = 0
 //                   </View> 
 //               </View>
 //             </View>
-        
+
 
 //           {/* <List medicinedata={medicinedata}/> */}
 //           <Card 
@@ -257,7 +257,7 @@ let count = 0
 //     await search();
 //   }
 
-  
+
 //   //로딩 useEffect
 //   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
 
@@ -266,7 +266,7 @@ let count = 0
 //   const handlePageChange = (newPage) => {
 //     // console.log("페이지 바뀜?",newPage)
 //     setPage(newPage);
-    
+
 //   }
 //   React.useEffect(() => {
 //       const setData = async () => {
@@ -334,7 +334,7 @@ let count = 0
 //                         <Icon4 name="times" color='black' size={25}style={{ marginRight:20 }} />
 //                       </TouchableOpacity>
 //                   </View>   
-                  
+
 //                   <View>
 //                     <TouchableOpacity onPress={()=>{handleButtonPress()}}>
 //                       <Icon4 name="search" color='black' size={25} />
@@ -342,7 +342,7 @@ let count = 0
 //                   </View> 
 //               </View>
 //             </View>
-        
+
 
 //           {/* <List medicinedata={medicinedata}/> */}
 //           <Card 
@@ -370,7 +370,7 @@ let count = 0
 //   );
 // }
 
-function TextSearch({navigation}) {
+function TextSearch({ navigation }) {
   const [input, setInput] = React.useState("");
   const [medicinedata, setMedicinedata] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -402,12 +402,24 @@ function TextSearch({navigation}) {
   const handleClearInput = async () => {
     setInput("");
   };
-  
+
   const handlePageChange = async (newPage) => {
     if (newPage > 0 && newPage <= Math.ceil(totalCount / 10)) {
       setPage(newPage);
     }
   };
+
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+              <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+          </TouchableOpacity>
+      ),
+      headerTitle: "약 검색",
+    });
+  }, [])
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -437,64 +449,65 @@ function TextSearch({navigation}) {
       {isLoading ? (
         <Loading /> // 로딩 중인 동안 로딩 스피너 표시
       ) : (
-      <View style={styles.container}>
-        <ScrollView>
-          {/* 검색 창 */}
+        <View style={styles.container}>
+          <ScrollView>
+            {/* 검색 창 */}
             <View style={styles.TextInputcontainer}>
               <View style={styles.innerContainer}>
-                  <View style={styles.inputAndMicrophone}>
-                      <TextInput
-                          multiline
-                          placeholder='알약 이름 검색'
-                          style={styles.input}
-                          value={input} // 현재 message 값을 입력 값으로 설정
-                          onChangeText={(text)=>setInput(text)}
-                      />
-                      {input ? (
-                         <TouchableOpacity  onPress={()=>{handleClearInput()}}>
-                          <Icon4 name="times" color='black' size={25}style={{ marginRight:20 }} />
-                         </TouchableOpacity>
-                      ):null}
-                     
-                  </View>   
-                  
-                  <View>
-                    <TouchableOpacity onPress={()=>{handleButtonPress()}}>
-                      <Icon4 name="search" color='black' size={25} />
+                <View style={styles.inputAndMicrophone}>
+                  <TextInput
+                    multiline
+                    placeholder='알약 이름 검색'
+                    style={styles.input}
+                    value={input} // 현재 message 값을 입력 값으로 설정
+                    onChangeText={(text) => setInput(text)}
+                  />
+                  {input ? (
+                    <TouchableOpacity onPress={() => { handleClearInput() }} >
+                      <Icon4 name="times" color='black' size={25} style={{ marginRight: 20 }}  accessibilityLabel='삭제' accessibilityRole='button'/>
                     </TouchableOpacity>
-                  </View> 
+                  ) : null}
+
+                </View>
+
+                <View>
+                  <TouchableOpacity onPress={() => { handleButtonPress() }}>
+                    <Icon4 name="search" color='black' size={25} accessibilityLabel='검색'
+                      accessibilityRole='button'/>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-        
 
-          {/* <List medicinedata={medicinedata}/> */}
-          <Card 
-            medicinedata={medicinedata} 
-            bookmark = {bookmark} //bookmark list넘겨줌
-            setBookmark = {setBookmark} //bookmark list를 변경하는 함수 넘겨줌
-            onPress={(medicinename, bookmark) => {
-              AccessibilityInfo.announceForAccessibility(medicinename+"을 선택하셨습니다!");
-              navigation.navigate('Detail', { medicinename, bookmark })
-            }}
-          />
-           <View style={{flexDirection: 'row',justifyContent:"space-between", alignItems:'center'}}>
-              <TouchableRipple onPress={()=>{page > 1 && handlePageChange(page -1)}}>
-                <Button mode="Outlined">이전 페이지</Button>
+
+            {/* <List medicinedata={medicinedata}/> */}
+            <Card
+              medicinedata={medicinedata}
+              bookmark={bookmark} //bookmark list넘겨줌
+              setBookmark={setBookmark} //bookmark list를 변경하는 함수 넘겨줌
+              onPress={(medicinename, bookmark) => {
+                AccessibilityInfo.announceForAccessibility(medicinename + "을 선택하셨습니다!");
+                navigation.navigate('Detail', { medicinename, bookmark })
+              }}
+            />
+            <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
+              <TouchableRipple onPress={() => { page > 1 && handlePageChange(page - 1) }} accessibilityLabel='이전 페이지' accessibilityRole='button'>
+                <Button mode="Outlined" importantForAccessibility='no-hide-descendants' >이전 페이지</Button>
               </TouchableRipple>
-              <Text>{page}</Text>
-              <TouchableRipple onPress={()=>{handlePageChange(page +1)}}>
-                <Button mode="Outlined">다음 페이지</Button>
+              <Text accessibilityLabel={`현재 페이지는 ${page}입니다`}>{page}</Text>
+              <TouchableRipple onPress={() => { handlePageChange(page + 1) }} accessibilityLabel='다음 페이지' accessibilityRole='button'>
+                <Button mode="Outlined" importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
               </TouchableRipple>
             </View>
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  c:{
+  c: {
     flex: 1,
   },
   container: {
@@ -503,103 +516,103 @@ const styles = StyleSheet.create({
     backgroundColor: '#eaeaea',
   },
   warningbox: {
-    flex:1,
+    flex: 1,
     flexDirection: 'row',
     alignItems: "center",
-    borderWidth:1,
+    borderWidth: 1,
 
     marginBottom: '5%',
-    height:150,
-    padding:20
+    height: 150,
+    padding: 20
   },
-  warningtext:{
-    flex:1,
+  warningtext: {
+    flex: 1,
   },
-  loginbox:{
+  loginbox: {
     flex: 2,
-    height:410,
-    borderWidth:1,
-    borderColor:"black",
-    padding:20
+    height: 410,
+    borderWidth: 1,
+    borderColor: "black",
+    padding: 20
     // justifyContent: 'center',
   },
-  loginsbox:{
-    flex:1,
+  loginsbox: {
+    flex: 1,
     justifyContent: "center",
   },
-  login:{
-    flex:1, 
-    marginBottom:10, 
+  login: {
+    flex: 1,
+    marginBottom: 10,
     justifyContent: 'center',
   },
-  loginbutton:{
-    borderBottomWidth:1,
-    borderBottomColor:'red',
-    marginBottom:10,
+  loginbutton: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'red',
+    marginBottom: 10,
   },
 
-  easy:{
-    flex:2,
+  easy: {
+    flex: 2,
   },
-  easybox:{
-    flex:1,
-    borderBottomWidth:1,
-    marginBottom:20,
+  easybox: {
+    flex: 1,
+    borderBottomWidth: 1,
+    marginBottom: 20,
     justifyContent: "center",
   },
-  kakaobutton:{
-    flex:1,
-    borderWidth:1,
-    backgroundColor:'yellow',
+  kakaobutton: {
+    flex: 1,
+    borderWidth: 1,
+    backgroundColor: 'yellow',
     alignItems: "center",
     justifyContent: "center",
-    borderRadius:30,
-    marginBottom:20,
+    borderRadius: 30,
+    marginBottom: 20,
   },
-  googlebutton:{
-    flex:1,
-    borderWidth:1,
-    backgroundColor:'blue',
+  googlebutton: {
+    flex: 1,
+    borderWidth: 1,
+    backgroundColor: 'blue',
     alignItems: "center",
     justifyContent: "center",
-    borderRadius:30,
-    marginBottom:20
+    borderRadius: 30,
+    marginBottom: 20
   },
   //검색
-  TextInputcontainer:{
+  TextInputcontainer: {
     justifyContent: 'center',
-    marginBottom:20,
+    marginBottom: 20,
     // backgroundColor: theme.colors.white
   },
-  innerContainer:{
+  innerContainer: {
     // paddingHorizontal:10,
     // marginHorizontal:10,
-    justifyContent:'space-between',
-    alignItems:'center',
-    flexDirection:'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
     // paddingVertical:10
   },
-  inputAndMicrophone:{
-    flexDirection:'row',
-    backgroundColor:theme.colors.inputBackground2,
-    flex:3,
-    marginRight:10,
+  inputAndMicrophone: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.inputBackground2,
+    flex: 3,
+    marginRight: 10,
     paddingVertical: Platform.OS === "ios" ? 10 : 0,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  input:{
+  input: {
     // backgroundColor:'transparent',
-    paddingLeft:20,
+    paddingLeft: 20,
     color: theme.colors.inputText,
-    flex:3,
-    fontSize:15,
-    height:50,
+    flex: 3,
+    fontSize: 15,
+    height: 50,
     alignSelf: 'center',
   },
-  
-  
+
+
 });
 
 export default TextSearch;

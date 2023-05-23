@@ -42,7 +42,7 @@ export default function Barcode() {
     React.useEffect(() => {
         (async () => {
             //라이센스 키
-            await DBR.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==");
+            await DBR.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMTAxODY1MTk0LVRYbE5iMkpwYkdWUWNtOXFYMlJpY2ciLCJtYWluU2VydmVyVVJMIjoiaHR0cHM6Ly9tbHRzLmR5bmFtc29mdC5jb20iLCJvcmdhbml6YXRpb25JRCI6IjEwMTg2NTE5NCIsImNoZWNrQ29kZSI6ODEzMTM2NDQzfQ==");
         })();
     }, []);
 
@@ -71,7 +71,7 @@ export default function Barcode() {
             // console.log(results[0].barcodeText);
 
             console.log("axios 호출")
-            axios.get("http://172.16.37.98:5000/barcode/search",
+            axios.get("http://172.16.38.121:5000/barcode/search",
                 {
                     params: {
                         // 약이름, page번호 요청
