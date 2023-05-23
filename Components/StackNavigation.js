@@ -49,6 +49,8 @@ import CameraSearchMain from '../Pages/Search/CameraSearchMain';
 import TextSearch from '../Pages/Search/TextSearch';
 import Kakao from '../Pages/SignUp/Easy/Kakao';
 import SetNickName from '../Pages/SignUp/Easy/SetNickname';
+import BarcodeMain from '../Pages/Search/BarcodeMain';
+// import GallerySearch from '../Pages/Search/GallerySearch';
 
 const Auth = () => {
   return (
@@ -86,6 +88,8 @@ const Auth = () => {
       <Stack.Screen name="TextSearch" component={TextSearch} />
       <Stack.Screen name="Kakao" component={Kakao} />
       <Stack.Screen name="SetNickName" component={SetNickName} />
+      <Stack.Screen name="BarcodeMain" component={BarcodeMain} />
+      {/* <Stack.Screen name="GallerySearch" component={GallerySearch} /> */}
     </Stack.Navigator>
   );
 };
