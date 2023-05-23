@@ -48,6 +48,8 @@ import PillDetectionMain from '../Pages/PillDetection/PillDetectionMain';
 import BarcodeCamera from '../Pages/Search/BarcodeCamera';
 import CameraSearchMain from '../Pages/Search/CameraSearchMain';
 import TextSearch from '../Pages/Search/TextSearch';
+import Kakao from '../Pages/SignUp/Easy/Kakao';
+import SetNickName from '../Pages/SignUp/Easy/SetNickname';
 
 const Auth = () => {
   return (
@@ -84,6 +86,8 @@ const Auth = () => {
       <Stack.Screen name="BarcodeCamera" component={BarcodeCamera} />
       <Stack.Screen name="CameraSearchMain" component={CameraSearchMain} />
       <Stack.Screen name="TextSearch" component={TextSearch} />
+      <Stack.Screen name="Kakao" component={Kakao} />
+      <Stack.Screen name="SetNickName" component={SetNickName} />
     </Stack.Navigator>
   );
 };

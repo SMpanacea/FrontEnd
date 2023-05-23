@@ -107,8 +107,6 @@ function MedicineDetail({navigation, route }) {
             <View style={styles.meditextbox}>
               <View>
               {/* 약 데이터 정보 뿌리는 화면 */}
-
-                
                   {medicinedetail && medicinedetail.efcyQesitm ? (
                     <View style={styles.Informationcontainer}>
                       <View style={styles.Info} accessible={true}>

@@ -2,16 +2,15 @@
 import axios from 'axios';
 import React, { useState, useEffect } from "react";
 import Constants from 'expo-constants';
-import { KeyboardAvoidingView, View, SafeAreaView, StyleSheet, TouchableOpacity, Alert, AppState } from 'react-native';
+import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Text, TextInput, Button, Surface } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Google from './Easy/Google'
+import Kakao from './Easy/Kakao';
 
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
 const IP = ServerPort();
 
-//** TODO : 간편 로그인 시 해당 세션을 지워줘야 함. 카카오면 카카오, 구글이면 구글
 export default function Login({ route, navigation }) {
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
@@ -27,7 +26,7 @@ export default function Login({ route, navigation }) {
         }
     }
 
-    // //액시오스 통신
+    //액시오스 통신
     const onFinish = async () => {
         try {
             const res = await axios.post(`${IP}/user/login`, {
@@ -35,7 +34,7 @@ export default function Login({ route, navigation }) {
                 upw: pw
             });
             console.log("res.data : ", res.data);
-            console.log("res.data.typeof : ", typeof(res.data));
+            console.log("res.data.typeof : ", typeof (res.data));
             if (res.data === false) {
                 Alert.alert(
                     '로그인에 실패하였습니다',
@@ -48,14 +47,10 @@ export default function Login({ route, navigation }) {
                     { cancelable: false }
                 );
             } else {
-                console.log("res.data : ", res.data);
                 const token = res.data;
-                console.log("token : ", token);
                 await AsyncStorage.setItem('token', token);
-                const getToken = await AsyncStorage.getItem('token');
-                console.log("getToken : ", getToken);
+                await AsyncStorage.setItem('loginType', "Gen");
                 route.params.setLoggedIn(true);
-                console.log("params : ", route.params.setLoggedIn);
                 navigation.navigate("bottom");
             }
         } catch (error) {
@@ -66,9 +61,9 @@ export default function Login({ route, navigation }) {
     return (
         <SafeAreaView style={styles.box}>
             <Text style={styles.text}>로그인</Text>
-             <TextInput
+            <TextInput
                 label={"아이디"}
-                style={[ styles.input ,styles.down]}
+                style={[styles.input, styles.down]}
                 maxLength={14}
                 onChangeText={setId}
             />
@@ -85,11 +80,11 @@ export default function Login({ route, navigation }) {
             <View style={styles.row}>
                 <TouchableOpacity>
                     <Text variant="titleMedium" style={styles.input}
-                    onPress={() => { navigation.navigate("ReissuanceId") }}>아이디</Text>
+                        onPress={() => { navigation.navigate("ReissuanceId") }}>아이디</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <Text variant="titleMedium" style={styles.input}
-                    onPress={() => { navigation.navigate("ReissuancePw") }}>/비밀번호 찾기</Text>
+                        onPress={() => { navigation.navigate("ReissuancePw") }}>/비밀번호 찾기</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={{ flex: 1, alignItems: "flex-end", marginBottom: 25 }}>
                     <Text variant="titleMedium" onPress={() => { navigation.navigate("Join") }}>회원가입</Text>
@@ -100,15 +95,10 @@ export default function Login({ route, navigation }) {
                 contentStyle={{ height: 60, alignItems: 'center', justifyContent: 'center' }}
                 labelStyle={{ fontSize: 19 }}
                 onPress={() => { handleLogin() }}>로그인</Button>
-            <Text variant="titleMedium" marginTop={40} style={styles.down}>긴편 로그인</Text>
-            <Button
-                mode="outlined"
-                style={styles.down}
-                contentStyle={{ height: 60, alignItems: 'center', justifyContent: 'center' }}
-                labelStyle={{ fontSize: 19 }}
-                // onPress={() => {navigation.navigate("Kakao")}}
-                >카카오 로그인</Button>
-            {/* <Google /> */}
+            <Text variant="titleMedium" style={styles.down2}>간편 로그인</Text>
+            <View style={styles.kakaoContainer}>
+                <Kakao navigation={navigation} route={route} />
+            </View>
         </SafeAreaView>
     );
 }
@@ -138,6 +128,11 @@ const styles = StyleSheet.create({
     down: {
         marginBottom: 10
     },
+    down2: {
+        marginBottom: 15,
+        marginTop: 30,
+        textAlign: 'center',
+    },
     row: {
         flexDirection: 'row',
         marginTop: 5,
@@ -145,5 +140,8 @@ const styles = StyleSheet.create({
     error: {
         color: 'red',
         fontSize: 15
+    },
+    kakaoContainer: {
+      alignItems: 'center',
     },
 })

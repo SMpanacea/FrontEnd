@@ -59,6 +59,7 @@ const MyComponent = ({medicinedata,bookmark, setBookmark}) => {
 
   return (
     <View>
+      
       {medicinedata.map((item, idx) => (
         <Card key={idx} style={{marginBottom:30}} onPress={() => handlePress(medicinedata[idx].itemSeq, bookmark)}>
           <Card.Title title={medicinedata[idx].itemName} subtitle={medicinedata[idx].updateDe} left={LeftContent} />
@@ -71,7 +72,7 @@ const MyComponent = ({medicinedata,bookmark, setBookmark}) => {
                 <Card.Cover source={{uri : medicinedata[idx].itemImage}}/>
             } */}
             {
-                medicinedata[idx].itemImage === null?<Card.Cover source={noimage}/>:
+                medicinedata[idx].itemImage === null?<Card.Cover  source={{ uri: 'https://panacea.s3.ap-northeast-2.amazonaws.com/default/medicine_default.jpg' }}  style={{ width:'100%'}}/>:
                 <Card.Cover source={{uri : medicinedata[idx].itemImage}}/>
             }
           {/* <Card.Cover source={{ uri: item.imageUri }} /> */}

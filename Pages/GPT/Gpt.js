@@ -13,30 +13,12 @@ import MessageList from '../../Components/MessageList';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 //색 모음
 import {theme} from '../../theme';
+import Search from '../../Components/Search';
 // import { Platform } from 'react-native';
 
 
 const messages = [];
 function Gpt({navigation, route}){
-
-  // // 사용자 메세지 1개 보내기 성공
-  // const [message, setMessage] = useState(''); //message입력
-
-  // const sendMessageToServer = async () => {
-  //   try {
-  //     const res = await axios.post(`${IP}/chat/question`, {
-  //       content: message,
-  //     });
-  //     // 성공적으로 요청이 처리되었을 때의 동작을 수행하십시오.
-  //     console.log("chatgpt sendMessage...", message)
-  //     console.log('메시지 전송 완료', res.data);
-  //     setMessage(''); // 메시지 입력 초기화
-  //   } catch (error) {
-  //     // 요청이 실패한 경우에 대한 오류 처리를 수행하십시오.
-  //     console.log("chat gpt메세지 보내기 실패,,,", error)
-  //     console.log("뭐보냄?...", message)
-  //   }
-  // };
 
   // 사용자가 보낸 메세지 전부 axios통신보내버리기
   const [message, setMessage] = useState(''); // 사용자 메시지 입력
@@ -78,11 +60,11 @@ function Gpt({navigation, route}){
             <View style={styles.TextInputcontainer}>
                 <View style={styles.innerContainer}>
                     <View style={styles.inputAndMicrophone}>
-                        <TouchableOpacity 
+                        {/* <TouchableOpacity 
                         style={styles.emoticonButton}
                         >
                             <Icon name="emoticon-outline" size={23} color={theme.colors.description} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TextInput
                             multiline
                             placeholder='쓰고 싶은 말 써봐라!'
@@ -90,17 +72,18 @@ function Gpt({navigation, route}){
                             value={message} // 현재 message 값을 입력 값으로 설정
                             onChangeText={text=>setMessage(text)}
                         />
-                        <TouchableOpacity style={styles.rightIconButtonStyle}>
+                        {/* <TouchableOpacity style={styles.rightIconButtonStyle}>
                             <Icon name="paperclip" size={23} color={theme.colors.description} />
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.rightIconButtonStyle}>
                             <Icon name="camera" size={23} color={theme.colors.description} />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>    
                     {/* 일단 잠들어 있어라,,,, 돈 나간다!!!!!! */}
                     <TouchableOpacity style={styles.sendButton} onPress={() => sendMessageToServer(message)}>
                     {/* <TouchableOpacity style={styles.sendButton} > */}
-                            <Icon name={message ? "send" : "microphone"} size={23} color={theme.colors.white} />
+                            {/* <Icon name={message ? "send" : "microphone"} size={23} color={theme.colors.white} /> */}
+                            <Icon name={message ? "send" : "send"} size={23} color={theme.colors.white} />
                     </TouchableOpacity>
                 </View>
             </View>
