@@ -13,7 +13,7 @@ export default function Main({ navigation }) {
                 style={styles.down}
                 contentStyle={styles.button}
                 labelStyle={{ fontSize: 20 }}
-                onPress={() => navigation.navigate('BarcodeCamera')}>바코드 검색</Button>
+                onPress={() => navigation.navigate('BarcodeMain')}>바코드 검색</Button>
             <Button
                 mode="outlined"
                 style={styles.down}
