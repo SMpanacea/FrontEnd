@@ -1,3 +1,4 @@
+//BarcodeCamera 작동하는 화면
 import * as React from 'react';
 import { SafeAreaView, StyleSheet, View, Modal, Text } from 'react-native';
 
@@ -12,6 +13,11 @@ import * as REA from 'react-native-reanimated';
 import axios from 'axios';
 
 
+//license 가져와잇!
+import BarcodeLicense from '../../Components/BarcodeLicense';
+const License = BarcodeLicense();
+
+
 //느낌상 공간주는 역할
 // const Separator = () => (
 //     <View style={styles.separator} />
@@ -21,7 +27,7 @@ import axios from 'axios';
 export default function Barcode() {
 
     //카메라 사용여부
-    const [useCamera, setUseCamera] = React.useState(false);
+    const [useCamera, setUseCamera] = React.useState(true);
     //바코드 결과값
     const [barcodeResults, setBarcodeResults] = React.useState([]);
     //카메라 허가 여부
@@ -36,13 +42,14 @@ export default function Barcode() {
     const device = devices.back;
 
     const [modalVisible, setModalVisible] = React.useState(false);
+    const [check, setCheck] = React.useState(false);
 
 
 
     React.useEffect(() => {
         (async () => {
             //라이센스 키
-            await DBR.initLicense("DLS2eyJoYW5kc2hha2VDb2RlIjoiMjAwMDAxLTE2NDk4Mjk3OTI2MzUiLCJvcmdhbml6YXRpb25JRCI6IjIwMDAwMSIsInNlc3Npb25QYXNzd29yZCI6IndTcGR6Vm05WDJrcEQ5YUoifQ==");
+            await DBR.initLicense(`${License}`);
         })();
     }, []);
 
@@ -54,12 +61,22 @@ export default function Barcode() {
     }, []);
 
     React.useEffect(() => {
+        if(barcodeResults !== undefined){
+            if(barcodeResults[0] !== undefined){
+                if(barcodeResults[0].barcodeText !== undefined){
+        console.log("result~~~~~~~~~~~~~~~~~~~~");
+        console.log(barcodeResults);
+        console.log(barcodeResults[0]);
+        console.log(barcodeResults[0].barcodeText);
+        console.log("end~~~~~~~~~~~~~~~~~~~~~~~~~");
+
         onScanned(barcodeResults);
+        }}}
     }, [barcodeResults]);
 
 
     //스캔 함수
-    const onScanned = (results) => {
+    const onScanned = async(results) => {
         console.log(results);
         setBarcodeResults(results);
 
@@ -67,11 +84,12 @@ export default function Barcode() {
         //카메라 사용 안함
         if (results[0]) {
             setUseCamera(false);
+            // setCheck(true);
             // console.log(results[0]);
             // console.log(results[0].barcodeText);
 
             console.log("axios 호출")
-            axios.get("http://172.16.37.98:5000/barcode/search",
+            await axios.get("http://172.16.38.121:5000/barcode/search",
                 {
                     params: {
                         // 약이름, page번호 요청
@@ -82,6 +100,8 @@ export default function Barcode() {
                     console.log(response.data);
                     setBarcodeResults(response.data[0]);
                     setModalVisible(true);
+                    setCheck(true);
+                    //alert 확인 누르면  setCheck를 false로 바꿔줘.
                     alert(
                         // JSON.stringify(response.data[0])
                         Object.entries(response.data[0])
@@ -104,17 +124,19 @@ export default function Barcode() {
     const frameProcessor = useFrameProcessor((frame) => {
         'worklet'
         const config = {};
-        config.template = "{\"ImageParameter\":{\"BarcodeFormatIds\":[\"BF_ONED\"],\"ExpectedBarcodesCount\": \"0\",\"Description\":\"\",\"Name\":\"Settings\",\"LocalizationModes\":[\"LM_SCAN_DIRECTLY\"]},\"Version\":\"3.0\"}";
+        // config.template = "{\"ImageParameter\":{\"BarcodeFormatIds\":[\"BF_ONED\"],\"ExpectedBarcodesCount\": \"0\",\"Description\":\"\",\"Name\":\"Settings\",\"LocalizationModes\":[\"LM_SCAN_DIRECTLY\"]},\"Version\":\"3.0\"}";
 
         config.rotateImage = false;
         const results = decode(frame, config)
-
+        if(!check){
+        setCheck(true);
         console.log("height: " + frame.height);
         console.log("width: " + frame.width);
         console.log(results);
         REA.runOnJS(setBarcodeResults)(results);
         REA.runOnJS(setFrameWidth)(frame.width);
         REA.runOnJS(setFrameHeight)(frame.height);
+        }
     }, [])
 
 
@@ -173,30 +195,7 @@ export default function Barcode() {
 
 
     return (
-        <SafeAreaView style={styles.container}>
-            {/* {modalVisible && (
-                <Modal
-                    style={{ height: 300 }}
-                    presentationStyle= "formSheet"
-                    animationType="fade"  // 모달 애니메이션 지정
-                    visible={modalVisible}  // 모달 표시 여부 지정
-                    onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
-                >
-                    <View  style={{ height: 300 }}>
-                        <Text>상품 정보</Text>
-                        {Object.entries(barcodeResults).map(([key, value]) => (
-                            <View key={key}>
-                                <Text>{key}</Text>
-                                <Text>{value}</Text>
-                            </View>
-                        ))}
-                        <Button
-                            title="Close"
-                            onPress={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 모달을 닫습니다
-                        />
-                    </View>
-                </Modal>
-            )} */}
+        <View style={styles.container}>
             {/* 카메라 사용중일때 띄우는 화면 */}
             {useCamera && (
                 <>
@@ -204,65 +203,18 @@ export default function Barcode() {
                         hasPermission && (
                             <>
                                 <Camera
-                                    style={{ width: '100%', height: '80%' }}
+                                    style={{ width: '100%', height: '100%' }}
                                     device={device}
                                     isActive={true}
                                     frameProcessor={frameProcessor}
                                     frameProcessorFps={1}
                                 />
-                            </>)}
-
-                    {/* <Button
-                            icon="close"
-                            mode='elevated'
-                            onPress={() => setUseCamera(false)}
-                        >
-                            Close
-                        </Button> */}
-
+                            </>
+                        )
+                    }
                 </>
-
             )}
-            {/* 카메라 사용안하고 있을때 띄우는 화면  */}
-            {/* {!useCamera && ( */}
-            <View
-                style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 50, justifyContent: 'flex-end', alignItems: 'center' }}
-            >
-                <View style={{ alignItems: "center" }}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Button
-                            icon="camera"
-                            mode='contained-tonal'
-                            onPress={() => setUseCamera(true)}
-                            style={{ marginRight: 8 }}
-                        >
-                            Scan Camera
-                        </Button>
-                        <Button
-                            icon="close"
-                            mode='contained-tonal'
-                            onPress={() => setUseCamera(false)}
-                        >
-                            Close
-                        </Button>
-                        <Button
-                            icon="image"
-                            mode='contained-tonal'
-                            onPress={() => decodeFromAlbum()}
-                        >
-                            Read Album
-                        </Button>
-                    </View>
-
-                    {/* {barcodeResults.map((barcode, idx) => (
-                        <Text style={StyleSheet.barcodeText} key={idx}>
-                            {barcode.barcodeFormat + ": " + barcode.barcodeText}
-                        </Text>
-                    ))} */}
-                </View>
-            </View>
-            {/* )} */}
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -292,5 +244,7 @@ const styles = StyleSheet.create({
 
 
 
+
+ 
 
 
