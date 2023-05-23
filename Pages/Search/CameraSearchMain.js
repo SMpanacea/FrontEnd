@@ -13,6 +13,7 @@ export default function CameraSearchMain({ navigation }) {
                 style={styles.down}
                 contentStyle={styles.button}
                 labelStyle={{ fontSize: 20 }}
+                //기창이형 코드 합치면 그 때 넣어 줄 예정
                 onPress={console.log("카머라 버튼 눌림")}>카메라로 알약 검색</Button>
             <Button
                 mode="outlined"
