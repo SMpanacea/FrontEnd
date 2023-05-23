@@ -1,7 +1,8 @@
 // 회원가입한 후 보이는 mypage화면
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Image, Alert, useIsFocused } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { SafeAreaView, StyleSheet, View, Image, InteractionManager, 
+  findNodeHandle, AccessibilityInfo } from 'react-native';
 import { Text, TextInput, Button, Title, Surface } from 'react-native-paper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,6 +33,8 @@ function MemberMyPage({ route, navigation }) {
   const [birth, setBirth] = useState('');
   const [gender, setGender] = useState('');
 
+  const screanReaderFocus = useRef(null);
+
   const fetchUserData = async () => {
     const getToken = await AsyncStorage.getItem('token');
     console.log("fetchUserData getToken : ", getToken)
@@ -54,6 +57,12 @@ function MemberMyPage({ route, navigation }) {
   };
 
   useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      const reactTag = findNodeHandle(screanReaderFocus.current);
+      if (reactTag) {
+          AccessibilityInfo.setAccessibilityFocus(reactTag);
+      }
+  })
     const { data } = route.params;
     console.log("data : ", data);
     if (data) {
@@ -93,6 +102,7 @@ function MemberMyPage({ route, navigation }) {
           <Image source={{ uri: img }} style={{ flex: 1 }} />
         </View>
         <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
+          <View ref={screanReaderFocus} accessibilityLabel="프로필 관리">
           <Button
             mode="outlined"
             style={[styles.button, styles.down]}
@@ -109,6 +119,7 @@ function MemberMyPage({ route, navigation }) {
                 }
               })
             }}>프로필 관리</Button>
+            </View>
           <Button
             mode="outlined"
             style={styles.button}

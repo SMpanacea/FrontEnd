@@ -1,8 +1,9 @@
 // 회원정보 확인 화면
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, Alert } from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import { StyleSheet, View, TouchableOpacity, Image, Alert, InteractionManager, 
+  findNodeHandle, AccessibilityInfo } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 
@@ -12,6 +13,16 @@ const IP = ServerPort();
 
 export default function MemberInfo({ navigation, route }) {
   const { userData } = route.params;
+
+  const screanReaderFocus = useRef(null);
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(() => {
+            const reactTag = findNodeHandle(screanReaderFocus.current);
+            if (reactTag) {
+                AccessibilityInfo.setAccessibilityFocus(reactTag);
+            }
+        })
+    }, []);
 
   const chkDel = () => {
     Alert.alert(
@@ -74,7 +85,7 @@ export default function MemberInfo({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.profileContainer}>
+      <View style={styles.profileContainer} ref={screanReaderFocus} accessibilityLabel="프로필 사진" >
         <Image source={{ uri: userData.img }} style={styles.profileImage} />
       </View>
 
