@@ -44,6 +44,7 @@ import MyBoardsList from '../Pages/MyPage/MyBoardsList';
 import MemberInfoEdit from '../Pages/MyPage/MenberInfoEdit';
 import MyLikesList from '../Pages/MyPage/MyLikesList';
 import MyCommentsList from '../Pages/MyPage/MyCommentsList';
+import PillDetectionMain from '../Pages/PillDetection/PillDetectionMain';
 import BarcodeCamera from '../Pages/Search/BarcodeCamera';
 import CameraSearchMain from '../Pages/Search/CameraSearchMain';
 import TextSearch from '../Pages/Search/TextSearch';
@@ -83,6 +84,7 @@ const Auth = () => {
       <Stack.Screen name="MemberInfoEdit" component={MemberInfoEdit} />
       <Stack.Screen name="MyLikesList" component={MyLikesList} />
       <Stack.Screen name="MyCommentsList" component={MyCommentsList} />
+      <Stack.Screen name="PillDetectionMain" component={PillDetectionMain} />
       <Stack.Screen name="BarcodeCamera" component={BarcodeCamera} />
       <Stack.Screen name="CameraSearchMain" component={CameraSearchMain} />
       <Stack.Screen name="TextSearch" component={TextSearch} />
