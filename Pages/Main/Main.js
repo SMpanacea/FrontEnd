@@ -31,7 +31,7 @@ export default function Main({ navigation }) {
                 /> */}
                 <LottieView
                     source={require('../../assets/pills.json') /** 움직이는 LottieView */}
-                    style={MainButtonStyle.barcodeImage}
+                    style={MainButtonStyle.mainSerachImage}
                     autoPlay loop
                 />
             </TouchableOpacity>
@@ -43,7 +43,7 @@ export default function Main({ navigation }) {
                 </View>
                 <LottieView
                     source={require('../../assets/Barcode Scan.json') /** 움직이는 LottieView */}
-                    style={MainButtonStyle.barcodeImage}
+                    style={MainButtonStyle.mainSerachImage}
                     autoPlay loop
                 />
             </TouchableOpacity>

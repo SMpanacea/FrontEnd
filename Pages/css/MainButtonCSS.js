@@ -5,7 +5,7 @@ export const MainButtonStyle = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 50,
         overflow: 'hidden',
-        height: 230,
+        height: 280,
         width: 350,
         alignItems: 'center',
         justifyContent: 'center',
@@ -36,17 +36,24 @@ export const MainButtonStyle = StyleSheet.create({
         // 마진 크기 조정
     },
     text: {
-        fontSize: 15,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'black',
         marginBottom: 10
     },
-    barcodeImage:{
+    mainSerachImage:{
         width: 230, // or whatever size you want
-        height: 170, // or whatever size you want
+        height: 200, // or whatever size you want
         position: 'absolute',
         right: -10,
         bottom: 10,
+    },
+    CameraSerachMainButton:{
+        width: 230, // or whatever size you want
+        height: 200, // or whatever size you want
+        position: 'absolute',
+        right: -10,
+        bottom: -10,
     }
 });
 

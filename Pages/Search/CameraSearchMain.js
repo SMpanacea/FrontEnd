@@ -28,11 +28,15 @@ export default function CameraSearchMain({ navigation }) {
                     <Text style={MainButtonStyle.text}>카메라로 알약 검색하기 &gt; </Text>
                     <Text style={MainButtonStyle.subText}>카메라를 알약을 촬영하여 검색</Text>
                 </View>
-                <Image
+                {/* <Image
                     source={require('../../assets/animation_640_lhwuujpi.gif')}
                     style={MainButtonStyle.image}
+                /> */}
+                                <LottieView
+                    source={require('../../assets/68430-camera.json') /** 움직이는 LottieView */}
+                    style={MainButtonStyle.CameraSerachMainButton}
+                    autoPlay loop
                 />
-                {/* </ImageBackground> */}
             </TouchableOpacity>
             <TouchableOpacity ref={screanReaderFocus}style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
 
@@ -40,9 +44,10 @@ export default function CameraSearchMain({ navigation }) {
                     <Text style={MainButtonStyle.text}>이름으로 알약 검색 &gt; </Text>
                     <Text style={MainButtonStyle.subText}>의약품이름으로 검색</Text>
                 </View>
-                <Image
-                    source={require('../../assets/searchButton.gif')}
-                    style={MainButtonStyle.image}
+                <LottieView
+                    source={require('../../assets/77218-search-imm.json') /** 움직이는 LottieView */}
+                    style={MainButtonStyle.CameraSerachMainButton}
+                    autoPlay loop
                 />
             </TouchableOpacity>
         </View>
