@@ -426,6 +426,8 @@ export default function Join({ navigation }) {
                     <View style={styles.box}>
                         <Text style={styles.text}>계정 만들기</Text>
                         <TextInput
+                            accessibilityLabel="아이디"
+                            accessibilityHint="아이디는 영문 소문자 또는 숫자로 이루어진 6~14자를 입력하세요."        
                             label={"아이디"}
                             style={styles.input}
                             placeholder="영문 소문자/숫자, 6~14자"
@@ -435,6 +437,8 @@ export default function Join({ navigation }) {
                         />
                         <Text style={styles.error}>{mIdError}</Text>
                         <TextInput
+                            accessibilityLabel="비밀번호"
+                            accessibilityHint="비밀번호는 영문 대소문자와 숫자, 특수문자로 이루어진 8자에서 16자를 입력하세요."             
                             label={"비밀번호"}
                             style={styles.input}
                             ref={pwRef}
@@ -449,6 +453,7 @@ export default function Join({ navigation }) {
                         />
                         <Text style={styles.error}>{mPwError}</Text>
                         <TextInput
+                            accessibilityLabel="비밀번호 확인"
                             ref={cpwRef}
                             style={styles.input}
                             placeholder="비밀번호 확인"
@@ -463,6 +468,7 @@ export default function Join({ navigation }) {
                         <Text style={styles.error}>{mCpwError}</Text>
                         <View style={[styles.row]}>
                             <TextInput
+                                accessibilityLabel="이메일"
                                 label={"이메일"}
                                 style={[styles.dateInput, styles.input]}
                                 onChangeText={setEmail}
@@ -482,6 +488,8 @@ export default function Join({ navigation }) {
                             <View>
                                 <View style={[styles.row]}>
                                     <TextInput
+                                        accessibilityLabel="이메일 인증번호"
+                                        accessibilityHint="이메일 인증번호는 숫자 6자리를 입력하세요." 
                                         label={"이메일 인증번호"}
                                         style={[styles.dateInput, styles.input]}
                                         onChangeText={setEmailNum}
@@ -500,6 +508,8 @@ export default function Join({ navigation }) {
                             </View>
                         )}
                         <TextInput
+                            accessibilityLabel="닉네임"
+                            accessibilityHint="닉네임은 영어 소문자 혹은 한글 혹은 숫자를 2~12자를 입력하세요." 
                             label={"닉네임"}
                             style={styles.input}
                             placeholder="영문 소문자/한글/숫자, 2~12자"
@@ -509,6 +519,8 @@ export default function Join({ navigation }) {
                         />
                         <Text style={[styles.error]}>{mNickError}</Text>
                         <TextInput
+                            accessibilityLabel="생년월일"
+                            accessibilityHint="생년월일 8자를 입력하되 -으로 구분해 주세요." 
                             label={"생년월일"}
                             style={styles.input}
                             placeholder="예시) 1990-01-01"
