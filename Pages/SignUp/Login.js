@@ -62,12 +62,14 @@ export default function Login({ route, navigation }) {
         <SafeAreaView style={styles.box}>
             <Text style={styles.text}>로그인</Text>
             <TextInput
+                importantForAccessibility="no-hide-descendants"
                 label={"아이디"}
                 style={[styles.input, styles.down]}
                 maxLength={14}
                 onChangeText={setId}
             />
             <TextInput
+                importantForAccessibility="no-hide-descendants"
                 label={"비밀번호"}
                 style={styles.input}
                 onChangeText={setPw}

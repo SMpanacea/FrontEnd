@@ -1,7 +1,8 @@
 // 회원정보 수정 화면
 import axios from 'axios';
-import React, { useState, useCallback } from 'react';
-import { KeyboardAvoidingView, ScrollView, StyleSheet, View, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View, TouchableOpacity, Image, Alert, 
+    InteractionManager, findNodeHandle, AccessibilityInfo} from 'react-native';
 import { Text, TextInput, Button, Title, RadioButton } from 'react-native-paper';
 import { launchImageLibrary } from 'react-native-image-picker'; //이미지 등록
 // import ImageResizer from 'react-native-image-resizer';
@@ -21,6 +22,17 @@ export default function MemberInfoEdit({ navigation, route }) {
     const [gender, setGender] = useState(userData.gender);
 
     const [checked, setChecked] = useState(gender);  //라디오버튼 체크 여부
+
+    const screanReaderFocus = useRef(null);
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(() => {
+            const reactTag = findNodeHandle(screanReaderFocus.current);
+            if (reactTag) {
+                AccessibilityInfo.setAccessibilityFocus(reactTag);
+            }
+        })
+    }, []);
+
 
     const handleImagePicker = () => {
         Alert.alert(
@@ -205,7 +217,8 @@ export default function MemberInfoEdit({ navigation, route }) {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
-                    <TouchableOpacity onPress={handleImagePicker}>
+                    <TouchableOpacity onPress={handleImagePicker}
+                    ref={screanReaderFocus} accessibilityLabel="프로필 사진 수정">
                         <View style={styles.profileContainer}>
                             <Image style={styles.profileImage} source={{ uri: img }} />
                         </View>

@@ -1,7 +1,8 @@
 //비밀번호 재설정
 import axios from 'axios';
 import React, { useState, useRef } from "react";
-import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert  } from 'react-native';
+import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert, InteractionManager, 
+    findNodeHandle, AccessibilityInf  } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 
 // 서버 포트
@@ -21,6 +22,16 @@ export default function ResetPw({ navigation, route }) {
 
     const [isPasswordVisible, setPasswordVisibility] = useState(false); //비밀번호 확인 변수
     const [isPasswordVisible2, setPasswordVisibility2] = useState(false);
+
+    const screanReaderFocus = useRef(null);
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(() => {
+            const reactTag = findNodeHandle(screanReaderFocus.current);
+            if (reactTag) {
+                AccessibilityInfo.setAccessibilityFocus(reactTag);
+            }
+        })
+    }, []);
 
     const chgPwd = async () => {
         if (cpw === "") {
@@ -139,6 +150,8 @@ export default function ResetPw({ navigation, route }) {
         <SafeAreaView style={styles.box}>
             <Text style={styles.text}>비밀번호 재설정</Text>
             <TextInput
+                accessibilityLabel="비밀번호"
+                accessibilityHint="비밀번호는 영문 대소문자와 숫자, 특수문자로 이루어진 8자에서 16자를 입력하세요."
                 label={"비밀번호"}
                 ref={pwRef}
                 placeholder="영문 대소문자/숫자/특수문자, 8자~16자"
@@ -153,6 +166,7 @@ export default function ResetPw({ navigation, route }) {
             />
 
             <TextInput
+                accessibilityLabel="비밀번호 확인"
                 ref={cpwRef}
                 placeholder="비밀번호 확인"
                 onChangeText={setCpw}

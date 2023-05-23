@@ -1,7 +1,8 @@
 // 아이디 찾기 화면
 import axios from 'axios';
 import React, { useState } from "react";
-import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Alert,
+    InteractionManager, findNodeHandle, AccessibilityInfo } from 'react-native';
 import { Text, TextInput, Button } from 'react-native-paper';
 
 // 서버 포트
@@ -18,6 +19,16 @@ export default function ReissuanceId() {
 
     const [isShown, setIsShown] = useState(false);  //이메일 인증번호 확인 변수
     
+    const screanReaderFocus = useRef(null);
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(() => {
+            const reactTag = findNodeHandle(screanReaderFocus.current);
+            if (reactTag) {
+                AccessibilityInfo.setAccessibilityFocus(reactTag);
+            }
+        })
+    }, []);
+
     const handleInputEmail = () => {
         const regExp3 = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
         if (email === "") {
@@ -143,9 +154,12 @@ export default function ReissuanceId() {
 
     return (
         <SafeAreaView style={styles.box} keyboardShouldPersistTaps="handled">
+
             <Text style={styles.text}>아이디 찾기</Text>
+
             <View style={[styles.row]}>
                 <TextInput
+                    accessibilityLabel="이메일"
                     label={"이메일"}
                     style={styles.dateInput}
                     onChangeText={setEmail}
@@ -158,10 +172,12 @@ export default function ReissuanceId() {
                     onPress={handleInputEmail}
                 >인증</Button>
             </View>
+
             {isShown && (
                 <View>
                     <View style={[styles.row]}>
                         <TextInput
+                            accessibilityLabel="이메일 인증번호"
                             label={"이메일 인증번호"}
                             style={[styles.dateInput]}
                             onChangeText={setEmailNum}
