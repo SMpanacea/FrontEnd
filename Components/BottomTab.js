@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 // npm install @react-navigation/native -- save
 // npm install @react-navigation/bottom-tabs --save
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -23,7 +23,7 @@ import GPT from '../Pages/GPT/Gpt';
 import MedicineCamera from '../Pages/Medicine/MedicineCamera';
 import BarcodeCamera from '../Pages/Search/BarcodeCamera';
 
-import Main from '../Pages/Main/Main';  
+import Main from '../Pages/Main/Main';
 import Login from '../Pages/SignUp/Login';
 
 // 서버 포트
@@ -38,7 +38,7 @@ const Tab = createMaterialBottomTabNavigator(); //createBottomTabNavigator을 Ta
 
 function BottomTab() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [token,setToken] = useState(null)
+  const [token, setToken] = useState(null)
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -49,31 +49,31 @@ function BottomTab() {
         token: getToken
       });
       console.log("bottomTab res data : ", res.data);
-      console.log("bottomTab res data type : ", typeof(res.data));
+      console.log("bottomTab res data type : ", typeof (res.data));
       if (res.data === true) {            //1. 로그인 되어 있는 경우 - 아이디 반환
         setLoggedIn(true);
-      } else if ( res.data === false) {   //2. 로그인 되어 있지 않은 경우 - false 반환
+      } else if (res.data === false) {   //2. 로그인 되어 있지 않은 경우 - false 반환
         setLoggedIn(false);
-       } else {                             //3. 토큰 유효기간이 만료된 경우 - 아이디, 토큰 반환
+      } else {                             //3. 토큰 유효기간이 만료된 경우 - 아이디, 토큰 반환
         setLoggedIn(false);
-       }
+      }
       console.log("bottomTab loggedIn : ", loggedIn);
     };
     checkLoginStatus();
   }, [loggedIn]);
 
-  return (  
-      <Tab.Navigator
-        initialRouteName="Main"
-        // animationEasing={Easing.linear}
-        barStyle={{
-          backgroundColor: '#FFFFFF',
-          paddingBottom: Platform.OS === 'ios' ? 20 : 0, // 안전 영역 고려          
-          // height:50
-        }}
-        activeColor="#6200EE"
-        inactiveColor="#95A5A6"
-      >
+  return (
+    <Tab.Navigator
+      initialRouteName="Main"
+      // animationEasing={Easing.linear}
+      barStyle={{
+        backgroundColor: '#FFFFFF',
+        paddingBottom: Platform.OS === 'ios' ? 20 : 0, // 안전 영역 고려          
+        // height:50
+      }}
+      activeColor="#6200EE"
+      inactiveColor="#95A5A6"
+    >
       {/* <Tab.Screen
         name="BookMarkScreen"
         component={BookMarkScreen}
@@ -102,6 +102,7 @@ function BottomTab() {
           tabBarIcon: ({ color }) => (
             <Icon2 name="chat" color={color} size={26} />
           ),
+          tabBarAccessibilityLabel: 'GPT', // accessibilty label for this tab
         }}
       />
       <Tab.Screen
@@ -112,34 +113,25 @@ function BottomTab() {
           tabBarIcon: ({ color }) => (
             <Icon name="home" color={color} size={26} />
           ),
+          tabBarAccessibilityLabel: 'Main', // accessibilty label for this tab
         }}
       />
       <Tab.Screen
         name="MyPage"
         component={loggedIn ? MemberMyPage : Login}
         initialParams={{
-          token:token,
-          setLoggedIn:setLoggedIn
+          token: token,
+          setLoggedIn: setLoggedIn
         }}
         options={{
           tabBarLabel: '마이페이지',
           tabBarIcon: ({ color }) => (
             <Icon3 name="people-outline" color={color} size={26} />
           ),
+          tabBarAccessibilityLabel: 'MyPage', // accessibilty label for this tab
         }}
       />
-      {/* <Tab.Screen
-        name="MedicineCamera"
-        component={MedicineCamera}
-        options={{
-          tabBarLabel: '카메라결과목록',
-          tabBarIcon: ({ color }) => (
-            <Icon2 name="pill" color={color} size={26} />
-          ),
-        }}
-      /> */}
-      
-      </Tab.Navigator>
+    </Tab.Navigator>
   );
 }
 

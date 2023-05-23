@@ -19,7 +19,7 @@ export default function CameraSearchMain({ navigation }) {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 
-            <TouchableOpacity  style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('PillDetectionMain')}>
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('PillDetectionMain')}>
                 {/* <ImageBackground
                     source={require('../../assets/animation_640_lhwuc4ir.gif')}
                     style={[styles.imageBackground,StyleSheet.absoluteFill]}
@@ -32,13 +32,13 @@ export default function CameraSearchMain({ navigation }) {
                     source={require('../../assets/animation_640_lhwuujpi.gif')}
                     style={MainButtonStyle.image}
                 /> */}
-                                <LottieView
+                <LottieView
                     source={require('../../assets/68430-camera.json') /** 움직이는 LottieView */}
                     style={MainButtonStyle.CameraSerachMainButton}
                     autoPlay loop
                 />
             </TouchableOpacity>
-            <TouchableOpacity ref={screanReaderFocus}style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
+            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
 
                 <View style={MainButtonStyle.textContainer}>
                     <Text style={MainButtonStyle.text}>이름으로 알약 검색 &gt; </Text>

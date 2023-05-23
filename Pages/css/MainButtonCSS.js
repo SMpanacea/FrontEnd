@@ -41,14 +41,14 @@ export const MainButtonStyle = StyleSheet.create({
         color: 'black',
         marginBottom: 10
     },
-    mainSerachImage:{
+    mainSerachImage: {
         width: 230, // or whatever size you want
         height: 200, // or whatever size you want
         position: 'absolute',
         right: -10,
         bottom: 10,
     },
-    CameraSerachMainButton:{
+    CameraSerachMainButton: {
         width: 230, // or whatever size you want
         height: 200, // or whatever size you want
         position: 'absolute',

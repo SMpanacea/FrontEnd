@@ -5,8 +5,8 @@ export default function LoadingScreen() {
 
   return (
     <View style={styles.container} accessible={true} accessibilityLabel="사진을 촬영 하였습니다   로딩 중">
-      <ActivityIndicator size="large" color="orange" 
-        />
+      <ActivityIndicator size="large" color="orange"
+      />
       <Text style={styles.loadingText} >loding</Text>
     </View>
   );

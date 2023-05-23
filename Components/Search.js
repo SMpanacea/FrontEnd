@@ -21,8 +21,8 @@
 
 //gpt 채팅 화면
 
-import React, {useState} from 'react'
-import {View, Text,StyleSheet, TextInput, TouchableOpacity, Platform} from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native'
 
 // 서버통신
 import axios from 'axios';
@@ -33,88 +33,88 @@ const IP = ServerPort();
 
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 //색 모음
-import {theme} from '../theme'
+import { theme } from '../theme'
 // import { Platform } from 'react-native';
 
-export default function Search () {
+export default function Search() {
   const [message, setMessage] = useState(''); // 사용자 메시지 입력
 
-  return(
+  return (
     <View style={styles.TextInputcontainer}>
-                <View style={styles.innerContainer}>
-                    <View style={styles.inputAndMicrophone}>
-                        <TextInput
-                            multiline
-                            placeholder='쓰고 싶은 말 써봐라!'
-                            style={styles.input}
-                            value={message} // 현재 message 값을 입력 값으로 설정
-                            onChangeText={text=>setMessage(text)}
-                        />
-                    </View>    
-                    {/* 일단 잠들어 있어라,,,, 돈 나간다!!!!!! */}
-                    <TouchableOpacity style={styles.sendButton} onPress={() => sendMessageToServer(message)}>
-                    {/* <TouchableOpacity style={styles.sendButton} > */}
-                            {/* <Icon name={message ? "send" : "microphone"} size={23} color={theme.colors.white} /> */}
-                            <Icon name={message ? "send" : "send"} size={23} color={theme.colors.white} />
-                    </TouchableOpacity>
-                </View>
-            </View>
+      <View style={styles.innerContainer}>
+        <View style={styles.inputAndMicrophone}>
+          <TextInput
+            multiline
+            placeholder='쓰고 싶은 말 써봐라!'
+            style={styles.input}
+            value={message} // 현재 message 값을 입력 값으로 설정
+            onChangeText={text => setMessage(text)}
+          />
+        </View>
+        {/* 일단 잠들어 있어라,,,, 돈 나간다!!!!!! */}
+        <TouchableOpacity style={styles.sendButton} onPress={() => sendMessageToServer(message)}>
+          {/* <TouchableOpacity style={styles.sendButton} > */}
+          {/* <Icon name={message ? "send" : "microphone"} size={23} color={theme.colors.white} /> */}
+          <Icon name={message ? "send" : "send"} size={23} color={theme.colors.white} />
+        </TouchableOpacity>
+      </View>
+    </View>
 
   )
 
 }
 const styles = StyleSheet.create({
-  TextInputcontainer:{
+  TextInputcontainer: {
     justifyContent: 'center',
     // backgroundColor: theme.colors.white
   },
-  innerContainer:{
+  innerContainer: {
     // paddingHorizontal:10,
     // marginHorizontal:10,
-    justifyContent:'space-between',
-    alignItems:'center',
-    flexDirection:'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
     // paddingVertical:10
   },
-  inputAndMicrophone:{
-    flexDirection:'row',
-    backgroundColor:theme.colors.inputBackground,
-    flex:3,
-    marginRight:10,
+  inputAndMicrophone: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.inputBackground,
+    flex: 3,
+    marginRight: 10,
     paddingVertical: Platform.OS === "ios" ? 10 : 0,
     borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'space-between'
   },
-  emoticonButton:{
-    justifyContent:'center',
+  emoticonButton: {
+    justifyContent: 'center',
     alignItems: 'center',
     paddingLeft: 10,
   },
-  rightIconButtonStyle:{
-      justifyContent:'center',
-      alignItems: 'center',
-      paddingRight: 15,
-      paddingLeft: 10,
-      borderLeftWidth:1,
-      borderLeftColor:'#fff'
+  rightIconButtonStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingRight: 15,
+    paddingLeft: 10,
+    borderLeftWidth: 1,
+    borderLeftColor: '#fff'
   },
-  input:{
-    backgroundColor:'transparent',
-    paddingLeft:20,
+  input: {
+    backgroundColor: 'transparent',
+    paddingLeft: 20,
     color: theme.colors.inputText,
-    flex:3,
-    fontSize:15,
-    height:50,
+    flex: 3,
+    fontSize: 15,
+    height: 50,
     alignSelf: 'center',
   },
-  sendButton:{
+  sendButton: {
     backgroundColor: theme.colors.primary,
     borderRadius: 50,
     height: 50,
     width: 50,
-    alignItems:'center',
+    alignItems: 'center',
     justifyContent: 'center'
-    
+
   }
 });
