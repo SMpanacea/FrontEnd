@@ -1,6 +1,6 @@
 function ServerPort() {
     // return "https://port-0-flask-test-p8xrq2mlfullttm.sel3.cloudtype.app/"
-    return "http://192.168.2.122:5000"
+    return "http://172.16.33.119:5000"
 }
 
 export default ServerPort;
