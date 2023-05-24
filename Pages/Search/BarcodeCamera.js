@@ -1,6 +1,6 @@
 //BarcodeCamera 작동하는 화면
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Modal, Text, Alert } from 'react-native';
 
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -12,6 +12,9 @@ import { decode } from 'vision-camera-dynamsoft-barcode-reader';
 import * as REA from 'react-native-reanimated';
 import axios from 'axios';
 
+// 서버
+import ServerPort from '../../Components/ServerPort';
+const IP = ServerPort();
 
 //license 가져와잇!
 import BarcodeLicense from '../../Components/BarcodeLicense';
@@ -76,49 +79,61 @@ export default function Barcode() {
 
 
     //스캔 함수
-    const onScanned = async(results) => {
+    const onScanned = async (results) => {
         console.log(results);
         setBarcodeResults(results);
-
+      
         console.log("호출은 계속 되나?");
         //카메라 사용 안함
         if (results[0]) {
-            setUseCamera(false);
-            // setCheck(true);
-            // console.log(results[0]);
-            // console.log(results[0].barcodeText);
-
-            console.log("axios 호출")
-            await axios.get("http://172.16.38.121:5000/barcode/search",
-                {
-                    params: {
-                        // 약이름, page번호 요청
-                        barcode: results[0].barcodeText,
-                    }
-                })
-                .then(response => {
-                    console.log(response.data);
-                    setBarcodeResults(response.data[0]);
-                    setModalVisible(true);
-                    setCheck(true);
-                    //alert 확인 누르면  setCheck를 false로 바꿔줘.
-                    alert(
-                        // JSON.stringify(response.data[0])
-                        Object.entries(response.data[0])
-                        .map(([key, value]) => `${key}: ${value}`)
-                        .join("\n")
-                        );
-                    // modal_view(response.data[0], true);
-
-
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+          setUseCamera(false);
+          // setCheck(true);
+          // console.log(results[0]);
+          // console.log(results[0].barcodeText);
+      
+          console.log("axios 호출");
+          await axios
+            .get(`${IP}/barcode/search`, {
+              params: {
+                // 약이름, page번호 요청
+                barcode: results[0].barcodeText,
+              },
+            })
+            .then((response) => {
+              console.log(response.data);
+              setBarcodeResults(response.data[0]);
+              setModalVisible(true);
+              setCheck(true);
+              //alert 확인 누르면  setCheck를 false로 바꿔줘.
+              // alert(
+              //     // JSON.stringify(response.data[0])
+              //     Object.entries(response.data[0])
+              //     .map(([key, value]) => `${key}: ${value}`)
+              //     .join("\n")
+              //     );
+              // modal_view(response.data[0], true);
+              const resultText = Object.entries(response.data[0])
+                .map(([key, value]) => `${key}: ${value}`)
+                .join("\n");
+      
+              Alert.alert(
+                '결과',
+                resultText,
+                [
+                  {
+                    text: '확인',
+                    onPress: handleCameraOpen,
+                  },
+                ],
+                { cancelable: false }
+              );
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         }
         console.log("하여튼 찍혔다!");
-
-    }
+      };
 
     //프레임 단위로 작동 함수
     const frameProcessor = useFrameProcessor((frame) => {
@@ -192,6 +207,10 @@ export default function Barcode() {
         }
     }
 
+    //카메라 다시 켜기
+    const handleCameraOpen = () => {
+        setUseCamera(true);
+    }
 
 
     return (
