@@ -100,7 +100,7 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
   };
 
   return (
-    <TouchableOpacity onPress={handleBookmark}> 
+    <TouchableOpacity onPress={handleBookmark} accessibilityLabel='즐겨찾기' accessibilityRole='button'> 
       <View style={styles.bookmarkbutton}>
         {showImage && <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />}
         {/* <Image source={bookmarked2 ?  bookmarkImage : bookmarkedImage} style={styles.image} />  */}

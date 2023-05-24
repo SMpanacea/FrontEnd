@@ -7,6 +7,18 @@ import { MainButtonStyle } from '../css/MainButtonCSS'
 import LottieView from 'lottie-react-native';
 export default function CameraSearchMain({ navigation }) {
     const screanReaderFocus = useRef(null);
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+                  <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+              </TouchableOpacity>
+          ),
+          headerTitle: "알약 검색",
+        });
+      }, [])
+
     useEffect(() => {
         InteractionManager.runAfterInteractions(() => {
             const reactTag = findNodeHandle(screanReaderFocus.current);
