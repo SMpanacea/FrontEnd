@@ -16,7 +16,7 @@ const MessageList = ({conversations}) => {
         }}
         >
         {conversations.map((conversation, index) => (
-            <React.Fragment key={index}>
+            <React.Fragment key={index} >
             {conversation.map((message, messageIndex) => (
                 <Message
                 key={messageIndex}

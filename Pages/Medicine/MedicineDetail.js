@@ -78,6 +78,11 @@ function MedicineDetail({ navigation, route }) {
   // navigation 기본 제공 header이름 수정
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+            <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+        </TouchableOpacity>
+    ),
       headerTitle: medicinname, //header 약 이름 출력
       headerRight: () => (
         <View style={styles.headerRightContainer}>

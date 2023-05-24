@@ -55,10 +55,10 @@ function Gpt({navigation, route}){
  
    return(
         <View style={{flex:1}}>
-            <MessageList conversations={conversations}/>
+            <MessageList conversations={conversations} />
             {/* 입력 창 */}
             <View style={styles.TextInputcontainer}>
-                <View style={styles.innerContainer}>
+                <View style={styles.innerContainer} >
                     <View style={styles.inputAndMicrophone}>
                         {/* <TouchableOpacity 
                         style={styles.emoticonButton}
@@ -67,7 +67,7 @@ function Gpt({navigation, route}){
                         </TouchableOpacity> */}
                         <TextInput
                             multiline
-                            placeholder='쓰고 싶은 말 써봐라!'
+                            placeholder='질문을 입력하세요'
                             style={styles.input}
                             value={message} // 현재 message 값을 입력 값으로 설정
                             onChangeText={text=>setMessage(text)}
@@ -80,7 +80,7 @@ function Gpt({navigation, route}){
                         </TouchableOpacity> */}
                     </View>    
                     {/* 일단 잠들어 있어라,,,, 돈 나간다!!!!!! */}
-                    <TouchableOpacity style={styles.sendButton} onPress={() => sendMessageToServer(message)}>
+                    <TouchableOpacity style={styles.sendButton} onPress={() => sendMessageToServer(message)} accessibilityLabel='전송' accessibilityRole='button'>
                     {/* <TouchableOpacity style={styles.sendButton} > */}
                             {/* <Icon name={message ? "send" : "microphone"} size={23} color={theme.colors.white} /> */}
                             <Icon name={message ? "send" : "send"} size={23} color={theme.colors.white} />
