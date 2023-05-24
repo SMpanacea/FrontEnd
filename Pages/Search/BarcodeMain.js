@@ -182,7 +182,7 @@
 
 
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Modal, Text, TouchableOpacity } from 'react-native';
 
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -193,6 +193,10 @@ import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision
 import { decode } from 'vision-camera-dynamsoft-barcode-reader';
 import * as REA from 'react-native-reanimated';
 import axios from 'axios';
+import LottieView from 'lottie-react-native';
+import { MainButtonStyle } from '../css/MainButtonCSS'
+
+
 
 
 //license 가져와잇!
@@ -329,25 +333,33 @@ export default function BarcodeMain({navigation}) {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-         <Button
-            mode="outlined"
-            style={styles.down}
-            contentStyle={styles.button}
-            labelStyle={{ fontSize: 20 }}
-            onPress={() => navigation.navigate('BarcodeCamera')}
-        >
-            카메라로 바코드 스캔
-        </Button>
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('BarcodeCamera')}>
+
+                <View style={MainButtonStyle.textContainer}>
+                    <Text style={MainButtonStyle.text}>카메라로 바코드 스캔하기 &gt; </Text>
+                    <Text style={MainButtonStyle.subText}>카메라로 바코드 스캔하여 검색</Text>
+                </View>
+                <LottieView
+                    source={require('../../assets/scan.json') /** 움직이는 LottieView */}
+                    style={MainButtonStyle.CameraSerachMainButton}
+                    autoPlay loop
+                />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => decodeFromAlbum()}>
+
+                <View style={MainButtonStyle.textContainer}>
+                    <Text style={MainButtonStyle.text}>갤러리로 바코드 스캔하기 &gt; </Text>
+                    <Text style={MainButtonStyle.subText}>갤러리로 사진 선택 후 바코드 스캔하여 검색</Text>
+                </View>
+                <LottieView
+                    source={require('../../assets/barcode.json') /** 움직이는 LottieView */}
+                    style={MainButtonStyle.barcode}
+                    autoPlay loop
+                />
+                </TouchableOpacity>
         
-        <Button
-            mode="outlined"
-            style={styles.down}
-            contentStyle={styles.button}
-            labelStyle={{ fontSize: 20 }}
-            onPress={() => decodeFromAlbum()}
-        >
-            갤러리 바코드 스캔
-        </Button>
+       
         {/* <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             {modal_view(barcodeResults, modalVisible)}
         </View> */}
