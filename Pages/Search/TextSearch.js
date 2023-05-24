@@ -378,7 +378,7 @@ function TextSearch({ navigation }) {
   const [bookmark, setBookmark] = React.useState([]);
   const [totalCount, setTotalCount] = React.useState(0);
 
-  const search = async (keyword, pageNo) => {
+  const search = async (keyword = "", pageNo) => {
     setIsLoading(true);
     try {
       const res = await axios.get(`${IP}/medicine/search`, {
@@ -387,8 +387,16 @@ function TextSearch({ navigation }) {
           pageNo: pageNo,
         },
       });
-      setMedicinedata(res.data.items);
-      setTotalCount(res.data.totalCount);
+      if (!res.data || !res.data.items || res.data.items.length === 0) {
+        // 검색 결과가 없을 경우, 빈 배열로 설정하여 map 함수를 실행하지 않음
+        setMedicinedata([]);
+        setInput("");
+        console.log("하하,,,")
+      } else {
+        setMedicinedata(res.data.items);
+        setTotalCount(res.data.totalCount);
+      }
+      // setTotalCount(res.data.totalCount);
     } catch (error) {
       console.log("Medicine 이름 목록 가져오기 실패,", error);
     }
@@ -396,7 +404,9 @@ function TextSearch({ navigation }) {
   };
 
   const handleButtonPress = () => {
+    setPage(1); // Set page to 1
     search(input, 1);
+    
   };
 
   const handleClearInput = async () => {
@@ -481,16 +491,18 @@ function TextSearch({ navigation }) {
 
 
             {/* <List medicinedata={medicinedata}/> */}
-            <Card
-              medicinedata={medicinedata}
-              bookmark={bookmark} //bookmark list넘겨줌
-              setBookmark={setBookmark} //bookmark list를 변경하는 함수 넘겨줌
-              onPress={(medicinename, bookmark) => {
-                AccessibilityInfo.announceForAccessibility(medicinename + "을 선택하셨습니다!");
-                navigation.navigate('Detail', { medicinename, bookmark })
-              }}
-            />
-            <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
+            {medicinedata.length > 0 ? (
+              <>
+               <Card
+                medicinedata={medicinedata}
+                bookmark={bookmark} //bookmark list넘겨줌
+                setBookmark={setBookmark} //bookmark list를 변경하는 함수 넘겨줌
+                onPress={(medicinename, bookmark) => {
+                  AccessibilityInfo.announceForAccessibility(medicinename + "을 선택하셨습니다!");
+                  navigation.navigate('Detail', { medicinename, bookmark })
+                }}
+              />
+              <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
               <TouchableRipple onPress={() => { page > 1 && handlePageChange(page - 1) }} accessibilityLabel='이전 페이지' accessibilityRole='button'>
                 <Button mode="Outlined" importantForAccessibility='no-hide-descendants' >이전 페이지</Button>
               </TouchableRipple>
@@ -499,6 +511,29 @@ function TextSearch({ navigation }) {
                 <Button mode="Outlined" importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
               </TouchableRipple>
             </View>
+              
+              </>
+             
+            ) : (
+              <View>
+                <Text>검색 결과가 없습니다.</Text>
+                <TouchableOpacity onPress={() => { search("", 1) }}><Text>다시 돌아가기</Text></TouchableOpacity>
+              </View>
+              
+              
+            )}
+              {/* <Card
+                medicinedata={medicinedata}
+                bookmark={bookmark}
+                setBookmark={setBookmark}
+                onPress={(medicinename, bookmark) => {
+                  AccessibilityInfo.announceForAccessibility(
+                    medicinename + "을 선택하셨습니다!"
+                  );
+                  navigation.navigate("Detail", { medicinename, bookmark });
+                }}
+              /> */}
+            
           </ScrollView>
         </View>
       )}
