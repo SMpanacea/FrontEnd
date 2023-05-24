@@ -1,6 +1,6 @@
 //BarcodeCamera 작동하는 화면
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Modal, Text, TouchableOpacity, Image } from 'react-native';
 
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -24,7 +24,7 @@ const License = BarcodeLicense();
 // );
 
 
-export default function Barcode() {
+export default function Barcode({navigation}) {
 
     //카메라 사용여부
     const [useCamera, setUseCamera] = React.useState(true);
@@ -44,7 +44,16 @@ export default function Barcode() {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [check, setCheck] = React.useState(false);
 
-
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+                  <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+              </TouchableOpacity>
+          ),
+          headerTitle: "바코드 인식",
+        });
+      }, [])
 
     React.useEffect(() => {
         (async () => {

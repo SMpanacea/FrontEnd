@@ -1,8 +1,10 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useLayoutEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  AccessibilityInfo
+  AccessibilityInfo,
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import {
   ImageUtil
@@ -24,12 +26,24 @@ const ScreenStates = {
   RESULTS: 2,
 };
 let imgArray = [];
-export default function PillDetectionMain({ }) {
+export default function PillDetectionMain({ navigation }) {
   const [image, setImage] = useState(null);
   const [boundingBoxes, setBoundingBoxes] = useState(null);
   const [screenState, setScreenState] = useState(ScreenStates.CAMERA);
 
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+              <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+          </TouchableOpacity>
+      ),
+      headerTitle: "알약 인식",
+    });
+  }, [])
+
   useEffect(() => {
     const screenReaderChangedSubscription = AccessibilityInfo.addEventListener('screenReaderChanged', isScreenReaderEnabled => {
       setScreenReaderEnabled(isScreenReaderEnabled);
