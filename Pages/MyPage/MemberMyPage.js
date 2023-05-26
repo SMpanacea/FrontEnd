@@ -1,9 +1,11 @@
 // 회원가입한 후 보이는 mypage화면
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
-import { SafeAreaView, StyleSheet, View, Image, InteractionManager, 
-  findNodeHandle, AccessibilityInfo } from 'react-native';
-import { Text, TextInput, Button, Title, Surface } from 'react-native-paper';
+import {
+  SafeAreaView, StyleSheet, View, Image, InteractionManager,
+  findNodeHandle, AccessibilityInfo
+} from 'react-native';
+import { Text, DefaultTheme, Button, Title, Surface } from 'react-native-paper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -35,6 +37,14 @@ function MemberMyPage({ route, navigation }) {
 
   const screanReaderFocus = useRef(null);
 
+  const customTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#51868C',
+    },
+  };
+
   const fetchUserData = async () => {
     const getToken = await AsyncStorage.getItem('token');
     console.log("fetchUserData getToken : ", getToken)
@@ -60,9 +70,9 @@ function MemberMyPage({ route, navigation }) {
     InteractionManager.runAfterInteractions(() => {
       const reactTag = findNodeHandle(screanReaderFocus.current);
       if (reactTag) {
-          AccessibilityInfo.setAccessibilityFocus(reactTag);
+        AccessibilityInfo.setAccessibilityFocus(reactTag);
       }
-  })
+    })
     const { data } = route.params;
     console.log("data : ", data);
     if (data) {
@@ -96,47 +106,55 @@ function MemberMyPage({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.box}>
-      <Surface style={styles.memberbox}>
-        <View style={{ flex: 1, marginBottom: 10, marginTop: 10 }}>
-          <Image source={{ uri: img }} style={{ flex: 1 }} />
-        </View>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
-          <View ref={screanReaderFocus} accessibilityLabel="프로필 관리">
-          <Button
-            mode="outlined"
-            style={[styles.button, styles.down]}
-            labelStyle={{ fontSize: 18, color: '#ffffff' }}
-            onPress={() => {
-              navigation.navigate("MemberInfo", {
-                userData: {
-                  id,
-                  email,
-                  nickname,
-                  birth,
-                  gender,
-                  img
-                }
-              })
-            }}>프로필 관리</Button>
-            </View>
-          <Button
-            mode="outlined"
-            style={styles.button}
-            labelStyle={{ fontSize: 18, color: '#ffffff' }}
-            onPress={handleLogout}
-          >로그아웃</Button>
-        </View>
-      </Surface>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <SafeAreaView style={styles.box}>
+        <Surface style={styles.memberbox}>
 
-      <Surface style={styles.bookmarkbox}>
-        <View style={styles.bookmarktitle}>
-          <Title style={{ fontSize: 20 }}>즐겨찾기한 약</Title>
-        </View>
-        <View style={styles.bookmarkimgcontainer}>
-        </View>
-      </Surface>
-    </SafeAreaView>
+          <View style={{ flex: 1, marginBottom: 10, marginTop: 10 }}>
+            <Image source={{ uri: img }} style={{ flex: 1 }} />
+          </View>
+
+          <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
+            <View ref={screanReaderFocus} accessibilityLabel="프로필 조회">
+              <Button
+                accessibilityLabel='프로필 조회하기'
+                mode="outlined"
+                style={[styles.button, styles.down]}
+                labelStyle={{ fontSize: 18, color: '#51868C' }}
+                theme={customTheme}
+                onPress={() => {
+                  navigation.navigate("MemberInfo", {
+                    userData: {
+                      id,
+                      email,
+                      nickname,
+                      birth,
+                      gender,
+                      img
+                    }
+                  })
+                }}>프로필 조회</Button>
+            </View>
+
+            <Button
+              accessibilityLabel='로그아웃 하기'
+              mode="outlined"
+              style={styles.button}
+              labelStyle={{ fontSize: 18, color: '#51868C' }}
+              theme={customTheme}
+              onPress={handleLogout}>로그아웃</Button>
+          </View>
+        </Surface>
+
+        <Surface style={styles.bookmarkbox}>
+          <View style={styles.bookmarktitle}>
+            <Title style={{ fontSize: 20 }}>즐겨찾기한 약</Title>
+          </View>
+          <View style={styles.bookmarkimgcontainer}>
+          </View>
+        </Surface>
+      </SafeAreaView>
+    </View>
   );
 }
 
@@ -145,7 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginHorizontal: 8,
-    backgroundColor: '#F7F7F7'
   },
   myinfocontainer: {
     backgroundColor: '#fff',
@@ -214,8 +231,6 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
-    backgroundColor: '#74cbd4',
-    borderColor: 'transparent',
     width: 160,
     marginLeft: 11
   },

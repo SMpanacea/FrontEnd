@@ -17,9 +17,9 @@ export default function CameraSearchMain({ navigation }) {
         })
     }, []);
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
 
-            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('PillDetectionMain')}>
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down, styles.button]} onPress={() => navigation.navigate('PillDetectionMain')}>
                 {/* <ImageBackground
                     source={require('../../assets/animation_640_lhwuc4ir.gif')}
                     style={[styles.imageBackground,StyleSheet.absoluteFill]}
@@ -38,7 +38,7 @@ export default function CameraSearchMain({ navigation }) {
                     autoPlay loop
                 />
             </TouchableOpacity>
-            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
+            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.button, MainButtonStyle.down, styles.button]} onPress={() => navigation.navigate('TextSearch')}>
 
                 <View style={MainButtonStyle.textContainer}>
                     <Text style={MainButtonStyle.text}>이름으로 알약 검색 &gt; </Text>
@@ -54,3 +54,8 @@ export default function CameraSearchMain({ navigation }) {
     )
 }
 
+const styles = StyleSheet.create({
+    button: {
+        elevation: 3,
+    }
+});

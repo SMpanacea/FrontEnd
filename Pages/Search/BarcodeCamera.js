@@ -12,17 +12,9 @@ import { decode } from 'vision-camera-dynamsoft-barcode-reader';
 import * as REA from 'react-native-reanimated';
 import axios from 'axios';
 
-
 //license 가져와잇!
 import BarcodeLicense from '../../Components/BarcodeLicense';
 const License = BarcodeLicense();
-
-
-//느낌상 공간주는 역할
-// const Separator = () => (
-//     <View style={styles.separator} />
-// );
-
 
 export default function Barcode() {
 
@@ -43,8 +35,6 @@ export default function Barcode() {
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [check, setCheck] = React.useState(false);
-
-
 
     React.useEffect(() => {
         (async () => {
@@ -109,8 +99,6 @@ export default function Barcode() {
                         .join("\n")
                         );
                     // modal_view(response.data[0], true);
-
-
                 })
                 .catch(error => {
                     console.error(error);
@@ -139,9 +127,6 @@ export default function Barcode() {
         }
     }, [])
 
-
-
-
     //앨범에서 바코드 읽기
     const decodeFromAlbum = async () => {
         let options = {
@@ -157,7 +142,6 @@ export default function Barcode() {
             }
         }
     }
-
 
     const modal_view = (data, boolean_data) => {
         console.log("modal_view 호출");

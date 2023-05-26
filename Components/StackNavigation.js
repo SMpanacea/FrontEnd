@@ -120,18 +120,7 @@ export default function Navigation() {
         component={Auth}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen name='bottom' component={BottomTab} options={ {headerShown:false}} />
-        <Stack.Screen name="Main" component={MedicineMain} options={ {headerShown:false}}/>
-        <Stack.Screen name="Detail" component={MedicineDetail} options={{
-          headerShown:false,
-          header: ({ navigation, route }) => (
-            <CustomHeader title="Details" navigation={navigation} />
-          ),
-          }}/> */}
-
-      {/* <StarStack.Screen name={medicineDetail} component={BookMarkScreen} options={{}} />
-        <StarStack.Screen  name={bookMar} component={MedicineDetailScreen} options={{}} /> */}
-    </Stack.Navigator>
+      </Stack.Navigator>
   );
 }
 

@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
       marginVertical:5
     },
     messageContainer:{
-      backgroundColor:theme.colors.inputBackground,
+      backgroundColor: '#51868C',
       maxWidth: '80%',
       alignSelf:'flex-end',
       flexDirection:'row',

@@ -2,7 +2,7 @@
 import axios from 'axios';
 import React, { useRef, useState, Component } from "react";
 import { KeyboardAvoidingView, ScrollView, View, Text, SafeAreaView, StyleSheet, Alert } from 'react-native';
-import { RadioButton, TextInput, Button } from 'react-native-paper';
+import { RadioButton, TextInput, Button, DefaultTheme } from 'react-native-paper';
 
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
@@ -52,6 +52,14 @@ export default function Join({ navigation }) {
     const [mEmailNumError, setMEmailNumError] = useState(false); //이메일 인증 번호 오류 메세지
     const [mNickError, setMNickError] = useState("");       //닉네임 오류 메세지
     const [mBirthError, setMBirthError] = useState("");     //생년월일 오류 메세지
+
+    const customTheme = {
+        ...DefaultTheme,
+        colors: {
+          ...DefaultTheme.colors,
+          primary: '#51868C',
+        },
+      };
 
     //유효성 검사
     const handleInputId = () => {
@@ -420,6 +428,7 @@ export default function Join({ navigation }) {
     }
 
     return (
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
@@ -430,6 +439,7 @@ export default function Join({ navigation }) {
                             accessibilityHint="아이디는 영문 소문자 또는 숫자로 이루어진 6~14자를 입력하세요."        
                             label={"아이디"}
                             style={styles.input}
+                            theme={customTheme}
                             placeholder="영문 소문자/숫자, 6~14자"
                             onChangeText={setId}
                             onEndEditing={handleInputId}
@@ -441,6 +451,7 @@ export default function Join({ navigation }) {
                             accessibilityHint="비밀번호는 영문 대소문자와 숫자, 특수문자로 이루어진 8자에서 16자를 입력하세요."             
                             label={"비밀번호"}
                             style={styles.input}
+                            theme={customTheme}
                             ref={pwRef}
                             placeholder="영문 대소문자/숫자/특수문자, 8자~16자"
                             onChangeText={setPw}
@@ -456,6 +467,7 @@ export default function Join({ navigation }) {
                             accessibilityLabel="비밀번호 확인"
                             ref={cpwRef}
                             style={styles.input}
+                            theme={customTheme}
                             placeholder="비밀번호 확인"
                             onChangeText={setCpw}
                             onEndEditing={handleInputCpw}
@@ -471,6 +483,7 @@ export default function Join({ navigation }) {
                                 accessibilityLabel="이메일"
                                 label={"이메일"}
                                 style={[styles.dateInput, styles.input]}
+                                theme={customTheme}
                                 onChangeText={setEmail}
                                 onEndEditing={handleInputEmail}
                                 maxLength={40}
@@ -479,6 +492,7 @@ export default function Join({ navigation }) {
                                 mode="outlined"
                                 contentStyle={{ height: 50, alignItems: 'center' }}
                                 labelStyle={{ fontSize: 15 }}
+                                theme={customTheme}
                                 onPress={emailCheck}
                             >인증</Button>
                         </View>
@@ -492,6 +506,7 @@ export default function Join({ navigation }) {
                                         accessibilityHint="이메일 인증번호는 숫자 6자리를 입력하세요." 
                                         label={"이메일 인증번호"}
                                         style={[styles.dateInput, styles.input]}
+                                        theme={customTheme}
                                         onChangeText={setEmailNum}
                                         onEndEditing={handleInputEmailNum}
                                         keyboardType="numeric"
@@ -501,6 +516,7 @@ export default function Join({ navigation }) {
                                         mode="outlined"
                                         contentStyle={{ height: 50, alignItems: 'center' }}
                                         labelStyle={{ fontSize: 15 }}
+                                        theme={customTheme}
                                         onPress={handleCheckEmailNum}
                                     >확인</Button>
                                 </View>
@@ -512,6 +528,7 @@ export default function Join({ navigation }) {
                             accessibilityHint="닉네임은 영어 소문자 혹은 한글 혹은 숫자를 2~12자를 입력하세요." 
                             label={"닉네임"}
                             style={styles.input}
+                            theme={customTheme}
                             placeholder="영문 소문자/한글/숫자, 2~12자"
                             onChangeText={setNickname}
                             onEndEditing={handleInputNickName}
@@ -523,6 +540,7 @@ export default function Join({ navigation }) {
                             accessibilityHint="생년월일 8자를 입력하되 -으로 구분해 주세요." 
                             label={"생년월일"}
                             style={styles.input}
+                            theme={customTheme}
                             placeholder="예시) 1990-01-01"
                             onChangeText={setBirth}
                             onEndEditing={handleInputBirth}
@@ -534,12 +552,14 @@ export default function Join({ navigation }) {
                             <Text style={{ fontSize: 16, marginLeft: 20, marginRight: 40 }}>성별</Text>
                             <RadioButton
                                 value="남성"
+                                theme={customTheme}
                                 status={checked === '남성' ? 'checked' : 'unchecked'}
                                 onPress={() => { { setChecked('남성'); setGender('남성'); } }}
                             />
                             <Text style={{ fontSize: 16, marginRight: 40 }}>남자</Text>
                             <RadioButton
                                 value="여성"
+                                theme={customTheme}
                                 status={checked === '여성' ? 'checked' : 'unchecked'}
                                 onPress={() => { { setChecked('여성'); setGender('여성'); } }}
                             />
@@ -550,11 +570,13 @@ export default function Join({ navigation }) {
                             contentStyle={styles.buttonContent}
                             labelStyle={styles.buttonLabel}
                             onPress={onFinish}
+                            theme={customTheme}
                         >확인</Button>
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
         </SafeAreaView>
+        </View>
     );
 }
 
@@ -588,8 +610,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     input: {
-        backgroundColor: '#f5f5f5',
-        borderEndColor: '#ffffff'
+        backgroundColor: 'white',
     },
     error: {
         color: 'red',

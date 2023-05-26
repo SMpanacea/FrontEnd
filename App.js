@@ -1,24 +1,3 @@
-// import { StatusBar } from 'expo-status-bar';
-// import { StyleSheet, Text, View } from 'react-native';
-
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });
-
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
@@ -30,9 +9,6 @@ import BottomTab from './Components/BottomTab';
 import Navigation from './Components/StackNavigation';
 // import BottomTabNavigationApp from './Navigation/BottomTabNavigationApp';
 // import Navigation from './Navigation/Navigation';
-
-// test
-// import Test from './Test';
 
 export default function App() {
   console.disableYellowBox = true;
@@ -51,7 +27,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
    // paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#ffffff',
     // padding: 8,
   },
   paragraph: {
