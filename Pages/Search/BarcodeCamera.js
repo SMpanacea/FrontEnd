@@ -1,10 +1,9 @@
 //BarcodeCamera 작동하는 화면
-import * as React from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text, Alert } from 'react-native';
-
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, View, Modal, Text, Alert, Pressable } from 'react-native';
+import { TouchableRipple, Button } from 'react-native-paper';
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { Button } from 'react-native-paper';
 
 
 import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
@@ -19,6 +18,11 @@ const IP = ServerPort();
 //license 가져와잇!
 import BarcodeLicense from '../../Components/BarcodeLicense';
 const License = BarcodeLicense();
+
+//아이콘
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import { Card } from 'react-native-paper';
 
 
 //느낌상 공간주는 역할
@@ -46,8 +50,12 @@ export default function Barcode() {
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [check, setCheck] = React.useState(false);
-
-
+    
+    //alert에서 보여줄 값
+    const [pnm, setPnm] = React.useState(""); //제품명
+    const [bnm, setBnm] = React.useState(""); //제조사명
+    const [dcnm, setDcnm] = React.useState(""); //식품유형
+    const [daycnt, setDaycnt] = React.useState(""); //유통/소비기한
 
     React.useEffect(() => {
         (async () => {
@@ -67,16 +75,16 @@ export default function Barcode() {
         if(barcodeResults !== undefined){
             if(barcodeResults[0] !== undefined){
                 if(barcodeResults[0].barcodeText !== undefined){
-        console.log("result~~~~~~~~~~~~~~~~~~~~");
-        console.log(barcodeResults);
-        console.log(barcodeResults[0]);
-        console.log(barcodeResults[0].barcodeText);
-        console.log("end~~~~~~~~~~~~~~~~~~~~~~~~~");
+        // console.log("result~~~~~~~~~~~~~~~~~~~~");
+        // console.log(barcodeResults);
+        // console.log(barcodeResults[0]);
+        // console.log(barcodeResults[0].barcodeText);
+        // console.log("PRDLST_NM잘나옴?",barcodeResults[0].PRDLST_NM);
+        // console.log("end~~~~~~~~~~~~~~~~~~~~~~~~~");
 
         onScanned(barcodeResults);
         }}}
     }, [barcodeResults]);
-
 
     //스캔 함수
     const onScanned = async (results) => {
@@ -100,33 +108,34 @@ export default function Barcode() {
               },
             })
             .then((response) => {
-              console.log(response.data);
+              console.log("전체 데이터 가져오는 놈이 너냐?",response.data);
+              console.log("POG_DAYCNT 가져오는 놈이 너냐?",response.data[0].PRDLST_NM);
+              setPnm(response.data[0].PRDLST_NM);
+              setBnm(response.data[0].BSSH_NM);
+              setDcnm(response.data[0].PRDLST_DCNM);
+              setDaycnt(response.data[0].POG_DAYCNT);
               setBarcodeResults(response.data[0]);
-              setModalVisible(true);
+              console.log("이름가져오나?", barcodeResults.PRDLST_NM);
+            //   setModalVisible(!modalVisible);
+            setModalVisible(!modalVisible)
               setCheck(true);
-              //alert 확인 누르면  setCheck를 false로 바꿔줘.
-              // alert(
-              //     // JSON.stringify(response.data[0])
-              //     Object.entries(response.data[0])
-              //     .map(([key, value]) => `${key}: ${value}`)
-              //     .join("\n")
-              //     );
-              // modal_view(response.data[0], true);
-              const resultText = Object.entries(response.data[0])
-                .map(([key, value]) => `${key}: ${value}`)
-                .join("\n");
-      
-              Alert.alert(
-                '결과',
-                resultText,
-                [
-                  {
-                    text: '확인',
-                    onPress: handleCameraOpen,
-                  },
-                ],
-                { cancelable: false }
-              );
+            //성공은 했음 근데 너무 길어서 짤림
+            // const resultTextArray = Object.entries(response.data[0])
+            // .map(([key, value]) => `${resultkey[key]}: ${value}`);
+
+            // const formattedResult = resultTextArray.map((item, index) => {
+            // return {
+            //     text: item,
+            //     onPress: index === resultTextArray.length - 1 ? handleCameraOpen : null,
+            // };
+            // });
+
+            // Alert.alert(
+            // '결과',
+            // null,
+            // formattedResult,
+            // { cancelable: false }
+            // );
             })
             .catch((error) => {
               console.error(error);
@@ -154,111 +163,238 @@ export default function Barcode() {
         }
     }, [])
 
-
-
-
     //앨범에서 바코드 읽기
-    const decodeFromAlbum = async () => {
-        let options = {
-            mediaType: 'photo',
-            includeBase64: true,
-        }
-        let response = await launchImageLibrary(options);
-        if (response && response.assets) {
-            if (response.assets[0].base64) {
-                console.log(response.assets[0].base64);
-                let results = await DBR.decodeBase64(response.assets[0].base64);
-                setBarcodeResults(results);
-            }
-        }
-    }
+    // const decodeFromAlbum = async () => {
+    //     let options = {
+    //         mediaType: 'photo',
+    //         includeBase64: true,
+    //     }
+    //     let response = await launchImageLibrary(options);
+    //     if (response && response.assets) {
+    //         if (response.assets[0].base64) {
+    //             console.log(response.assets[0].base64);
+    //             let results = await DBR.decodeBase64(response.assets[0].base64);
+    //             setBarcodeResults(results);
+    //         }
+    //     }
+    // }
 
+    if(modalVisible){
+        return (
+          <View >
+            <Modal
+              presentationStyle={"formSheet"}
+              animationType="slide"  // 모달 애니메이션 지정
+              onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
+              transparent={true} // 투명한 모달로 설정              
+            >
+              
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                {pnm && pnm ? (
+                  <View style={{marginBottom:10,}}>
+                    <View style={styles.Info2}>
+                      <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
+                      <Text style={styles.InfoTitle}>제품명</Text>
+                    </View>
+                    <Card>
+                      <Card.Content>
+                        <Text variant="bodyMedium">{pnm}</Text>
+                      </Card.Content>
+                    </Card>
+                  </View>
+                ) : null}
+                  {bnm && bnm ? (
+                    <View style={{marginBottom:10,}}>
+                      <View style={styles.Info2}>
+                        <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
+                        <Text style={styles.InfoTitle}>제조사명</Text>
+                      </View>
+                      <Card>
+                        <Card.Content>
+                          <Text variant="bodyMedium">{bnm}</Text>
+                        </Card.Content>
+                      </Card>
+                    </View>
+                   ) : null}
 
-    const modal_view = (data, boolean_data) => {
-        console.log("modal_view 호출");
-        console.log(data);
-        if (boolean_data) {
-            console.log("modalVisible true");
-            return (
-                <View>
-                    <Text>들어옴!</Text>
-                    <Modal
-                        presentationStyle={"formSheet"}
-                        animationType="slide"  // 모달 애니메이션 지정
-                        visible={boolean_data}  // 모달 표시 여부 지정
-                        onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
-                    >
-                        <View>
-                            <Text>상품 정보</Text>
-                            {Object.entries(data).map(([key, value]) => (
-                                <View key={key}>
-                                    <Text>{key}</Text>
-                                    <Text>{value}</Text>
-                                </View>
-                            ))}
-                            <Button
-                                title="Close"
-                                onPress={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 모달을 닫습니다
-                            />
-                        </View>
-                    </Modal>
+                  {dcnm && dcnm ? (
+                    <View style={{marginBottom:10,}}>
+                      <View style={styles.Info2}>
+                        <Icon style={styles.InfoIcon} name="bread-slice" size={20} color="black" />
+                        <Text style={styles.InfoTitle}>식품 유형</Text>
+                      </View>
+                      <Card>
+                        <Card.Content>
+                          <Text variant="bodyMedium">{dcnm}</Text>
+                        </Card.Content>
+                      </Card>
+                    </View>
+                  ) : null}
+                  {daycnt && daycnt ? (
+                    <View style={{marginBottom:10,}}>
+                      <View style={styles.Info2}>
+                        <Icon style={styles.InfoIcon} name="calendar-day" size={20} color="black" />
+                        <Text style={styles.InfoTitle}>유통/소비기한</Text>
+                      </View>
+                      <Card>
+                        <Card.Content>
+                          <Text variant="bodyMedium">{daycnt}</Text>
+                        </Card.Content>
+                      </Card>
+                    </View>
+                  ) : null}
+
+                {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
+                <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
+                  <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
+                </TouchableRipple>
+                  
                 </View>
-            );
-        }
+              </View>
+              
+                {/* 저 위에 코드 기준으로 다시 꾸며 줘 */}
+            </Modal>
+          </View>
+        );
     }
 
     //카메라 다시 켜기
-    const handleCameraOpen = () => {
-        setUseCamera(true);
-    }
-
+    // const handleCameraOpen = () => {
+    //     setUseCamera(true);
+    // }
 
     return (
         <View style={styles.container}>
-            {/* 카메라 사용중일때 띄우는 화면 */}
-            {useCamera && (
+          {/* 카메라 사용 중일 때 띄우는 화면 */}
+          {useCamera && (
+            <>
+              {device != null && hasPermission && (
                 <>
-                    {device != null &&
-                        hasPermission && (
-                            <>
-                                <Camera
-                                    style={{ width: '100%', height: '100%' }}
-                                    device={device}
-                                    isActive={true}
-                                    frameProcessor={frameProcessor}
-                                    frameProcessorFps={1}
-                                />
-                            </>
-                        )
-                    }
+                  <Camera
+                    style={{ width: '100%', height: '100%' }}
+                    device={device}
+                    isActive={true}
+                    frameProcessor={frameProcessor}
+                    frameProcessorFps={1}
+                    onBarCodeScanned={onScanned} // 바코드 스캔 시 호출되는 콜백 함수
+                  />
                 </>
-            )}
+              )}
+            </>
+          )}
         </View>
-    );
+      );
 }
 
-
 const styles = StyleSheet.create({
-
-    container: {
-        flex: 1,
+  container: {
+      flex: 1,
+  },
+  title: {
+      textAlign: 'center',
+      marginVertical: 8,
+  },
+  separator: {
+      marginVertical: 4,
+  },
+  switchView: {
+      alignItems: 'center',
+      flexDirection: "row",
+  },
+  barcodeText: {
+      fontSize: 20,
+      color: 'black',
+      fontWeight: 'bold',
+  },
+  close:{
+    flex:1,
+    borderWidth: 1,
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderWidth: 1,
+    marginBottom: 10,
+    marginTop: 20,
+    borderRadius: 5,
+    height: 150,
+    padding: 10,
+    elevation: 2,
+  },
+      
+  Informationcontainer: {
+    flex: 1,
+    borderWidth:1,
+    // marginBottom: 40,
+  },
+  Info: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: "center",
+  },
+  Info2: {
+    flexDirection: 'row',
+    alignItems: "center",
+  },
+  InfoTitle: {
+    marginTop: 10,
+    marginBottom: 15,
+  },
+  InfoIcon: {
+    padding: 10,
+  },
+  Icon:{
+    // borderWidth:1,
+    width:100,
+    marginLeft:60,
+    
+  },
+  Infotext: {
+    textAlignVertical: 'center'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 30,
+    width:'80%',
+    // alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
     },
-    title: {
-        textAlign: 'center',
-        marginVertical: 8,
-    },
-    separator: {
-        marginVertical: 4,
-    },
-    switchView: {
-        alignItems: 'center',
-        flexDirection: "row",
-    },
-    barcodeText: {
-        fontSize: 20,
-        color: 'black',
-        fontWeight: 'bold',
-    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  // button: {
+  //   borderRadius: 20,
+  //   padding: 10,
+  //   elevation: 2,
+  // },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    // textAlign: 'center',
+  },
 });
 
 
