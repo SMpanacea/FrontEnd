@@ -30,12 +30,11 @@ const screenWidth = Dimensions.get('window').width;
 
 
 
-function MedicineDetail({ navigation, route }) {
+function MedicineDetail({ navigation, route}) {
   const { medicinedatitemSeq } = route.params;//다른 컴포넌트에서 넘겨받은 약 고유값
   const [bookmark, setBookmark2] = React.useState(route.params.bookmark); //bookmarklist를 받아서 bookmarklist로 초기값 설정해줌
   const { setBookmark } = route.params; //부모의 booklist를 변경해주는 함수
   const [bookmarked, setBookMarked] = React.useState(bookmark.includes(medicinedatitemSeq)); //별표를 성화할지 비활성화 해줄 true, false값
-
 
   const [medicinedetail, setMedicinedetail] = React.useState(null);
   const [medicinname, setMedicinName] = React.useState("");
