@@ -51,6 +51,7 @@ export default function Barcode() {
     const [bnm, setBnm] = React.useState(""); //제조사명
     const [dcnm, setDcnm] = React.useState(""); //식품유형
     const [daycnt, setDaycnt] = React.useState(""); //유통/소비기한
+    const [datatype,setDatatype] = React.useState("")//datatype저장
 
     React.useEffect(() => {
         (async () => {
@@ -132,25 +133,40 @@ export default function Barcode() {
             },
           })
           .then((response) => {
-            //바코드 값이 없을 경우임
-            if(response.data[0] == undefined){
-              console.log("여기로 오나요?", response.data)
-              setNobar(true); 
+            //약, 음식 바코드 값이 없을 경우임
+            // if(response.data == false){
+            //   console.log("여기로 와?")
+            //   console.log(response.data)
+            //   setNobar(true); 
+            //   setModalVisible(!modalVisible)
+            //   setCheck(true);
+            // }
+            //음식 바코드 값이 있을 경우 
+            if(response.data.data_type === "food"){
+              console.log("foode로 들어와?");
+              // console.log("POG_DAYCNT 가져오는 놈이 너냐?",response.data[0].PRDLST_NM);
+              console.log("이름가져오나?", response.data);
+              setPnm(response.data.data[0].PRDLST_NM);
+              setBnm(response.data.data[0].BSSH_NM);
+              setDcnm(response.data.data[0].PRDLST_DCNM);
+              setDaycnt(response.data.data[0].POG_DAYCNT);
+              setDatatype(response.data.data_type)
+              setBarcodeResults(response.data.data[0]);
               setModalVisible(!modalVisible)
               setCheck(true);
             }
-            //바코드 값이 있을 경우
+            //알약 바코드 값이 있을 경우
+            else if(response.data.data_type === "medicine"){
+              console.log("약",response.data)
+              setBarcodeResults(response.data.data[0]);
+              setModalVisible(!modalVisible)
+              setCheck(true);
+            }
             else{
-              console.log("전체 데이터 가져오는 놈이 너냐?",response.data);
-              // console.log("POG_DAYCNT 가져오는 놈이 너냐?",response.data[0].PRDLST_NM);
-              setPnm(response.data[0].PRDLST_NM);
-              setBnm(response.data[0].BSSH_NM);
-              setDcnm(response.data[0].PRDLST_DCNM);
-              setDaycnt(response.data[0].POG_DAYCNT);
-              setBarcodeResults(response.data[0]);
-              console.log("이름가져오나?", barcodeResults.PRDLST_NM);
-            //   setModalVisible(!modalVisible);
-            setModalVisible(!modalVisible)
+              console.log("여기로 와?")
+              console.log(response.data)
+              setNobar(true); 
+              setModalVisible(!modalVisible)
               setCheck(true);
             }
            
@@ -182,18 +198,21 @@ export default function Barcode() {
     }, [])
 
     if(modalVisible){
+      console.log("데이터 타입 잘 가져와?", datatype)
+      console.log("nobar", nobar)
         return (
           <View >
             <Modal
               presentationStyle={"formSheet"}
               animationType="slide"  // 모달 애니메이션 지정
               onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
-              transparent={true} // 투명한 모달로 설정              
+              transparent={true} // 투명한 모달로 설정 
+                           
             >
               
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  {nobar ? (
+                  {nobar === true ? (
                     <View>
                       <Card>
                       <Card.Content>
@@ -201,75 +220,145 @@ export default function Barcode() {
                       </Card.Content>
                     </Card>
                       {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
-                      <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
+                      <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);setNobar(!nobar);}}>
                         <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
                       </TouchableRipple>
                     </View>
                   ):(
                   <View>
-                    {pnm && pnm ? (
-                  <View style={{marginBottom:10,}}>
-                    <View style={styles.Info2}>
-                      <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
-                      <Text style={styles.InfoTitle}>제품명</Text>
-                    </View>
-                    <Card>
-                      <Card.Content>
-                        <Text variant="bodyMedium">{pnm}</Text>
-                      </Card.Content>
-                    </Card>
-                  </View>
-                ) : null}
-                  {bnm && bnm ? (
-                    <View style={{marginBottom:10,}}>
-                      <View style={styles.Info2}>
-                        <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
-                        <Text style={styles.InfoTitle}>제조사명</Text>
-                      </View>
-                      <Card>
-                        <Card.Content>
-                          <Text variant="bodyMedium">{bnm}</Text>
-                        </Card.Content>
-                      </Card>
-                    </View>
-                   ) : null}
+                    {/* 음식일 경우 */}
+                    { datatype === "food" ? (
+                      <View>
+                        {pnm && pnm ? (
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>제품명</Text>
+                            </View>
+                            <Card>
+                              <Card.Content>
+                                <Text variant="bodyMedium">{pnm}</Text>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                        ) : null}
+                      {bnm && bnm ? (
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>제조사명</Text>
+                            </View>
+                            <Card>
+                              <Card.Content>
+                                <Text variant="bodyMedium">{bnm}</Text>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                      ) : null}
 
-                  {dcnm && dcnm ? (
-                    <View style={{marginBottom:10,}}>
-                      <View style={styles.Info2}>
-                        <Icon style={styles.InfoIcon} name="bread-slice" size={20} color="black" />
-                        <Text style={styles.InfoTitle}>식품 유형</Text>
-                      </View>
-                      <Card>
-                        <Card.Content>
-                          <Text variant="bodyMedium">{dcnm}</Text>
-                        </Card.Content>
-                      </Card>
-                    </View>
-                  ) : null}
-                  {daycnt && daycnt ? (
-                    <View style={{marginBottom:10,}}>
-                      <View style={styles.Info2}>
-                        <Icon style={styles.InfoIcon} name="calendar-day" size={20} color="black" />
-                        <Text style={styles.InfoTitle}>유통/소비기한</Text>
-                      </View>
-                      <Card>
-                        <Card.Content>
-                          <Text variant="bodyMedium">{daycnt}</Text>
-                        </Card.Content>
-                      </Card>
-                    </View>
-                  ) : null}
+                      {dcnm && dcnm ? (
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="bread-slice" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>식품 유형</Text>
+                            </View>
+                            <Card>
+                              <Card.Content>
+                                <Text variant="bodyMedium">{dcnm}</Text>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                      ) : null}
+                      {daycnt && daycnt ? (
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="calendar-day" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>유통/소비기한</Text>
+                            </View>
+                            <Card>
+                              <Card.Content>
+                                <Text variant="bodyMedium">{daycnt}</Text>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                      ) : null}
 
-                {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
-                <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
-                  <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
-                </TouchableRipple>
+                        {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
+                        <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
+                          <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
+                        </TouchableRipple>
+
+                      </View>
+                    ): null}
+
+                    {/* 약일 경우 */}
+                    { datatype === "medicine" ? (
+                      <View>
+                        {/* {pnm && pnm ? (
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>제품명</Text>
+                            </View>
+                            <Card>
+                              <Card.Content>
+                                <Text variant="bodyMedium">{pnm}</Text>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                        ) : null}
+                      {bnm && bnm ? (
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>제조사명</Text>
+                            </View>
+                            <Card>
+                              <Card.Content>
+                                <Text variant="bodyMedium">{bnm}</Text>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                      ) : null}
+
+                      {dcnm && dcnm ? (
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="bread-slice" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>식품 유형</Text>
+                            </View>
+                            <Card>
+                              <Card.Content>
+                                <Text variant="bodyMedium">{dcnm}</Text>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                      ) : null}
+                      {daycnt && daycnt ? (
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="calendar-day" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>유통/소비기한</Text>
+                            </View>
+                            <Card>
+                              <Card.Content>
+                                <Text variant="bodyMedium">{daycnt}</Text>
+                              </Card.Content>
+                            </Card>
+                          </View>
+                      ) : null} */}
+
+                        {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
+                        <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
+                          <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
+                        </TouchableRipple>
+
+                      </View>
+                    ): null}
+
 
                   </View>
                   )}
-                
-                  
                 </View>
               </View>
             </Modal>
