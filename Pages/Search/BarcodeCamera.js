@@ -30,6 +30,8 @@ export default function Barcode() {
     const [useCamera, setUseCamera] = React.useState(true);
     //바코드 결과값
     const [barcodeResults, setBarcodeResults] = React.useState([]);
+    //바코드 결과값 없을 경우
+    const [nobar, setNobar] = React.useState(false);
     //카메라 허가 여부
     const [hasPermission, setHasPermission] = React.useState(false);
     //프레임 너비
@@ -73,29 +75,74 @@ export default function Barcode() {
     }, [barcodeResults]);
 
     //스캔 함수
+    // const onScanned = async (results) => {
+    //     console.log(results);
+    //     setBarcodeResults(results);
+      
+    //     console.log("호출은 계속 되나?");
+    //     //카메라 사용 안함
+    //     if (results[0]) {
+    //       setUseCamera(false);
+    //       // setCheck(true);
+    //       // console.log(results[0]);
+    //       // console.log(results[0].barcodeText);
+      
+    //       console.log("axios 호출");
+    //       await axios
+    //         .get(`${IP}/barcode/search`, {
+    //           params: {
+    //             // 약이름, page번호 요청
+    //             barcode: results[0].barcodeText,
+    //           },
+    //         })
+    //         .then((response) => {
+    //           console.log("전체 데이터 가져오는 놈이 너냐?",response.data);
+    //           console.log("POG_DAYCNT 가져오는 놈이 너냐?",response.data[0].PRDLST_NM);
+    //           setPnm(response.data[0].PRDLST_NM);
+    //           setBnm(response.data[0].BSSH_NM);
+    //           setDcnm(response.data[0].PRDLST_DCNM);
+    //           setDaycnt(response.data[0].POG_DAYCNT);
+    //           setBarcodeResults(response.data[0]);
+    //           console.log("이름가져오나?", barcodeResults.PRDLST_NM);
+    //         //   setModalVisible(!modalVisible);
+    //         setModalVisible(!modalVisible)
+    //           setCheck(true);
+    //         })
+    //         .catch((error) => {
+    //           console.error(error);
+    //         });
+    //     }
+    //     console.log("하여튼 찍혔다!");
+    //   };
+
     const onScanned = async (results) => {
-        console.log(results);
-        setBarcodeResults(results);
-      
-        console.log("호출은 계속 되나?");
-        //카메라 사용 안함
-        if (results[0]) {
-          setUseCamera(false);
-          // setCheck(true);
-          // console.log(results[0]);
-          // console.log(results[0].barcodeText);
-      
-          console.log("axios 호출");
-          await axios
-            .get(`${IP}/barcode/search`, {
-              params: {
-                // 약이름, page번호 요청
-                barcode: results[0].barcodeText,
-              },
-            })
-            .then((response) => {
+      console.log(results);
+      setBarcodeResults(results);
+    
+      console.log("호출은 계속 되나?");
+      //카메라 사용 안함
+      if (results[0]) {
+        setUseCamera(false);
+        console.log("axios 호출");
+        await axios
+          .get(`${IP}/barcode/search`, {
+            params: {
+              // 약이름, page번호 요청
+              barcode: results[0].barcodeText,
+            },
+          })
+          .then((response) => {
+            //바코드 값이 없을 경우임
+            if(response.data[0] == undefined){
+              console.log("여기로 오나요?", response.data)
+              setNobar(true); 
+              setModalVisible(!modalVisible)
+              setCheck(true);
+            }
+            //바코드 값이 있을 경우
+            else{
               console.log("전체 데이터 가져오는 놈이 너냐?",response.data);
-              console.log("POG_DAYCNT 가져오는 놈이 너냐?",response.data[0].PRDLST_NM);
+              // console.log("POG_DAYCNT 가져오는 놈이 너냐?",response.data[0].PRDLST_NM);
               setPnm(response.data[0].PRDLST_NM);
               setBnm(response.data[0].BSSH_NM);
               setDcnm(response.data[0].PRDLST_DCNM);
@@ -105,13 +152,15 @@ export default function Barcode() {
             //   setModalVisible(!modalVisible);
             setModalVisible(!modalVisible)
               setCheck(true);
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-        console.log("하여튼 찍혔다!");
-      };
+            }
+           
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      console.log("하여튼 찍혔다!");
+    };
 
     //프레임 단위로 작동 함수
     const frameProcessor = useFrameProcessor((frame) => {
@@ -144,7 +193,21 @@ export default function Barcode() {
               
               <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                {pnm && pnm ? (
+                  {nobar ? (
+                    <View>
+                      <Card>
+                      <Card.Content>
+                        <Text variant="bodyMedium">바코드에 등록된 정보가 없습니다.</Text>
+                      </Card.Content>
+                    </Card>
+                      {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
+                      <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
+                        <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
+                      </TouchableRipple>
+                    </View>
+                  ):(
+                  <View>
+                    {pnm && pnm ? (
                   <View style={{marginBottom:10,}}>
                     <View style={styles.Info2}>
                       <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
@@ -202,6 +265,10 @@ export default function Barcode() {
                 <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
                   <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
                 </TouchableRipple>
+
+                  </View>
+                  )}
+                
                   
                 </View>
               </View>
