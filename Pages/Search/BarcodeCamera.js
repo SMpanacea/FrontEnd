@@ -24,13 +24,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { Card } from 'react-native-paper';
 
-
-//느낌상 공간주는 역할
-// const Separator = () => (
-//     <View style={styles.separator} />
-// );
-
-
 export default function Barcode() {
 
     //카메라 사용여부
@@ -75,13 +68,6 @@ export default function Barcode() {
         if(barcodeResults !== undefined){
             if(barcodeResults[0] !== undefined){
                 if(barcodeResults[0].barcodeText !== undefined){
-        // console.log("result~~~~~~~~~~~~~~~~~~~~");
-        // console.log(barcodeResults);
-        // console.log(barcodeResults[0]);
-        // console.log(barcodeResults[0].barcodeText);
-        // console.log("PRDLST_NM잘나옴?",barcodeResults[0].PRDLST_NM);
-        // console.log("end~~~~~~~~~~~~~~~~~~~~~~~~~");
-
         onScanned(barcodeResults);
         }}}
     }, [barcodeResults]);
@@ -119,23 +105,6 @@ export default function Barcode() {
             //   setModalVisible(!modalVisible);
             setModalVisible(!modalVisible)
               setCheck(true);
-            //성공은 했음 근데 너무 길어서 짤림
-            // const resultTextArray = Object.entries(response.data[0])
-            // .map(([key, value]) => `${resultkey[key]}: ${value}`);
-
-            // const formattedResult = resultTextArray.map((item, index) => {
-            // return {
-            //     text: item,
-            //     onPress: index === resultTextArray.length - 1 ? handleCameraOpen : null,
-            // };
-            // });
-
-            // Alert.alert(
-            // '결과',
-            // null,
-            // formattedResult,
-            // { cancelable: false }
-            // );
             })
             .catch((error) => {
               console.error(error);
@@ -162,22 +131,6 @@ export default function Barcode() {
         REA.runOnJS(setFrameHeight)(frame.height);
         }
     }, [])
-
-    //앨범에서 바코드 읽기
-    // const decodeFromAlbum = async () => {
-    //     let options = {
-    //         mediaType: 'photo',
-    //         includeBase64: true,
-    //     }
-    //     let response = await launchImageLibrary(options);
-    //     if (response && response.assets) {
-    //         if (response.assets[0].base64) {
-    //             console.log(response.assets[0].base64);
-    //             let results = await DBR.decodeBase64(response.assets[0].base64);
-    //             setBarcodeResults(results);
-    //         }
-    //     }
-    // }
 
     if(modalVisible){
         return (
@@ -252,18 +205,10 @@ export default function Barcode() {
                   
                 </View>
               </View>
-              
-                {/* 저 위에 코드 기준으로 다시 꾸며 줘 */}
             </Modal>
           </View>
         );
     }
-
-    //카메라 다시 켜기
-    // const handleCameraOpen = () => {
-    //     setUseCamera(true);
-    // }
-
     return (
         <View style={styles.container}>
           {/* 카메라 사용 중일 때 띄우는 화면 */}
