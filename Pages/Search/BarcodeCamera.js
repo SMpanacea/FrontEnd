@@ -24,7 +24,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import { Card } from 'react-native-paper';
 
-export default function Barcode() {
+export default function Barcode({navigation}) {
 
     //카메라 사용여부
     const [useCamera, setUseCamera] = React.useState(true);
@@ -75,47 +75,6 @@ export default function Barcode() {
         }}}
     }, [barcodeResults]);
 
-    //스캔 함수
-    // const onScanned = async (results) => {
-    //     console.log(results);
-    //     setBarcodeResults(results);
-      
-    //     console.log("호출은 계속 되나?");
-    //     //카메라 사용 안함
-    //     if (results[0]) {
-    //       setUseCamera(false);
-    //       // setCheck(true);
-    //       // console.log(results[0]);
-    //       // console.log(results[0].barcodeText);
-      
-    //       console.log("axios 호출");
-    //       await axios
-    //         .get(`${IP}/barcode/search`, {
-    //           params: {
-    //             // 약이름, page번호 요청
-    //             barcode: results[0].barcodeText,
-    //           },
-    //         })
-    //         .then((response) => {
-    //           console.log("전체 데이터 가져오는 놈이 너냐?",response.data);
-    //           console.log("POG_DAYCNT 가져오는 놈이 너냐?",response.data[0].PRDLST_NM);
-    //           setPnm(response.data[0].PRDLST_NM);
-    //           setBnm(response.data[0].BSSH_NM);
-    //           setDcnm(response.data[0].PRDLST_DCNM);
-    //           setDaycnt(response.data[0].POG_DAYCNT);
-    //           setBarcodeResults(response.data[0]);
-    //           console.log("이름가져오나?", barcodeResults.PRDLST_NM);
-    //         //   setModalVisible(!modalVisible);
-    //         setModalVisible(!modalVisible)
-    //           setCheck(true);
-    //         })
-    //         .catch((error) => {
-    //           console.error(error);
-    //         });
-    //     }
-    //     console.log("하여튼 찍혔다!");
-    //   };
-
     const onScanned = async (results) => {
       console.log(results);
       setBarcodeResults(results);
@@ -133,18 +92,9 @@ export default function Barcode() {
             },
           })
           .then((response) => {
-            //약, 음식 바코드 값이 없을 경우임
-            // if(response.data == false){
-            //   console.log("여기로 와?")
-            //   console.log(response.data)
-            //   setNobar(true); 
-            //   setModalVisible(!modalVisible)
-            //   setCheck(true);
-            // }
             //음식 바코드 값이 있을 경우 
             if(response.data.data_type === "food"){
               console.log("foode로 들어와?");
-              // console.log("POG_DAYCNT 가져오는 놈이 너냐?",response.data[0].PRDLST_NM);
               console.log("이름가져오나?", response.data);
               setPnm(response.data.data[0].PRDLST_NM);
               setBnm(response.data.data[0].BSSH_NM);
@@ -157,10 +107,12 @@ export default function Barcode() {
             }
             //알약 바코드 값이 있을 경우
             else if(response.data.data_type === "medicine"){
-              console.log("약",response.data)
-              setBarcodeResults(response.data.data[0]);
-              setModalVisible(!modalVisible)
-              setCheck(true);
+              console.log("약",response.data.data)
+              console.log("마!!!!",response.data.data[0])
+              navigation.navigate('BarcodeMedicineDetail', {
+                medicineBarcodeData: response.data.data
+              });
+              // navigation.navigate('BarcodeMedicineDetail', { medicineBarcodeData: response.data});
             }
             else{
               console.log("여기로 와?")
@@ -182,8 +134,6 @@ export default function Barcode() {
     const frameProcessor = useFrameProcessor((frame) => {
         'worklet'
         const config = {};
-        // config.template = "{\"ImageParameter\":{\"BarcodeFormatIds\":[\"BF_ONED\"],\"ExpectedBarcodesCount\": \"0\",\"Description\":\"\",\"Name\":\"Settings\",\"LocalizationModes\":[\"LM_SCAN_DIRECTLY\"]},\"Version\":\"3.0\"}";
-
         config.rotateImage = false;
         const results = decode(frame, config)
         if(!check){
