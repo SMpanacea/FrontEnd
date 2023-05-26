@@ -58,9 +58,9 @@ function BarcodeMedicineDetail({ route }) {
             }
         </View>
         <View style={styles.meditextbox}>
-            <View>
+            <View style={styles.Informationcontainer}>
                 {barname ? (
-                    <View style={styles.Informationcontainer}>
+                    <View >
                     <View style={styles.Info} accessible={true}>
                         <Icon style={styles.InfoIcon} name="edit" size={20} color="black" />
                         <Text style={styles.InfoTitle}>약 이름</Text>
@@ -75,22 +75,22 @@ function BarcodeMedicineDetail({ route }) {
                     </View>
                 ) : null}
             </View>
-            <View>
+            <View style={styles.Informationcontainer}>
                 {barme ? (
-                    // <View style={styles.Informationcontainer}>
-                    // <View style={styles.Info} accessible={true}>
-                    //     <Icon style={styles.InfoIcon} name="edit" size={20} color="black" />
-                    //     <Text style={styles.InfoTitle}>제조사</Text>
-                    // </View>
-                    // <View>
-                    //     <Card>
-                    //     <Card.Content>
-                    //         <Text variant="bodyMedium">{barme}</Text>
-                    //     </Card.Content>
-                    //     </Card>
-                    // </View>
-                    // </View>
-                    <Text variant="bodyMedium">{barme}</Text>
+                    <View >
+                    <View style={styles.Info} accessible={true}>
+                        <Icon style={styles.InfoIcon} name="edit" size={20} color="black" />
+                        <Text style={styles.InfoTitle}>제조사</Text>
+                    </View>
+                    <View>
+                        <Card>
+                        <Card.Content>
+                            <Text variant="bodyMedium">{barme}</Text>
+                        </Card.Content>
+                        </Card>
+                    </View>
+                    </View>
+                    // <Text variant="bodyMedium">{barme}</Text>
                 ) : null}
             </View>
         </View>
@@ -145,7 +145,6 @@ function BarcodeMedicineDetail({ route }) {
       marginBottom: 40,
     },
     Info: {
-      flex: 1,
       flexDirection: 'row',
       alignItems: "center",
     },
