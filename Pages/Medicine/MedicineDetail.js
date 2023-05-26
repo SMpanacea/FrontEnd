@@ -40,7 +40,7 @@ function MedicineDetail({ navigation, route }) {
   const [medicinedetail, setMedicinedetail] = React.useState(null);
   const [medicinname, setMedicinName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
-
+  
   React.useEffect(() => {
     console.log('cliked 재랜더링되었습니다.');
     console.log("bo", bookmark);
