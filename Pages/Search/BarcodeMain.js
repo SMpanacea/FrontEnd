@@ -197,6 +197,9 @@ import LottieView from 'lottie-react-native';
 import { MainButtonStyle } from '../css/MainButtonCSS'
 
 
+// 서버
+import ServerPort from '../../Components/ServerPort';
+const IP = ServerPort();
 
 
 //license 가져와잇!
@@ -261,7 +264,7 @@ export default function BarcodeMain({navigation}) {
             // console.log(results[0].barcodeText);
 
             console.log("axios 호출")
-            await axios.get("http://172.16.38.121:5000/barcode/search",
+            await axios.get(`${IP}/barcode/search`,
                 {
                     params: {
                         // 약이름, page번호 요청
