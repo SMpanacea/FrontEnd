@@ -7,6 +7,15 @@ import {theme} from '../theme';
 const MessageList = ({conversations}) => {
     const scrollViewRef = useRef(); // 스크롤 뷰를 조작하기 위한 ref를 생성...
 
+    const getImportantForAccessibility = () => {
+        console.log("getImportantForAccessibility", conversations)
+        if (Array.isArray(conversations) && conversations.length === 0) {
+          return 'no-hide-descendants';
+        } else {
+          return 'yes';
+        }
+      };
+
     return (
         <ScrollView
         style={{ backgroundColor: theme.colors.white }}
@@ -14,6 +23,7 @@ const MessageList = ({conversations}) => {
         onContentSizeChange={() => {
             scrollViewRef.current.scrollToEnd({ animated: true });// 스크롤 뷰의 컨텐츠 크기가 변경되면 스크롤을 자동으로 맨 아래로 이동!
         }}
+        importantForAccessibility={getImportantForAccessibility()}
         >
         {conversations.map((conversation, index) => (
             <React.Fragment key={index} >
