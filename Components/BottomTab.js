@@ -69,8 +69,9 @@ function BottomTab() {
         paddingBottom: Platform.OS === 'ios' ? 20 : 0, // 안전 영역 고려          
         // height:50
       }}
-      activeColor="#51868C"
-      inactiveColor="#95a5a6"
+      activeColor="#51868C"//선택된 탭의 아이콘 색상
+      inactiveColor="#95a5a6"//선택되지 않은 탭의 아이콘 색상
+      shifting={true} //눌렀을 때 text활성화 되는 친구 없애도 상관 x
     >
       <Tab.Screen
         name="GPT"
@@ -81,6 +82,7 @@ function BottomTab() {
             <Icon2 name="chat" color={'#51868C'} size={26} />
           ),
           tabBarAccessibilityLabel: 'GPT', // accessibilty label for this tab
+          tabBarColor: 'red',
         }}
       />
       <Tab.Screen

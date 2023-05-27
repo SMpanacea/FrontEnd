@@ -1,7 +1,7 @@
 //BarcodeCamera 작동하는 화면
 
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text, Alert, Pressable } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Modal, Text, Alert, Pressable,Image, ScrollView } from 'react-native';
 import { TouchableRipple, Button } from 'react-native-paper';
 
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
@@ -23,6 +23,7 @@ const License = BarcodeLicense();
 
 //아이콘
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import LottieView from 'lottie-react-native';
 
 import { Card } from 'react-native-paper';
 
@@ -50,20 +51,25 @@ export default function Barcode({navigation}) {
     React.useLayoutEffect(() => {
         navigation.setOptions({
           headerLeft: () => (
-              <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+              <TouchableRipple onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
                   <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
-              </TouchableOpacity>
+              </TouchableRipple>
           ),
           headerTitle: "바코드 인식",
         });
       }, [])
     
-    //alert에서 보여줄 값
+    //alert에서 보여줄 값 (음식)
     const [pnm, setPnm] = React.useState(""); //제품명
     const [bnm, setBnm] = React.useState(""); //제조사명
     const [dcnm, setDcnm] = React.useState(""); //식품유형
     const [daycnt, setDaycnt] = React.useState(""); //유통/소비기한
     const [datatype,setDatatype] = React.useState("")//datatype저장
+
+    //alert에서 보여줄 값(약)
+    const [barname, setBarname] = React.useState(''); //약 이름
+    const [barme, setBarme] = React.useState(''); //제조사
+    const [barimage, setBarimage] = React.useState(''); //약 사진
 
     React.useEffect(() => {
         (async () => {
@@ -71,6 +77,13 @@ export default function Barcode({navigation}) {
             await DBR.initLicense(`${License}`);
         })();
     }, []);
+
+  //   React.useEffect(() => {
+  //     console.log("카메라 사용여부 변경됨1",  useCamera);
+  //     console.log("카메라 사용여부 변경됨2",  device);
+  //     console.log("카메라 사용여부 변경됨3",  hasPermission);
+
+  // }, [useCamera]);
 
     React.useEffect(() => {
         (async () => {
@@ -87,6 +100,7 @@ export default function Barcode({navigation}) {
         }}}
     }, [barcodeResults]);
 
+    //스캔 함수
     const onScanned = async (results) => {
       console.log(results);
       setBarcodeResults(results);
@@ -108,6 +122,7 @@ export default function Barcode({navigation}) {
             if(response.data.data_type === "food"){
               console.log("foode로 들어와?");
               console.log("이름가져오나?", response.data);
+              console.log("데이터 타입이 뭐야!", response.data.data_type);
               setPnm(response.data.data[0].PRDLST_NM);
               setBnm(response.data.data[0].BSSH_NM);
               setDcnm(response.data.data[0].PRDLST_DCNM);
@@ -121,18 +136,27 @@ export default function Barcode({navigation}) {
             else if(response.data.data_type === "medicine"){
               console.log("약",response.data.data)
               console.log("마!!!!",response.data.data[0])
-              navigation.navigate('BarcodeMedicineDetail', {
-                medicineBarcodeData: response.data.data
-              });
+              console.log("데이터 타입이 뭐야!", response.data.data_type);
+              setBarname(response.data.data[0])
+              setBarme(response.data.data[1])
+              setBarimage(response.data.data[2])
+              setDatatype(response.data.data_type)
+              setModalVisible(!modalVisible)
+              setCheck(true);
+              // navigation.navigate('BarcodeMedicineDetail', {
+              //   medicineBarcodeData: response.data.data,
+              //   useCamera: setUseCamera
+              // });
               // navigation.navigate('BarcodeMedicineDetail', { medicineBarcodeData: response.data});
             }
             else{
-              console.log("여기로 와?")
-              console.log(response.data)
               setNobar(true); 
               setModalVisible(!modalVisible)
               setCheck(true);
             }
+            // 이전 페이지로 돌아가면서 카메라 켜기
+        // navigation.pop();
+        // setUseCamera(true);
            
           })
           .catch((error) => {
@@ -160,7 +184,6 @@ export default function Barcode({navigation}) {
     }, [])
 
     if(modalVisible){
-      console.log("데이터 타입 잘 가져와?", datatype)
       console.log("nobar", nobar)
         return (
           <View >
@@ -251,72 +274,69 @@ export default function Barcode({navigation}) {
                         </TouchableRipple>
 
                       </View>
-                    ): null}
+                    ): null}    
 
-                    {/* 약일 경우 */}
-                    { datatype === "medicine" ? (
+                      {/* 약일 경우 */}
+                      { datatype === "medicine" ? (
                       <View>
-                        {/* {pnm && pnm ? (
+                        <ScrollView 
+                        showsVerticalScrollIndicator={false} // 스크롤바 표시 여부 설정 없애버림
+                        >
+                        <View style={styles.imagebox}>
+                          {barimage !== null ?
                           <View style={{marginBottom:10,}}>
                             <View style={styles.Info2}>
                               <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
-                              <Text style={styles.InfoTitle}>제품명</Text>
+                              <Text style={styles.InfoTitle}>이미지</Text>
                             </View>
-                            <Card>
-                              <Card.Content>
-                                <Text variant="bodyMedium">{pnm}</Text>
-                              </Card.Content>
-                            </Card>
+                            <Image source={{ uri: barimage }} resizeMode="contain" style={styles.image} />
                           </View>
-                        ) : null}
-                      {bnm && bnm ? (
-                          <View style={{marginBottom:10,}}>
-                            <View style={styles.Info2}>
-                              <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
-                              <Text style={styles.InfoTitle}>제조사명</Text>
+                             :
+                            <LottieView
+                              source={require('../../assets/search_empty.json') /** 움직이는 LottieView */}
+                              style={styles.Lotteimage}
+                              autoPlay loop
+                            />
+                          }
+                      </View>
+                          {barname ? (
+                            <View style={{marginBottom:10,}}>
+                              <View style={styles.Info2}>
+                                <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
+                                <Text style={styles.InfoTitle}>제품명</Text>
+                              </View>
+                              <Card>
+                                <Card.Content>
+                                  <Text variant="bodyMedium">{barname}</Text>
+                                </Card.Content>
+                              </Card>
                             </View>
-                            <Card>
-                              <Card.Content>
-                                <Text variant="bodyMedium">{bnm}</Text>
-                              </Card.Content>
-                            </Card>
-                          </View>
-                      ) : null}
+                          ) : null}
+                         {barme ? (
+                            <View style={{marginBottom:10,}}>
+                              <View style={styles.Info2}>
+                                <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
+                                <Text style={styles.InfoTitle}>제조사명</Text>
+                              </View>
+                              <Card>
+                                <Card.Content>
+                                  <Text variant="bodyMedium">{barme}</Text>
+                                </Card.Content>
+                              </Card>
+                            </View>
+                          ) : null}
+                        
+                          {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
+                          <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
+                            <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
+                          </TouchableRipple>
 
-                      {dcnm && dcnm ? (
-                          <View style={{marginBottom:10,}}>
-                            <View style={styles.Info2}>
-                              <Icon style={styles.InfoIcon} name="bread-slice" size={20} color="black" />
-                              <Text style={styles.InfoTitle}>식품 유형</Text>
-                            </View>
-                            <Card>
-                              <Card.Content>
-                                <Text variant="bodyMedium">{dcnm}</Text>
-                              </Card.Content>
-                            </Card>
-                          </View>
-                      ) : null}
-                      {daycnt && daycnt ? (
-                          <View style={{marginBottom:10,}}>
-                            <View style={styles.Info2}>
-                              <Icon style={styles.InfoIcon} name="calendar-day" size={20} color="black" />
-                              <Text style={styles.InfoTitle}>유통/소비기한</Text>
-                            </View>
-                            <Card>
-                              <Card.Content>
-                                <Text variant="bodyMedium">{daycnt}</Text>
-                              </Card.Content>
-                            </Card>
-                          </View>
-                      ) : null} */}
-
-                        {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
-                        <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
-                          <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
-                        </TouchableRipple>
+                        </ScrollView>
+                        
 
                       </View>
                     ): null}
+
 
 
                   </View>
@@ -327,27 +347,48 @@ export default function Barcode({navigation}) {
           </View>
         );
     }
+
+    // return (
+    //     <View style={styles.container}>
+    //       {/* 카메라 사용 중일 때 띄우는 화면 */}
+    //         <>
+    //           {device != null && hasPermission && (
+    //             <>
+    //               <Camera
+    //                 style={{ width: '100%', height: '100%' }}
+    //                 device={device}
+    //                 isActive={useCamera}
+    //                 frameProcessor={frameProcessor}
+    //                 frameProcessorFps={1}
+    //                 onBarCodeScanned={onScanned} // 바코드 스캔 시 호출되는 콜백 함수
+    //               />
+    //             </>
+    //           )}
+    //         </>
+    //     </View>
+    //   );
     return (
-        <View style={styles.container}>
-          {/* 카메라 사용 중일 때 띄우는 화면 */}
-          {useCamera && (
-            <>
-              {device != null && hasPermission && (
-                <>
-                  <Camera
-                    style={{ width: '100%', height: '100%' }}
-                    device={device}
-                    isActive={true}
-                    frameProcessor={frameProcessor}
-                    frameProcessorFps={1}
-                    onBarCodeScanned={onScanned} // 바코드 스캔 시 호출되는 콜백 함수
-                  />
-                </>
-              )}
-            </>
-          )}
-        </View>
-      );
+      <View style={styles.container}>
+        {/* 카메라 사용 중일 때 띄우는 화면 */}
+        {useCamera && (
+          <>
+            {device != null && hasPermission && (
+              <>
+                <Camera
+                  style={{ width: '100%', height: '100%' }}
+                  device={device}
+                  isActive={true}
+                  frameProcessor={frameProcessor}
+                  frameProcessorFps={1}
+                  onBarCodeScanned={onScanned} // 바코드 스캔 시 호출되는 콜백 함수
+                />
+              </>
+            )}
+          </>
+        )}
+      </View>
+    );
+
 }
 
 const styles = StyleSheet.create({
@@ -458,6 +499,27 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     // textAlign: 'center',
   },
+  imagebox: {
+    flex: 1,
+  },
+  image: {
+    borderWidth: 1,
+    borderColor: '#eaeaea',
+    width: '100%',
+    height: 350, // 원하는 세로 크기로 변경해주세요
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
+  },
+  Lotteimage: {
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#eaeaea',
+    width: '100%',
+    height: 'auto', // 원하는 세로 크기로 변경해주세요
+  },
+
 });
 
 
