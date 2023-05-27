@@ -27,7 +27,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Card } from 'react-native-paper';
 
 export default function Barcode({navigation}) {
-
     //카메라 사용여부
     const [useCamera, setUseCamera] = React.useState(true);
     //바코드 결과값

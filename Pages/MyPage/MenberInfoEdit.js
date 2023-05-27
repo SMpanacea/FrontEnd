@@ -1,9 +1,11 @@
 // 회원정보 수정 화면
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
-import { KeyboardAvoidingView, ScrollView, StyleSheet, View, TouchableOpacity, Image, Alert, 
-    InteractionManager, findNodeHandle, AccessibilityInfo} from 'react-native';
-import { Text, TextInput, Button, Title, RadioButton } from 'react-native-paper';
+import {
+    KeyboardAvoidingView, ScrollView, StyleSheet, View, TouchableOpacity, Image, Alert,
+    InteractionManager, findNodeHandle, AccessibilityInfo
+} from 'react-native';
+import { Text, TextInput, Button, DefaultTheme, RadioButton } from 'react-native-paper';
 import { launchImageLibrary } from 'react-native-image-picker'; //이미지 등록
 // import ImageResizer from 'react-native-image-resizer';
 import fs from 'react-native-fs';
@@ -33,6 +35,13 @@ export default function MemberInfoEdit({ navigation, route }) {
         })
     }, []);
 
+    const customTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            primary: '#51868C',
+        },
+    };
 
     const handleImagePicker = () => {
         Alert.alert(
@@ -192,18 +201,18 @@ export default function MemberInfoEdit({ navigation, route }) {
                         {
                             text: '확인',
                             onPress: () => {
-                              navigation.navigate("MyPage", {
-                                data: {
-                                  id,
-                                  email,
-                                  nickname,
-                                  birth,
-                                  gender,
-                                  img
-                                }
-                              });
+                                navigation.navigate("MyPage", {
+                                    data: {
+                                        id,
+                                        email,
+                                        nickname,
+                                        birth,
+                                        gender,
+                                        img
+                                    }
+                                });
                             }
-                          }
+                        }
                     ],
                     { cancelable: false }
                 );
@@ -217,8 +226,9 @@ export default function MemberInfoEdit({ navigation, route }) {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+                    
                     <TouchableOpacity onPress={handleImagePicker}
-                    ref={screanReaderFocus} accessibilityLabel="프로필 사진 수정">
+                        ref={screanReaderFocus} accessibilityLabel="프로필 사진 수정">
                         <View style={styles.profileContainer}>
                             <Image style={styles.profileImage} source={{ uri: img }} />
                         </View>
@@ -237,7 +247,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                                 value={email}
                                 maxLength={40}
                                 onChangeText={setEmail}
-                                // onEndEditing={handleEmailChange}
+                            // onEndEditing={handleEmailChange}
                             />
                         </View>
 
@@ -266,6 +276,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                         <View style={styles.userInfoItem}>
                             <Text style={styles.label2}>성별</Text>
                             <RadioButton
+                                theme={customTheme}
                                 value="남성"
                                 status={checked === '남성' ? 'checked' : 'unchecked'}
                                 onPress={() => {
@@ -275,6 +286,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                             />
                             <Text style={{ fontSize: 18, marginRight: 50 }}>남자</Text>
                             <RadioButton
+                                theme={customTheme}
                                 value="여성"
                                 status={checked === '여성' ? 'checked' : 'unchecked'}
                                 onPress={() => {
@@ -288,17 +300,21 @@ export default function MemberInfoEdit({ navigation, route }) {
 
                     <View style={styles.row}>
                         <Button
-                            mode="contained"
+                            accessibilityLabel='수정 완료하기'
+                            mode="outlined"
                             style={{ marginRight: 30 }}
                             contentStyle={{ height: 60, alignItems: 'center', justifyContent: 'center' }}
-                            labelStyle={{ fontSize: 19 }}
+                            labelStyle={{ fontSize: 19, color: '#51868C' }}
+                            theme={customTheme}
                             onPress={() => { navigation.navigate("ResetPw", { id }); }}>비밀번호 변경</Button>
+
                         <Button
-                            mode="contained"
+                            accessibilityLabel='수정 완료하기'
+                            mode="outlined"
                             contentStyle={{ height: 60, alignItems: 'center', justifyContent: 'center' }}
-                            labelStyle={{ fontSize: 19 }}
-                            onPress={handleSubmit2}
-                        >완료</Button>
+                            labelStyle={{ fontSize: 19, color: '#51868C' }}
+                            theme={customTheme}
+                            onPress={handleSubmit2}>완료</Button>
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>

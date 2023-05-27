@@ -1,8 +1,9 @@
 //비밀번호 찾기 화면
 import axios from 'axios';
-import React, { useState } from "react";
-import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Text, TextInput, Button } from 'react-native-paper';
+import React, { useState, useRef, useEffect } from "react";
+import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert,
+    InteractionManager, findNodeHandle, AccessibilityInfo } from 'react-native';
+import { Text, TextInput, Button, DefaultTheme } from 'react-native-paper';
 
 // 서버 포트
 import ServerPort from '../../../Components/ServerPort';
@@ -12,15 +13,31 @@ export default function ReissuancePw({ navigation }) {
     const [id, setId] = useState('');
     const [tempId, setTempId] = useState('');
     const [email, setEmail] = useState('');
-    const [tempEmail, setTempEmail] = useState('');
     const [emailNum, setEmailNum] = useState('');
     const [cemailNum, setCEmailNum] = useState('');
 
     const [isShown, setIsShown] = useState(false);  //이메일 인증번호 확인 변수
-
     const [emailNumError, setEmailNumError] = useState(false);//이메일 인증번호
 
-    const handleFind = async () => {      // 서버에 아이디, tempEmail 전송하는 최종 함수
+    const screanReaderFocus = useRef(null);
+    useEffect(() => {
+        InteractionManager.runAfterInteractions(() => {
+            const reactTag = findNodeHandle(screanReaderFocus.current);
+            if (reactTag) {
+                AccessibilityInfo.setAccessibilityFocus(reactTag);
+            }
+        })
+    }, []);
+
+    const customTheme = {
+        ...DefaultTheme,
+        colors: {
+          ...DefaultTheme.colors,
+          primary: '#51868C',
+        },
+      };
+
+    const handleFind = async () => {      // 서버에 아이디, 이매알을 전송하는 최종 함수
         if (id === '' || emailNumError == false) {
             Alert.alert(
                 '',
@@ -36,7 +53,7 @@ export default function ReissuancePw({ navigation }) {
             try {
                 const res = await axios.post(`${IP}/user/findpw`, {
                     uid: tempId,
-                    email: tempEmail
+                    email: email
                 });
                 console.log("res.data : ", res.data);
                 console.log("res.data type : ", typeof (res.data));
@@ -119,7 +136,6 @@ export default function ReissuancePw({ navigation }) {
                     { text: '확인' }
                 ]
             )
-            setTempEmail(email);
             setEmailNumError(true);
         } else {
             setIsShown(true);
@@ -171,14 +187,21 @@ export default function ReissuancePw({ navigation }) {
             });
     };
     return (
-        <SafeAreaView style={styles.box}>
-            <Text style={styles.text}>비밀번호 찾기</Text>
+        <View style={{ flex: 1, backgroundColor: 'white'}}>
+        <SafeAreaView style={styles.box} keyboardShouldPersistTaps="handled">
+
+            <TouchableOpacity  ref={screanReaderFocus}
+                    accessibilityLabel="비밀번호 찾기">
+                <Text importantForAccessibility='no-hide-descendants'
+                style={styles.text}>비밀번호 찾기</Text>
+            </TouchableOpacity>
 
             <TextInput
                 accessibilityLabel="아이디"
                 accessibilityHint="아이디는 영문 소문자 또는 숫자로 이루어진 6~14자를 입력하세요."
                 style={{ marginBottom: 10, 
-                backgroundColor: '#f5f5f5' }}
+                backgroundColor: 'white' }}
+                theme={customTheme}
                 label={"아이디"}
                 placeholder="영문 소문자/숫자, 6~14자"
                 onChangeText={setId}
@@ -192,13 +215,16 @@ export default function ReissuancePw({ navigation }) {
                         accessibilityLabel="이메일"
                         label={"이메일"}
                         style={[styles.dateInput]}
+                        theme={customTheme}
                         onChangeText={setEmail}
                         maxLength={40}
                     />
                     <Button
+                        accessibilityLabel="인증번호 받기"
                         mode="outlined"
                         contentStyle={{ height: 50, alignItems: 'center' }}
-                        labelStyle={{ fontSize: 15 }}
+                        labelStyle={{ fontSize: 15, color: '#51868C' }}
+                        theme={customTheme}
                         onPress={handleInputEmail}
                     >인증</Button>
                 </View>
@@ -207,17 +233,20 @@ export default function ReissuancePw({ navigation }) {
                     <View>
                         <View style={[styles.row]}>
                             <TextInput
-                        accessibilityLabel="이메일 인증번호"
+                                accessibilityLabel="이메일 인증번호"
                                 label={"이메일 인증번호"}
                                 style={[styles.dateInput]}
+                                theme={customTheme}
                                 onChangeText={setEmailNum}
                                 keyboardType="numeric"
                                 maxLength={6}
                             />
                             <Button
+                                accessibilityLabel="인증번호 확인하기"
                                 mode="outlined"
                                 contentStyle={{ height: 50, alignItems: 'center' }}
-                                labelStyle={{ fontSize: 15 }}
+                                labelStyle={{ fontSize: 15, color: '#51868C' }}
+                                theme={customTheme}
                                 onPress={handleInputEmailNum}
                             >확인</Button>
                         </View>
@@ -228,9 +257,11 @@ export default function ReissuancePw({ navigation }) {
                 mode="outlined"
                 contentStyle={{ height: 50, alignItems: 'center' }}
                 labelStyle={{ fontSize: 15 }}
+                theme={customTheme}
                 onPress={handleFind}
             >확인</Button>
         </SafeAreaView>
+        </View>
     )
 }
 
@@ -255,7 +286,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 10,
         color: 'black',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'white',
     },
     error: {
         color: 'red',

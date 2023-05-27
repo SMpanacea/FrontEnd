@@ -34,8 +34,6 @@ const IP = ServerPort();
 
 const Tab = createMaterialBottomTabNavigator(); //createBottomTabNavigator을 Tab에 저장해줌
 
-//<Tab.Navigator initialRouteName="BookMarkMain"> -> 바텀탭에 제이 처음에 뜨는 곳 지정해줌 BookMarkMain이 제일 먼저 나옴
-
 function BottomTab() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [token, setToken] = useState(null)
@@ -61,7 +59,7 @@ function BottomTab() {
     };
     checkLoginStatus();
   }, [loggedIn]);
-
+  
   return (
     <Tab.Navigator
       initialRouteName="Main"
@@ -71,36 +69,16 @@ function BottomTab() {
         paddingBottom: Platform.OS === 'ios' ? 20 : 0, // 안전 영역 고려          
         // height:50
       }}
-      activeColor="#6200EE"
-      inactiveColor="#95A5A6"
+      activeColor="#51868C"
+      inactiveColor="#95a5a6"
     >
-      {/* <Tab.Screen
-        name="BookMarkScreen"
-        component={BookMarkScreen}
-        options={{
-          tabBarLabel: '즐겨찾기',
-          tabBarIcon: ({ color }) => (
-            <Icon2 name="bell" color={color} size={26} />
-          ),
-        }}
-      /> */}
-      {/* <Tab.Screen
-        name="CameraSearch"
-        component={BarcodeCamera}
-        options={{
-          tabBarLabel: '카메라 사진찍어!!',
-          tabBarIcon: ({ color }) => (
-            <Icon2 name="camera" color={color} size={26} />
-          ),
-        }}
-      /> */}
       <Tab.Screen
         name="GPT"
         component={GPT}
         options={{
-          tabBarLabel: 'GPT',
+          tabBarLabel: 'ChatGPT',
           tabBarIcon: ({ color }) => (
-            <Icon2 name="chat" color={color} size={26} />
+            <Icon2 name="chat" color={'#51868C'} size={26} />
           ),
           tabBarAccessibilityLabel: 'GPT', // accessibilty label for this tab
         }}
@@ -111,7 +89,7 @@ function BottomTab() {
         options={{
           tabBarLabel: '홈',
           tabBarIcon: ({ color }) => (
-            <Icon name="home" color={color} size={26} />
+            <Icon name="home" color={'#51868C'} size={26} />
           ),
           tabBarAccessibilityLabel: 'Main', // accessibilty label for this tab
         }}
@@ -126,7 +104,7 @@ function BottomTab() {
         options={{
           tabBarLabel: '마이페이지',
           tabBarIcon: ({ color }) => (
-            <Icon3 name="people-outline" color={color} size={26} />
+            <Icon3 name="people-outline" color={'#51868C'} size={26} />
           ),
           tabBarAccessibilityLabel: 'MyPage', // accessibilty label for this tab
         }}

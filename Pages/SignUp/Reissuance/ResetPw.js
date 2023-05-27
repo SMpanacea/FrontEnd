@@ -1,9 +1,9 @@
 //비밀번호 재설정
 import axios from 'axios';
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert, InteractionManager, 
-    findNodeHandle, AccessibilityInf  } from 'react-native';
-import { Text, TextInput, Button } from 'react-native-paper';
+    findNodeHandle, AccessibilityInfo } from 'react-native';
+import { Text, TextInput, Button, DefaultTheme } from 'react-native-paper';
 
 // 서버 포트
 import ServerPort from '../../../Components/ServerPort';
@@ -32,6 +32,14 @@ export default function ResetPw({ navigation, route }) {
             }
         })
     }, []);
+    
+    const customTheme = {
+        ...DefaultTheme,
+        colors: {
+          ...DefaultTheme.colors,
+          primary: '#51868C',
+        },
+      };
 
     const chgPwd = async () => {
         if (cpw === "") {
@@ -147,8 +155,15 @@ export default function ResetPw({ navigation, route }) {
     }
 
     return (
+        <View style={{ flex: 1, backgroundColor: 'white'}}>
         <SafeAreaView style={styles.box}>
-            <Text style={styles.text}>비밀번호 재설정</Text>
+            
+            <TouchableOpacity ref={screanReaderFocus}
+                    accessibilityLabel="비밀번호 재설정">
+            <Text  importantForAccessibility='no-hide-descendants'
+                style={styles.text}>비밀번호 재설정</Text>
+            </TouchableOpacity>
+
             <TextInput
                 accessibilityLabel="비밀번호"
                 accessibilityHint="비밀번호는 영문 대소문자와 숫자, 특수문자로 이루어진 8자에서 16자를 입력하세요."
@@ -157,11 +172,14 @@ export default function ResetPw({ navigation, route }) {
                 placeholder="영문 대소문자/숫자/특수문자, 8자~16자"
                 onChangeText={setPw}
                 style={styles.dateInput}
+                theme={customTheme}
                 onEndEditing={handleInputPw}
                 secureTextEntry={!isPasswordVisible}
                 autoCapitalize="none"
                 textContentType="password"
-                right={<TextInput.Icon icon="eye" onPress={() => setPasswordVisibility(!isPasswordVisible)} />}
+                right={
+                <TextInput.Icon icon="eye" onPress={() => setPasswordVisibility(!isPasswordVisible)} 
+                accessibilityLabel="비밀번호 확인하기"/>}
                 maxLength={16}
             />
 
@@ -171,6 +189,7 @@ export default function ResetPw({ navigation, route }) {
                 placeholder="비밀번호 확인"
                 onChangeText={setCpw}
                 style={[styles.dateInput, styles.down]}
+                theme={customTheme}
                 secureTextEntry={!isPasswordVisible2}
                 autoCapitalize="none"
                 textContentType="password"
@@ -182,9 +201,11 @@ export default function ResetPw({ navigation, route }) {
                 mode="outlined"
                 contentStyle={{ height: 50, alignItems: 'center' }}
                 labelStyle={{ fontSize: 15 }}
+                theme={customTheme}
                 onPress={chgPwd}
             >완료</Button>
         </SafeAreaView>
+        </View>
     )
 }
 
@@ -209,7 +230,7 @@ const styles = StyleSheet.create({
         // flex: 1,
         marginBottom: 10,
         color: 'black',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: 'white',
     },
     error: {
         color: 'red',

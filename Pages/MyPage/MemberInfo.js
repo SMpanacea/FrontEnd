@@ -1,10 +1,11 @@
 // 회원정보 확인 화면
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useRef} from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, Alert, InteractionManager, 
+import React, { useEffect, useRef } from 'react';
+import {
+  StyleSheet, View, TouchableOpacity, Image, Alert, InteractionManager,
   findNodeHandle, AccessibilityInfo } from 'react-native';
-import { Text, Button } from 'react-native-paper';
+import { Text, Button, DefaultTheme } from 'react-native-paper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 
 // 서버 포트
@@ -15,14 +16,22 @@ export default function MemberInfo({ navigation, route }) {
   const { userData } = route.params;
 
   const screanReaderFocus = useRef(null);
-    useEffect(() => {
-        InteractionManager.runAfterInteractions(() => {
-            const reactTag = findNodeHandle(screanReaderFocus.current);
-            if (reactTag) {
-                AccessibilityInfo.setAccessibilityFocus(reactTag);
-            }
-        })
-    }, []);
+  useEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      const reactTag = findNodeHandle(screanReaderFocus.current);
+      if (reactTag) {
+        AccessibilityInfo.setAccessibilityFocus(reactTag);
+      }
+    })
+  }, []);
+
+  const customTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#51868C',
+    },
+  };
 
   const chkDel = () => {
     Alert.alert(
@@ -64,7 +73,7 @@ export default function MemberInfo({ navigation, route }) {
         await AsyncStorage.removeItem('loginType');
         route.params.setLoggedIn(false);
         navigation.navigate("bottom");
-        
+
       } else {
         Alert.alert(
           '탈퇴에 실패하였습니다',
@@ -118,10 +127,14 @@ export default function MemberInfo({ navigation, route }) {
       </TouchableOpacity>
 
       <View style={styles.profileInfo}>
+
         <Button
-          mode="contained"
+          accessibilityLabel='프로필 수정하기'
+          mode="outlined"
+          style={styles.button}
           contentStyle={{ height: 60, alignItems: 'center', justifyContent: 'center' }}
-          labelStyle={{ fontSize: 19 }}
+          labelStyle={{ fontSize: 19, color: '#51868C' }}
+          theme={customTheme}
           onPress={() => {
             navigation.navigate("MemberInfoEdit", { userData });
           }}>수정</Button>
@@ -133,7 +146,7 @@ export default function MemberInfo({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: 'white',
   },
   profileContainer: {
     alignItems: 'center',
