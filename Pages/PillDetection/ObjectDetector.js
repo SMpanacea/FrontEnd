@@ -100,7 +100,7 @@ function outputsToNMSPredictions(
   startY,
 ) {
   // 설정값들
-  const predictionThreshold = 0.4; // 예측 신뢰도 임계값
+  const predictionThreshold = 0.1; // 예측 신뢰도 임계값
   const iOUThreshold = 0.6; // IOU 임계값
   const nMSLimit = 15; // NMS 제한 개수
   const results = []; // 결과 배열
