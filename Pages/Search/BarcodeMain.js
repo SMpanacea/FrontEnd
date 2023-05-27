@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text, TouchableOpacity, Image } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Modal, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { TouchableRipple, Button } from 'react-native-paper';
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -54,6 +54,11 @@ export default function BarcodeMain({navigation}) {
     const [daycnt, setDaycnt] = React.useState(""); //유통/소비기한
     const [datatype,setDatatype] = React.useState("")//datatype저장
 
+    //alert에서 보여줄 값(약)
+    const [barname, setBarname] = React.useState(''); //약 이름
+    const [barme, setBarme] = React.useState(''); //제조사
+    const [barimage, setBarimage] = React.useState(''); //약 사진
+
     React.useEffect(() => {
         (async () => {
             //라이센스 키
@@ -96,16 +101,6 @@ export default function BarcodeMain({navigation}) {
                     }
                 })
                 .then(response => {
-                    // console.log(response.data);
-                    // setBarcodeResults(response.data[0]);
-                    // setModalVisible(true);
-                    // alert(
-                    //     // JSON.stringify(response.data[0])
-                    //     Object.entries(response.data[0])
-                    //     .map(([key, value]) => `${key}: ${value}`)
-                    //     .join("\n")
-                    //     );
-                    // modal_view(response.data[0], true);
                     //음식 바코드 값이 있을 경우 
                     if(response.data.data_type === "food"){
                         console.log("foode로 들어와?");
@@ -122,11 +117,12 @@ export default function BarcodeMain({navigation}) {
                     //알약 바코드 값이 있을 경우
                     else if(response.data.data_type === "medicine"){
                         console.log("약",response.data.data)
-                        console.log("마!!!!",response.data.data[0])
-                        navigation.navigate('BarcodeMedicineDetail', {
-                        medicineBarcodeData: response.data.data
-                        });
-                        // navigation.navigate('BarcodeMedicineDetail', { medicineBarcodeData: response.data});
+                        setBarname(response.data.data[0])
+                        setBarme(response.data.data[1])
+                        setBarimage(response.data.data[2])
+                        setDatatype(response.data.data_type)
+                        setModalVisible(!modalVisible)
+                        setCheck(true);
                     }
                     else{
                         console.log("여기로 와?")
@@ -162,39 +158,6 @@ export default function BarcodeMain({navigation}) {
         }
     }
 
-
-    // const modal_view = (data, boolean_data) => {
-    //     console.log("modal_view 호출");
-    //     console.log(data);
-    //     if (boolean_data) {
-    //         console.log("modalVisible true");
-    //         return (
-    //             <View>
-    //                 <Text>들어옴!</Text>
-    //                 <Modal
-    //                     presentationStyle={"formSheet"}
-    //                     animationType="slide"  // 모달 애니메이션 지정
-    //                     visible={boolean_data}  // 모달 표시 여부 지정
-    //                     onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
-    //                 >
-    //                     <View>
-    //                         <Text>상품 정보</Text>
-    //                         {Object.entries(data).map(([key, value]) => (
-    //                             <View key={key}>
-    //                                 <Text>{key}</Text>
-    //                                 <Text>{value}</Text>
-    //                             </View>
-    //                         ))}
-    //                         <Button
-    //                             title="Close"
-    //                             onPress={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 모달을 닫습니다
-    //                         />
-    //                     </View>
-    //                 </Modal>
-    //             </View>
-    //         );
-    //     }
-    // }
     if(modalVisible){
         console.log("데이터 타입 잘 가져와?", datatype)
         console.log("nobar", nobar)
@@ -224,6 +187,7 @@ export default function BarcodeMain({navigation}) {
                       </View>
                     ):(
                     <View>
+
                       {/* 음식일 경우 */}
                       { datatype === "food" ? (
                         <View>
@@ -288,6 +252,67 @@ export default function BarcodeMain({navigation}) {
   
                         </View>
                       ): null}
+
+                      {/* 약일 경우 */}
+                      { datatype === "medicine" ? (
+                      <View>
+                        <ScrollView 
+                        showsVerticalScrollIndicator={false} // 스크롤바 표시 여부 설정 없애버림
+                        >
+                        <View style={styles.imagebox}>
+                          {barimage !== null ?
+                          <View style={{marginBottom:10,}}>
+                            <View style={styles.Info2}>
+                              <Icon style={styles.InfoIcon} name="image" size={20} color="black" />
+                              <Text style={styles.InfoTitle}>이미지</Text>
+                            </View>
+                            <Image source={{ uri: barimage }} resizeMode="contain" style={styles.image} />
+                          </View>
+                             :
+                            <LottieView
+                              source={require('../../assets/search_empty.json') /** 움직이는 LottieView */}
+                              style={styles.Lotteimage}
+                              autoPlay loop
+                            />
+                          }
+                      </View>
+                          {barname ? (
+                            <View style={{marginBottom:10,}}>
+                              <View style={styles.Info2}>
+                                <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
+                                <Text style={styles.InfoTitle}>제품명</Text>
+                              </View>
+                              <Card>
+                                <Card.Content>
+                                  <Text variant="bodyMedium">{barname}</Text>
+                                </Card.Content>
+                              </Card>
+                            </View>
+                          ) : null}
+                         {barme ? (
+                            <View style={{marginBottom:10,}}>
+                              <View style={styles.Info2}>
+                                <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
+                                <Text style={styles.InfoTitle}>제조사명</Text>
+                              </View>
+                              <Card>
+                                <Card.Content>
+                                  <Text variant="bodyMedium">{barme}</Text>
+                                </Card.Content>
+                              </Card>
+                            </View>
+                          ) : null}
+                        
+                          {/* 모달 닫기 버튼 클릭 시 모달 닫기*/}
+                          <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);}}>
+                            <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
+                          </TouchableRipple>
+
+                        </ScrollView>
+                        
+
+                      </View>
+                    ): null}
                     </View>
                     )}
                   </View>
@@ -326,31 +351,6 @@ export default function BarcodeMain({navigation}) {
                     autoPlay loop
                 />
                 </TouchableOpacity>
-        
-       
-        {/* <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
-         <Button
-            mode="outlined"
-            style={styles.down}
-            contentStyle={styles.button}
-            labelStyle={{ fontSize: 20, color: '#000' }}
-            onPress={() => navigation.navigate('BarcodeCamera')}
-        >
-            카메라로 바코드 스캔
-        </Button>
-        
-        <Button
-            mode="outlined"
-            style={styles.down}
-            contentStyle={styles.button}
-            labelStyle={{ fontSize: 20, color: '#000' }}
-            onPress={() => decodeFromAlbum()}
-        >
-            앨범에서 바코드 스캔
-        </Button> */}
-        {/* <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            {modal_view(barcodeResults, modalVisible)}
-        </View> */}
         </View>
     );
 }
@@ -372,21 +372,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginVertical: 8,
     },
-    separator: {
-        marginVertical: 4,
-    },
-    switchView: {
-        alignItems: 'center',
-        flexDirection: "row",
-    },
     barcodeText: {
         fontSize: 20,
         color: 'black',
         fontWeight: 'bold',
-    },
-    close:{
-      flex:1,
-      borderWidth: 1,
     },
     button: {
       alignItems: 'center',
@@ -398,12 +387,6 @@ const styles = StyleSheet.create({
       height: 150,
       padding: 10,
       elevation: 2,
-    },
-        
-    Informationcontainer: {
-      flex: 1,
-      borderWidth:1,
-      // marginBottom: 40,
     },
     Info: {
       flex: 1,
@@ -427,9 +410,6 @@ const styles = StyleSheet.create({
       marginLeft:60,
       
     },
-    Infotext: {
-      textAlignVertical: 'center'
-    },
     centeredView: {
       flex: 1,
       justifyContent: 'center',
@@ -452,25 +432,25 @@ const styles = StyleSheet.create({
       shadowRadius: 4,
       elevation: 5,
     },
-    // button: {
-    //   borderRadius: 20,
-    //   padding: 10,
-    //   elevation: 2,
-    // },
-    buttonOpen: {
-      backgroundColor: '#F194FF',
+    imagebox: {
+      flex: 1,
     },
-    buttonClose: {
-      backgroundColor: '#2196F3',
+    image: {
+      borderWidth: 1,
+      borderColor: '#eaeaea',
+      width: '100%',
+      height: 150, // 원하는 세로 크기로 변경해주세요
+      borderBottomLeftRadius: 30,
+      borderBottomRightRadius: 30,
+      borderTopRightRadius: 30,
+      borderTopLeftRadius: 30,
     },
-    textStyle: {
-      color: 'white',
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-    modalText: {
-      marginBottom: 15,
-      // textAlign: 'center',
+    Lotteimage: {
+      backgroundColor: 'white',
+      borderWidth: 1,
+      borderColor: '#eaeaea',
+      width: '100%',
+      height: 'auto', // 원하는 세로 크기로 변경해주세요
     },
 });
 
