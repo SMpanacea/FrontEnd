@@ -10,7 +10,7 @@ import ServerPort from './ServerPort';
 const IP = ServerPort();
 
 
-function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, setBookmark}){
+function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, setBookmark, token}){
   const [bookmarked2, setBookmark2] = useState(bookmarked) //bookmared를 받았으니 별활성화 할지 안 할지의 값을 받은거임 그래서 초기값으로 설정해줬으니 자기값임(부모값을 자식값으로 넣어줌)
   const [showImage, setShowImage] = useState(false);
   
@@ -42,11 +42,11 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
 
   console.log("도키도키", bookmarked)
   const handleBookmark = () => { //bookmark핸들러
-  setBookmarked(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
+    setBookmark(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
 
 
 
-
+    console.log("토큰?", token)
 
   
   // console.log("두근두근",bookmark) //배열 잘 가져와 근데 뭐가 문제임
@@ -63,7 +63,7 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
     itemName: medicinedetail.itemName, 
     itemImage: medicinedetail.itemImage, 
     updateDe:medicinedetail.updateDe,
-    token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
+    token:token//걍 지정해줌
   };
 
     if(bookmarked2){
