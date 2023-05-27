@@ -63,7 +63,7 @@ const Auth = () => {
       <Stack.Screen name="CameraList" options={{ headerShown: false }}>
         {(props) => <MedicineCamera {...props} navigation={props.navigation} />}
       </Stack.Screen>
-      <Stack.Screen name="Main" component={MedicineMain} options={{ headerShown: false, tabBarStyle: { display: 'none' } }} />
+      <Stack.Screen name="Main" component={MedicineMain} options={{ headerShown: true, tabBarStyle: { display: 'none' } }} />
       {/* <Stack.Screen name="Detail" component={MedicineDetail} options={{
           // headerShown:false,
           tabBarStyle: {display: 'none'},

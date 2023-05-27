@@ -1,7 +1,7 @@
 // 모든 약 정보 볼 수 있는 메인화면
 import axios from 'axios';
 import React from 'react';
-import { StyleSheet, View, ScrollView, TouchableOpacity, AccessibilityInfo, UIManager, findNodeHandle } from 'react-native';
+import { StyleSheet, View, ScrollView, TouchableOpacity, AccessibilityInfo, UIManager, findNodeHandle, Image } from 'react-native';
 import { Text, TouchableRipple, Button } from 'react-native-paper';
 // 화면 비율
 import { RefreshControl, Dimensions } from 'react-native';
@@ -29,6 +29,18 @@ function MedicineMain({ navigation, route }) {
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
   const [page, setPage] = React.useState(1);//다음 page 번호
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+              <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+          </TouchableOpacity>
+      ),
+      headerTitle: "약 검색 결과",
+    });
+  }, [])
+
 
   // 사용자에게 새로고침이 잘되고 있는지 인지시키기 위해 멈추는 함수
   // wait 함수를 정의합니다. 이 함수는 입력받은 시간만큼 대기한 후 Promise를 resolve합니다.
@@ -104,25 +116,21 @@ function MedicineMain({ navigation, route }) {
 
   //북마크 리스트 가져오는 AXIOS
   const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
-  // React.useEffect(() => {
-  //   console.log("json", json);
-    // const Bookmark = () => {
-    //   axios.post(`${IP}/medicine/bookmarklist`, {
-    //     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
-    //   })
-    //     .then(function (res) {
-    //       console.log("북마크 잘 가져왔나요?", res.data);
-    //       setBookmark(res.data);
-    //       console.log("test", bookmark);
-    //     })
-    //     .catch(function (e) {
-    //       console.log("즐겨찾기 리스트 못 가져옴,,,", e)
-    //     })
+  React.useEffect(() => {
+    const getBookmarkList = async () => {
+      try {
+        const res = await axios.post(`${IP}/medicine/bookmarklist`, {
+          token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ",
+        });
+        setBookmark(res.data);
+      } catch (e) {
+        console.log("즐겨찾기 리스트 못 가져옴,,,", e);
+      }
+    };
+    getBookmarkList();
+  }, []);
 
-    // };
-    // Bookmark();
-    // console.log("bookmark배열 값 잘 가져오나요?",bookmark)
-  // }, []);
 
   return (
     <View style={styles.c}>

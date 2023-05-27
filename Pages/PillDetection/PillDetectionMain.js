@@ -33,6 +33,8 @@ export default function PillDetectionMain({ navigation }) {
 
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
 
+  
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
