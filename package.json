@@ -38,6 +38,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.2.1",
     "react-native-image-base64": "^0.1.4",
+    "react-native-image-crop-picker": "^0.38.1",
     "react-native-image-picker": "^5.3.1",
     "react-native-modal-datetime-picker": "^14.0.1",
     "react-native-paper": "^5.7.2",

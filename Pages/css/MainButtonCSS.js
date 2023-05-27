@@ -10,8 +10,17 @@ export const MainButtonStyle = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    buttonThree: {
+        backgroundColor: 'white',
+        borderRadius: 50,
+        overflow: 'hidden',
+        height: 200,
+        width: 350,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     down: {
-        marginBottom: 60
+        marginBottom: 30
     },
     imageBackground: {
         //borderRadius: 50, // 원하는 borderRadius 값으로 조정
@@ -52,8 +61,15 @@ export const MainButtonStyle = StyleSheet.create({
         width: 230, // or whatever size you want
         height: 200, // or whatever size you want
         position: 'absolute',
-        right: -10,
+        right: -20,
         bottom: -10,
+    },
+    CameraSerachMainButton_album: {
+        width: 430, // or whatever size you want
+        height: 400, // or whatever size you want
+        position: 'absolute',
+        right: -70,
+        bottom: -60,
     },
     barcode: {
         width: 160, // or whatever size you want
