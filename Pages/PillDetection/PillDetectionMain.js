@@ -39,7 +39,7 @@ export default function PillDetectionMain({ }) {
       screenReaderChangedSubscription.remove();
     };
   }, []);
-  imgArray = [];//이미지 base64 데이터 배열
+  //imgArray = [];//이미지 base64 데이터 배열
   // 리셋 핸들러 함수
   const handleReset = useCallback(async () => {
     setScreenState(ScreenStates.CAMERA);
