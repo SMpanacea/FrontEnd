@@ -1,13 +1,9 @@
 //BarcodeCamera 작동하는 화면
 
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text, Alert, Pressable,Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Modal, Text,Image, ScrollView } from 'react-native';
 import { TouchableRipple, Button } from 'react-native-paper';
-
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
-import { launchImageLibrary } from 'react-native-image-picker';
-
-
 import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import { decode } from 'vision-camera-dynamsoft-barcode-reader';
 import * as REA from 'react-native-reanimated';
@@ -27,6 +23,9 @@ import LottieView from 'lottie-react-native';
 
 import { Card } from 'react-native-paper';
 
+// 로딩
+import Loading from '../../Components/Loading';
+
 export default function Barcode({navigation}) {
     //카메라 사용여부
     const [useCamera, setUseCamera] = React.useState(true);
@@ -44,6 +43,9 @@ export default function Barcode({navigation}) {
     const devices = useCameraDevices();
     //후면 카메라 선택
     const device = devices.back;
+
+    //로딩
+    const [isLoading, setIsLoading] = useState(false); // 로딩 보여줄지 말지 상태 관리
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [check, setCheck] = React.useState(false);
@@ -78,13 +80,6 @@ export default function Barcode({navigation}) {
         })();
     }, []);
 
-  //   React.useEffect(() => {
-  //     console.log("카메라 사용여부 변경됨1",  useCamera);
-  //     console.log("카메라 사용여부 변경됨2",  device);
-  //     console.log("카메라 사용여부 변경됨3",  hasPermission);
-
-  // }, [useCamera]);
-
     React.useEffect(() => {
         (async () => {
             const status = await Camera.requestCameraPermission();
@@ -108,6 +103,7 @@ export default function Barcode({navigation}) {
       console.log("호출은 계속 되나?");
       //카메라 사용 안함
       if (results[0]) {
+        setIsLoading(true);//로딩 페이지 표시
         setUseCamera(false);
         console.log("axios 호출");
         await axios
@@ -129,38 +125,33 @@ export default function Barcode({navigation}) {
               setDaycnt(response.data.data[0].POG_DAYCNT);
               setDatatype(response.data.data_type)
               setBarcodeResults(response.data.data[0]);
-              setModalVisible(!modalVisible)
+              setIsLoading(false); // 로딩 숨김
+              setModalVisible(!modalVisible)//모달 표시
               setCheck(true);
             }
             //알약 바코드 값이 있을 경우
             else if(response.data.data_type === "medicine"){
               console.log("약",response.data.data)
-              console.log("마!!!!",response.data.data[0])
-              console.log("데이터 타입이 뭐야!", response.data.data_type);
               setBarname(response.data.data[0])
               setBarme(response.data.data[1])
               setBarimage(response.data.data[2])
               setDatatype(response.data.data_type)
-              setModalVisible(!modalVisible)
+              setIsLoading(false); // 로딩 숨김
+              setModalVisible(!modalVisible)//모달 표시
               setCheck(true);
-              // navigation.navigate('BarcodeMedicineDetail', {
-              //   medicineBarcodeData: response.data.data,
-              //   useCamera: setUseCamera
-              // });
-              // navigation.navigate('BarcodeMedicineDetail', { medicineBarcodeData: response.data});
             }
             else{
-              setNobar(true); 
+              setNobar(true);
+              setIsLoading(false); // 로딩 숨김 
               setModalVisible(!modalVisible)
               setCheck(true);
             }
-            // 이전 페이지로 돌아가면서 카메라 켜기
-        // navigation.pop();
-        // setUseCamera(true);
-           
           })
           .catch((error) => {
             console.error(error);
+          })
+          .finally(() => {
+            setIsLoading(false); // 로딩 페이지 숨김
           });
       }
       console.log("하여튼 찍혔다!");
@@ -192,7 +183,6 @@ export default function Barcode({navigation}) {
               animationType="slide"  // 모달 애니메이션 지정
               onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
               transparent={true} // 투명한 모달로 설정 
-                           
             >
               
               <View style={styles.centeredView}>
@@ -286,7 +276,7 @@ export default function Barcode({navigation}) {
                           {barimage !== null ?
                           <View style={{marginBottom:10,}}>
                             <View style={styles.Info2}>
-                              <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
+                              <Icon style={styles.InfoIcon} name="image" size={20} color="black" />
                               <Text style={styles.InfoTitle}>이미지</Text>
                             </View>
                             <Image source={{ uri: barimage }} resizeMode="contain" style={styles.image} />
@@ -348,25 +338,6 @@ export default function Barcode({navigation}) {
         );
     }
 
-    // return (
-    //     <View style={styles.container}>
-    //       {/* 카메라 사용 중일 때 띄우는 화면 */}
-    //         <>
-    //           {device != null && hasPermission && (
-    //             <>
-    //               <Camera
-    //                 style={{ width: '100%', height: '100%' }}
-    //                 device={device}
-    //                 isActive={useCamera}
-    //                 frameProcessor={frameProcessor}
-    //                 frameProcessorFps={1}
-    //                 onBarCodeScanned={onScanned} // 바코드 스캔 시 호출되는 콜백 함수
-    //               />
-    //             </>
-    //           )}
-    //         </>
-    //     </View>
-    //   );
     return (
       <View style={styles.container}>
         {/* 카메라 사용 중일 때 띄우는 화면 */}
@@ -386,8 +357,11 @@ export default function Barcode({navigation}) {
             )}
           </>
         )}
+        {/*로딩 표시*/}
+        {isLoading && <Loading />}
       </View>
     );
+    
 
 }
 
@@ -395,25 +369,10 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
   },
-  title: {
-      textAlign: 'center',
-      marginVertical: 8,
-  },
-  separator: {
-      marginVertical: 4,
-  },
-  switchView: {
-      alignItems: 'center',
-      flexDirection: "row",
-  },
   barcodeText: {
       fontSize: 20,
       color: 'black',
       fontWeight: 'bold',
-  },
-  close:{
-    flex:1,
-    borderWidth: 1,
   },
   button: {
     alignItems: 'center',
@@ -425,12 +384,6 @@ const styles = StyleSheet.create({
     height: 150,
     padding: 10,
     elevation: 2,
-  },
-      
-  Informationcontainer: {
-    flex: 1,
-    borderWidth:1,
-    // marginBottom: 40,
   },
   Info: {
     flex: 1,
@@ -454,9 +407,6 @@ const styles = StyleSheet.create({
     marginLeft:60,
     
   },
-  Infotext: {
-    textAlignVertical: 'center'
-  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -479,26 +429,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  // button: {
-  //   borderRadius: 20,
-  //   padding: 10,
-  //   elevation: 2,
-  // },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    // textAlign: 'center',
-  },
   imagebox: {
     flex: 1,
   },
@@ -506,7 +436,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eaeaea',
     width: '100%',
-    height: 350, // 원하는 세로 크기로 변경해주세요
+    height: 150, // 원하는 세로 크기로 변경해주세요
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     borderTopRightRadius: 30,
