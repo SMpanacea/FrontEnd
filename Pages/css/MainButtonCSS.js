@@ -20,7 +20,8 @@ export const MainButtonStyle = StyleSheet.create({
         justifyContent: 'center',
     },
     down: {
-        marginBottom: 30
+        marginBottom: 30,
+        elevation: 10,
     },
     imageBackground: {
         //borderRadius: 50, // 원하는 borderRadius 값으로 조정

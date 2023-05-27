@@ -52,6 +52,6 @@ export default function Main({ navigation }) {
 
 const styles = StyleSheet.create({
     button: {
-        elevation: 3,
+        elevation: 10,
     }
 });
