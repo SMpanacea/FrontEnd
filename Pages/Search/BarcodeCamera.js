@@ -1,13 +1,9 @@
 //BarcodeCamera 작동하는 화면
 
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text, Alert, Pressable,Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Modal, Text,Image, ScrollView } from 'react-native';
 import { TouchableRipple, Button } from 'react-native-paper';
-
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
-import { launchImageLibrary } from 'react-native-image-picker';
-
-
 import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision-camera';
 import { decode } from 'vision-camera-dynamsoft-barcode-reader';
 import * as REA from 'react-native-reanimated';
@@ -27,6 +23,9 @@ import LottieView from 'lottie-react-native';
 
 import { Card } from 'react-native-paper';
 
+// 로딩
+import Loading from '../../Components/Loading';
+
 export default function Barcode({navigation}) {
     //카메라 사용여부
     const [useCamera, setUseCamera] = React.useState(true);
@@ -44,6 +43,9 @@ export default function Barcode({navigation}) {
     const devices = useCameraDevices();
     //후면 카메라 선택
     const device = devices.back;
+
+    //로딩
+    const [isLoading, setIsLoading] = useState(false); // 로딩 보여줄지 말지 상태 관리
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [check, setCheck] = React.useState(false);
@@ -101,6 +103,7 @@ export default function Barcode({navigation}) {
       console.log("호출은 계속 되나?");
       //카메라 사용 안함
       if (results[0]) {
+        setIsLoading(true);//로딩 페이지 표시
         setUseCamera(false);
         console.log("axios 호출");
         await axios
@@ -122,7 +125,8 @@ export default function Barcode({navigation}) {
               setDaycnt(response.data.data[0].POG_DAYCNT);
               setDatatype(response.data.data_type)
               setBarcodeResults(response.data.data[0]);
-              setModalVisible(!modalVisible)
+              setIsLoading(false); // 로딩 숨김
+              setModalVisible(!modalVisible)//모달 표시
               setCheck(true);
             }
             //알약 바코드 값이 있을 경우
@@ -132,17 +136,22 @@ export default function Barcode({navigation}) {
               setBarme(response.data.data[1])
               setBarimage(response.data.data[2])
               setDatatype(response.data.data_type)
-              setModalVisible(!modalVisible)
+              setIsLoading(false); // 로딩 숨김
+              setModalVisible(!modalVisible)//모달 표시
               setCheck(true);
             }
             else{
-              setNobar(true); 
+              setNobar(true);
+              setIsLoading(false); // 로딩 숨김 
               setModalVisible(!modalVisible)
               setCheck(true);
             }
           })
           .catch((error) => {
             console.error(error);
+          })
+          .finally(() => {
+            setIsLoading(false); // 로딩 페이지 숨김
           });
       }
       console.log("하여튼 찍혔다!");
@@ -174,7 +183,6 @@ export default function Barcode({navigation}) {
               animationType="slide"  // 모달 애니메이션 지정
               onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
               transparent={true} // 투명한 모달로 설정 
-                           
             >
               
               <View style={styles.centeredView}>
@@ -349,8 +357,11 @@ export default function Barcode({navigation}) {
             )}
           </>
         )}
+        {/*로딩 표시*/}
+        {isLoading && <Loading />}
       </View>
     );
+    
 
 }
 
