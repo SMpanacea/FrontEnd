@@ -78,13 +78,6 @@ export default function Barcode({navigation}) {
         })();
     }, []);
 
-  //   React.useEffect(() => {
-  //     console.log("카메라 사용여부 변경됨1",  useCamera);
-  //     console.log("카메라 사용여부 변경됨2",  device);
-  //     console.log("카메라 사용여부 변경됨3",  hasPermission);
-
-  // }, [useCamera]);
-
     React.useEffect(() => {
         (async () => {
             const status = await Camera.requestCameraPermission();
@@ -135,29 +128,18 @@ export default function Barcode({navigation}) {
             //알약 바코드 값이 있을 경우
             else if(response.data.data_type === "medicine"){
               console.log("약",response.data.data)
-              console.log("마!!!!",response.data.data[0])
-              console.log("데이터 타입이 뭐야!", response.data.data_type);
               setBarname(response.data.data[0])
               setBarme(response.data.data[1])
               setBarimage(response.data.data[2])
               setDatatype(response.data.data_type)
               setModalVisible(!modalVisible)
               setCheck(true);
-              // navigation.navigate('BarcodeMedicineDetail', {
-              //   medicineBarcodeData: response.data.data,
-              //   useCamera: setUseCamera
-              // });
-              // navigation.navigate('BarcodeMedicineDetail', { medicineBarcodeData: response.data});
             }
             else{
               setNobar(true); 
               setModalVisible(!modalVisible)
               setCheck(true);
             }
-            // 이전 페이지로 돌아가면서 카메라 켜기
-        // navigation.pop();
-        // setUseCamera(true);
-           
           })
           .catch((error) => {
             console.error(error);
@@ -286,7 +268,7 @@ export default function Barcode({navigation}) {
                           {barimage !== null ?
                           <View style={{marginBottom:10,}}>
                             <View style={styles.Info2}>
-                              <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
+                              <Icon style={styles.InfoIcon} name="image" size={20} color="black" />
                               <Text style={styles.InfoTitle}>이미지</Text>
                             </View>
                             <Image source={{ uri: barimage }} resizeMode="contain" style={styles.image} />
@@ -348,25 +330,6 @@ export default function Barcode({navigation}) {
         );
     }
 
-    // return (
-    //     <View style={styles.container}>
-    //       {/* 카메라 사용 중일 때 띄우는 화면 */}
-    //         <>
-    //           {device != null && hasPermission && (
-    //             <>
-    //               <Camera
-    //                 style={{ width: '100%', height: '100%' }}
-    //                 device={device}
-    //                 isActive={useCamera}
-    //                 frameProcessor={frameProcessor}
-    //                 frameProcessorFps={1}
-    //                 onBarCodeScanned={onScanned} // 바코드 스캔 시 호출되는 콜백 함수
-    //               />
-    //             </>
-    //           )}
-    //         </>
-    //     </View>
-    //   );
     return (
       <View style={styles.container}>
         {/* 카메라 사용 중일 때 띄우는 화면 */}
@@ -395,25 +358,10 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
   },
-  title: {
-      textAlign: 'center',
-      marginVertical: 8,
-  },
-  separator: {
-      marginVertical: 4,
-  },
-  switchView: {
-      alignItems: 'center',
-      flexDirection: "row",
-  },
   barcodeText: {
       fontSize: 20,
       color: 'black',
       fontWeight: 'bold',
-  },
-  close:{
-    flex:1,
-    borderWidth: 1,
   },
   button: {
     alignItems: 'center',
@@ -425,12 +373,6 @@ const styles = StyleSheet.create({
     height: 150,
     padding: 10,
     elevation: 2,
-  },
-      
-  Informationcontainer: {
-    flex: 1,
-    borderWidth:1,
-    // marginBottom: 40,
   },
   Info: {
     flex: 1,
@@ -454,9 +396,6 @@ const styles = StyleSheet.create({
     marginLeft:60,
     
   },
-  Infotext: {
-    textAlignVertical: 'center'
-  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -479,26 +418,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  // button: {
-  //   borderRadius: 20,
-  //   padding: 10,
-  //   elevation: 2,
-  // },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    // textAlign: 'center',
-  },
   imagebox: {
     flex: 1,
   },
@@ -506,7 +425,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eaeaea',
     width: '100%',
-    height: 350, // 원하는 세로 크기로 변경해주세요
+    height: 150, // 원하는 세로 크기로 변경해주세요
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     borderTopRightRadius: 30,
