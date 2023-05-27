@@ -33,7 +33,7 @@ function MedicineMain({ navigation, route }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+          <TouchableOpacity onPress={() => navigation.popToTop()} accessibilityLabel='뒤로가기'>
               <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
           </TouchableOpacity>
       ),

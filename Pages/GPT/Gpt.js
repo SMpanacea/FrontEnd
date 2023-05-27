@@ -1,6 +1,6 @@
 //gpt 채팅 화면
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native'
+import React, { useState, useRef, useEffect } from 'react'
+import { View, Text, StyleSheet, TextInput, Platform, TouchableOpacity, InteractionManager, findNodeHandle, AccessibilityInfo } from 'react-native'
 
 // 서버통신
 import axios from 'axios';
@@ -13,11 +13,21 @@ import Icon from '@expo/vector-icons/MaterialCommunityIcons';
 //색 모음
 import { theme } from '../../theme';
 import Search from '../../Components/Search';
+import { useFocusEffect } from '@react-navigation/native';
 // import { Platform } from 'react-native';
 
 const messages = [];
 function Gpt({ navigation, route }) {
-
+  const screanReaderFocus = useRef(null);
+  // useFocusEffect(() => {
+  //   InteractionManager.runAfterInteractions(() => {
+  //     const reactTag = findNodeHandle(screanReaderFocus.current);
+  //     if (reactTag) {
+  //       console.log("findNodeHandle")
+  //       AccessibilityInfo.setAccessibilityFocus(reactTag);
+  //     }
+  //   })
+  // }, []);
   // 사용자가 보낸 메세지 전부 axios통신보내버리기
   const [message, setMessage] = useState(''); // 사용자 메시지 입력
   const [conversations, setConversations] = useState([]); // 대화 목록
@@ -51,6 +61,15 @@ function Gpt({ navigation, route }) {
     }
   };
 
+  useEffect(() => {
+    console.log("chat gpt useEffect", conversations);
+    if(conversations.length > 0){
+
+      AccessibilityInfo.announceForAccessibility(conversations[conversations.length-1][0].content);
+    }
+
+  },[conversations]);
+
   return (
     <View style={{ flex: 1 }}>
       <MessageList conversations={conversations} />
@@ -64,6 +83,7 @@ function Gpt({ navigation, route }) {
                 </TouchableOpacity> */}
             <TextInput
               multiline
+              ref={screanReaderFocus}
               placeholder='상담하고 싶은 내용을 입력해 주세요'
               style={styles.input}
               value={message} // 현재 message 값을 입력 값으로 설정
@@ -77,7 +97,7 @@ function Gpt({ navigation, route }) {
                   <Icon name="camera" size={23} color={theme.colors.description} />
                 </TouchableOpacity> */}
           </View>
-          
+
           {/* 일단 잠들어 있어라,,,, 돈 나간다!!!!!! */}
           <TouchableOpacity style={styles.sendButton} onPress={() => sendMessageToServer(message)}>
             <Icon name={message ? "send" : "send"} size={23} color={theme.colors.white} />

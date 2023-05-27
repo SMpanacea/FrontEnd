@@ -10,9 +10,10 @@ import {
 } from 'react-native-pytorch-core';
 import ImagePicker from 'react-native-image-crop-picker';
 import ServerPort from '../../Components/ServerPort';
+import { useFocusEffect } from '@react-navigation/native';
 export default function CameraSearchMain({ navigation }) {
     const IP = ServerPort();
-    const screanReaderFocus = useRef(null);
+    // const screanReaderFocus = useRef(null);
     const decodeFromAlbum = async () => {
         ImagePicker.openPicker({
             multiple: true,
@@ -49,8 +50,9 @@ export default function CameraSearchMain({ navigation }) {
             headerTitle: "알약 검색",
         });
     }, [])
+    const screanReaderFocus = useRef(null);
 
-    useEffect(() => {
+    useFocusEffect(() => {
         InteractionManager.runAfterInteractions(() => {
             const reactTag = findNodeHandle(screanReaderFocus.current);
             if (reactTag) {
@@ -59,10 +61,11 @@ export default function CameraSearchMain({ navigation }) {
             }
         })
     }, []);
+
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
 
-            <TouchableOpacity style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => navigation.navigate('PillDetectionMain')}>
+            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => navigation.navigate('PillDetectionMain')}>
                 {/* <ImageBackground
                     source={require('../../assets/animation_640_lhwuc4ir.gif')}
                     style={[styles.imageBackground,StyleSheet.absoluteFill]}
@@ -81,7 +84,7 @@ export default function CameraSearchMain({ navigation }) {
                     autoPlay loop
                 />
             </TouchableOpacity>
-            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => decodeFromAlbum()}>
+            <TouchableOpacity style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => decodeFromAlbum()}>
 
                 <View style={MainButtonStyle.textContainer}>
                     <Text style={MainButtonStyle.text}>사진으로 알약 검색 &gt; </Text>
@@ -93,7 +96,7 @@ export default function CameraSearchMain({ navigation }) {
                     autoPlay loop
                 />
             </TouchableOpacity>
-            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
+            <TouchableOpacity style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
 
                 <View style={MainButtonStyle.textContainer}>
                     <Text style={MainButtonStyle.text}>이름으로 알약 검색 &gt; </Text>
