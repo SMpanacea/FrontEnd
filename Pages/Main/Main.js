@@ -35,7 +35,7 @@ export default function Main({ navigation }) {
                     autoPlay loop
                 />
             </TouchableOpacity>
-            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('BarcodeCamera')}>
+            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('BarcodeMain')}>
 
                 <View style={MainButtonStyle.textContainer}>
                     <Text style={MainButtonStyle.text}>바코드 검색 &gt; </Text>

@@ -182,7 +182,7 @@
 
 
 import * as React from 'react';
-import { SafeAreaView, StyleSheet, View, Modal, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Modal, Text, TouchableOpacity, Image } from 'react-native';
 
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -193,6 +193,13 @@ import { Camera, useCameraDevices, useFrameProcessor } from 'react-native-vision
 import { decode } from 'vision-camera-dynamsoft-barcode-reader';
 import * as REA from 'react-native-reanimated';
 import axios from 'axios';
+import LottieView from 'lottie-react-native';
+import { MainButtonStyle } from '../css/MainButtonCSS'
+
+
+// 서버
+import ServerPort from '../../Components/ServerPort';
+const IP = ServerPort();
 
 
 //license 가져와잇!
@@ -208,6 +215,17 @@ export default function BarcodeMain({navigation}) {
     const [barcodeResults, setBarcodeResults] = React.useState([]);
 
     const [modalVisible, setModalVisible] = React.useState(false);
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+          headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+                  <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+              </TouchableOpacity>
+          ),
+          headerTitle: "바코드 검색",
+        });
+      }, [])
 
 
 
@@ -246,7 +264,7 @@ export default function BarcodeMain({navigation}) {
             // console.log(results[0].barcodeText);
 
             console.log("axios 호출")
-            await axios.get("http://172.16.38.121:5000/barcode/search",
+            await axios.get(`${IP}/barcode/search`,
                 {
                     params: {
                         // 약이름, page번호 요청
@@ -329,25 +347,33 @@ export default function BarcodeMain({navigation}) {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-         <Button
-            mode="outlined"
-            style={styles.down}
-            contentStyle={styles.button}
-            labelStyle={{ fontSize: 20 }}
-            onPress={() => navigation.navigate('BarcodeCamera')}
-        >
-            카메라로 바코드 스캔
-        </Button>
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('BarcodeCamera')}>
+
+                <View style={MainButtonStyle.textContainer}>
+                    <Text style={MainButtonStyle.text}>카메라로 바코드 스캔하기 &gt; </Text>
+                    <Text style={MainButtonStyle.subText}>카메라로 바코드 스캔하여 검색</Text>
+                </View>
+                <LottieView
+                    source={require('../../assets/scan.json') /** 움직이는 LottieView */}
+                    style={MainButtonStyle.CameraSerachMainButton}
+                    autoPlay loop
+                />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => decodeFromAlbum()}>
+
+                <View style={MainButtonStyle.textContainer}>
+                    <Text style={MainButtonStyle.text}>갤러리로 바코드 스캔하기 &gt; </Text>
+                    <Text style={MainButtonStyle.subText}>갤러리로 사진 선택 후 바코드 스캔하여 검색</Text>
+                </View>
+                <LottieView
+                    source={require('../../assets/barcode.json') /** 움직이는 LottieView */}
+                    style={MainButtonStyle.barcode}
+                    autoPlay loop
+                />
+                </TouchableOpacity>
         
-        <Button
-            mode="outlined"
-            style={styles.down}
-            contentStyle={styles.button}
-            labelStyle={{ fontSize: 20 }}
-            onPress={() => decodeFromAlbum()}
-        >
-            갤러리 바코드 스캔
-        </Button>
+       
         {/* <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             {modal_view(barcodeResults, modalVisible)}
         </View> */}

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity, Image, View, Alert, Button } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import KakaoButton from '../../../assets/kakao_login_large_narrow.png'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,14 +14,25 @@ export default function App({ route, navigation }) {
     const [profile, setProfile] = useState('');
     const [gender, setGender] = useState('');
 
+    useEffect(() => {
+        if (email && gender && profile) {
+            console.log("email : ", email);
+            console.log("gender : ", gender);
+            console.log("profile : ", profile);
+        }
+      }, [email, gender, profile]);
+
     const getProfile = async () => {
         try {
             const result = await KakaoLogin.getProfile();
             console.log("GetProfile Success", JSON.stringify(result));
             console.log("email : ", result.email);
+
             setEmail(result.email);          
             setProfile(result.profileImageUrl);          
             setGender(result.gender === "female" ? "여성" : "남성");
+            
+            console.log("email : ", email);
             await handleSubmit();
         } catch (error) {
             console.log(`GetProfile Fail(code:${error.code})`, error.message);
@@ -43,9 +54,11 @@ export default function App({ route, navigation }) {
     };
 
     const handleSubmit = async () => {
-        console.log("handleSubmit email : ", email);
-        console.log("handleSubmit gender : ", gender);
-        console.log("handleSubmit profile : ", profile);
+        
+        console.log("1email : ", email);
+        console.log("2gender : ", gender);
+        console.log("3profile : ", profile);
+
         try {
             const res = await axios.post(`${IP}/user/easylogin`, {
                 uid: email,

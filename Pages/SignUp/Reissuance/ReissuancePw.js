@@ -175,8 +175,10 @@ export default function ReissuancePw({ navigation }) {
             <Text style={styles.text}>비밀번호 찾기</Text>
 
             <TextInput
+                accessibilityLabel="아이디"
+                accessibilityHint="아이디는 영문 소문자 또는 숫자로 이루어진 6~14자를 입력하세요."
                 style={{ marginBottom: 10, 
-                    backgroundColor: '#f5f5f5' }}
+                backgroundColor: '#f5f5f5' }}
                 label={"아이디"}
                 placeholder="영문 소문자/숫자, 6~14자"
                 onChangeText={setId}
@@ -187,6 +189,7 @@ export default function ReissuancePw({ navigation }) {
                 style={{ marginBottom: 25 }}>
                 <View style={[styles.row]}>
                     <TextInput
+                        accessibilityLabel="이메일"
                         label={"이메일"}
                         style={[styles.dateInput]}
                         onChangeText={setEmail}
@@ -204,6 +207,7 @@ export default function ReissuancePw({ navigation }) {
                     <View>
                         <View style={[styles.row]}>
                             <TextInput
+                        accessibilityLabel="이메일 인증번호"
                                 label={"이메일 인증번호"}
                                 style={[styles.dateInput]}
                                 onChangeText={setEmailNum}

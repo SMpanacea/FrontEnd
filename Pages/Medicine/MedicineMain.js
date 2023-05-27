@@ -24,8 +24,8 @@ import Loading from '../../Components/Loading';
 import ServerPort from '../../Components/ServerPort';
 const IP = ServerPort();
 
-function MedicineMain({ navigation }) {
-
+function MedicineMain({ navigation, route }) {
+  const {json} = route.params;
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
   const [page, setPage] = React.useState(1);//다음 page 번호
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
@@ -62,47 +62,67 @@ function MedicineMain({ navigation }) {
     AccessibilityInfo.announceForAccessibility(selectedDate + "를 선택하셨습니다!");
   };
 
+
   React.useEffect(() => {
-    const setData = async () => {
-      setIsLoading(true); // 로딩 상태 true 로 변경
-      try {
-        const res = await axios.get(`${IP}/medicine/search`, {
-          params: {
-            pageNo: page,
-          },
-        });
-        setMedicinedata(res.data.items);
-        setTimeout(() => {
-          setIsLoading(false); // 3초 후 로딩 상태 false 로 변경
-        }, 4000); // 4초의 지연 시간 설정
-      } catch (error) {
-        console.log('Medicine 목록 가져오기 실패', error);
-        setIsLoading(false); // 에러 발생 시에도 로딩 상태 false 로 변경
+    console.log("json값 메인에서 뽑는중!!!", json);
+    console.log("json왜 안나옴!!");
+    let count = 0;
+    for(var i=0; i<json.length; i++){
+      if (json[i].hasOwnProperty("items")) {
+        count++;
+        setMedicinedata(...medicinedata, json[i].items)
+        // Access the items property
+        console.log(json[i].items);
+        console.log("돌고 있다!!!", medicinedata);
+        // Perform further operations with items
+      } else {
+        // Handle the case when items property doesn't exist
+        console.log("items property does not exist for index", i);
       }
-    };
-    setData();
-  }, [page]);
+    }
+    console.log("count",count);
+    console.log("돌아라", medicinedata);
+    // const setData = async () => {
+    //   setIsLoading(true); // 로딩 상태 true 로 변경
+    //   try {
+    //     const res = await axios.get(`${IP}/medicine/search`, {
+    //       params: {
+    //         pageNo: page,
+    //       },
+    //     });
+    //     setMedicinedata(res.data.items);
+    //     setTimeout(() => {
+    //       setIsLoading(false); // 3초 후 로딩 상태 false 로 변경
+    //     }, 4000); // 4초의 지연 시간 설정
+    //   } catch (error) {
+    //     console.log('Medicine 목록 가져오기 실패', error);
+    //     setIsLoading(false); // 에러 발생 시에도 로딩 상태 false 로 변경
+    //   }
+    // };
+    // setData();
+  }, []);
 
   //북마크 리스트 가져오는 AXIOS
   const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
-  React.useEffect(() => {
-    const Bookmark = () => {
-      axios.post(`${IP}/medicine/bookmarklist`, {
-        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
-      })
-        .then(function (res) {
-          console.log("북마크 잘 가져왔나요?", res.data);
-          setBookmark(res.data);
-          console.log("test", bookmark);
-        })
-        .catch(function (e) {
-          console.log("즐겨찾기 리스트 못 가져옴,,,", e)
-        })
+  // React.useEffect(() => {
+  //   console.log("json", json);
+    // const Bookmark = () => {
+    //   axios.post(`${IP}/medicine/bookmarklist`, {
+    //     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
+    //   })
+    //     .then(function (res) {
+    //       console.log("북마크 잘 가져왔나요?", res.data);
+    //       setBookmark(res.data);
+    //       console.log("test", bookmark);
+    //     })
+    //     .catch(function (e) {
+    //       console.log("즐겨찾기 리스트 못 가져옴,,,", e)
+    //     })
 
-    };
-    Bookmark();
+    // };
+    // Bookmark();
     // console.log("bookmark배열 값 잘 가져오나요?",bookmark)
-  }, []);
+  // }, []);
 
   return (
     <View style={styles.c}>
@@ -110,28 +130,28 @@ function MedicineMain({ navigation }) {
         <Loading /> // 로딩 중인 동안 로딩 3초간 스피너 표시
       ) : (
         <View style={styles.container} >
+          {medicinedata && medicinedata.length > 0 ? (
           <ScrollView style={{ margin: 10 }} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-            <Card
-              medicinedata={medicinedata}
+            {json.map((item, idx) => {
+              {if(item.hasOwnProperty("items")){
+                return(
+                  <Card
+              medicinedata={item.items}
               bookmark={bookmark} //bookmark list넘겨줌
               setBookmark={setBookmark} //bookmark list를 변경하는 함수 넘겨줌
               onPress={(medicinename, bookmark) => {
                 navigation.navigate('Detail', { medicinename, bookmark })
               }}
             />
-            <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }} accessible={true}>
-              <TouchableRipple onPress={() => { page > 1 && handlePageChange(page - 1) }} >
-                <Button mode="Outlined" accessibilityLabel='이전 페이지' >이전 페이지</Button>
-              </TouchableRipple>
-              <Text accessibilityLabel={`현재 페이지는 ${page}입니다`}>{page}</Text>
-              <TouchableRipple onPress={() => { handlePageChange(page + 1) }} accessibilityLabel='다음 페이지' >
-                <Button mode="Outlined" importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
-              </TouchableRipple>
-            </View>
+                )
+              }
+            }})}
           </ScrollView>
-
+          ): (
+            <Text>결과값이 없음</Text>
+          )}
         </View>
 
       )}

@@ -54,6 +54,13 @@ export const MainButtonStyle = StyleSheet.create({
         position: 'absolute',
         right: -10,
         bottom: -10,
+    },
+    barcode: {
+        width: 160, // or whatever size you want
+        height: 130, // or whatever size you want
+        position: 'absolute',
+        right: 5,
+        bottom: 10,
     }
 });
 
