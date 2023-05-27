@@ -71,8 +71,10 @@ function BottomTab() {
         paddingBottom: Platform.OS === 'ios' ? 20 : 0, // 안전 영역 고려          
         // height:50
       }}
-      activeColor="#6200EE"
-      inactiveColor="#95A5A6"
+      // tabBarActiveColor="#FFFF00" // 아이콘이 활성화되었을 때 주변 배경색을 노란색으로 설정
+      activeColor="#6200EE" //선택된 탭의 아이콘 색상
+      inactiveColor="#95A5A6" //선택되지 않은 탭의 아이콘 색상
+      shifting={true}
     >
       {/* <Tab.Screen
         name="BookMarkScreen"
@@ -103,6 +105,7 @@ function BottomTab() {
             <Icon2 name="chat" color={color} size={26} />
           ),
           tabBarAccessibilityLabel: 'GPT', // accessibilty label for this tab
+          tabBarColor: 'red',
         }}
       />
       <Tab.Screen
