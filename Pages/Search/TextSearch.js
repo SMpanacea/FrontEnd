@@ -33,6 +33,8 @@ function TextSearch({ navigation }) {
   const [page, setPage] = React.useState(1);
   const [bookmark, setBookmark] = React.useState([]);
   const [totalCount, setTotalCount] = React.useState(0);
+  const [tokens, setTokens] = React.useState("");
+  console.log("왜 ?", tokens)
 
   const search = async (keyword = "", pageNo) => {
     setIsLoading(true);
@@ -93,23 +95,30 @@ function TextSearch({ navigation }) {
     fetchData();
   }, [page]); // page가 변경될 때마다 실행
 
-  React.useEffect( async() => {
-    const getToken = await AsyncStorage.getItem('token'); //로그인되어있다면, 토큰을 async-storage에서 가져옴. 가져와서 변수에 저장시켜줄 것. 토큰을 서버에 보내라
-    console.log("textsearch getToken : ", getToken)
-    //getToken null일 때 빈 배열로 넘겨서 그냥 detail들어갈 수 있게 다시 처리
+  // token null일 때 처리 ㅇ
+  React.useEffect(async () => {
+    const getToken = await AsyncStorage.getItem('token');
+    console.log("textsearch getToken: ", getToken);
+
     const getBookmarkList = async () => {
       try {
         const res = await axios.post(`${IP}/medicine/bookmarklist`, {
-          token:
-          getToken,
+          token: getToken,
         });
-        console.log("textsearch res data : ", res.data);
-        setBookmark(res.data);
+        console.log("textsearch res data: ", res.data);
+        setBookmark(res.data || []); // bookmark가 null인 경우 빈 배열로 처리
+        setTokens(getToken)
       } catch (e) {
-        console.log("즐겨찾기 리스트 못 가져옴,,,", e);
+        console.log("즐겨찾기 리스트 못 가져옴,", e);
       }
     };
-    getBookmarkList();
+
+    if (getToken === null) {
+      // getToken이 null일 때 빈 배열을 처리
+      setBookmark([]); // 또는 다른 기본값을 전달할 수 있음
+    } else {
+      getBookmarkList();
+    }
   }, []);
 
 
@@ -157,6 +166,7 @@ function TextSearch({ navigation }) {
                 medicinedata={medicinedata}
                 bookmark={bookmark} //bookmark list넘겨줌
                 setBookmark={setBookmark} //bookmark list를 변경하는 함수 넘겨줌
+                token={tokens}//token bookmark로 넘겨줌
                 onPress={(medicinename, bookmark) => {
                   AccessibilityInfo.announceForAccessibility(medicinename + "을 선택하셨습니다!");
                   navigation.navigate('Detail', { medicinename, bookmark })
