@@ -96,6 +96,7 @@ function TextSearch({ navigation }) {
   React.useEffect( async() => {
     const getToken = await AsyncStorage.getItem('token'); //로그인되어있다면, 토큰을 async-storage에서 가져옴. 가져와서 변수에 저장시켜줄 것. 토큰을 서버에 보내라
     console.log("textsearch getToken : ", getToken)
+    //getToken null일 때 빈 배열로 넘겨서 그냥 detail들어갈 수 있게 다시 처리
     const getBookmarkList = async () => {
       try {
         const res = await axios.post(`${IP}/medicine/bookmarklist`, {
