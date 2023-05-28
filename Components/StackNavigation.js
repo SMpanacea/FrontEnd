@@ -95,7 +95,7 @@ const Auth = () => {
       <Stack.Screen name="SetNickName" component={SetNickName} />
       <Stack.Screen name="BarcodeMain" component={BarcodeMain} />
       <Stack.Screen name="Barcode" component={Barcode} />
-
+      <Stack.Screen name="BookMarkScreen" component={BookMarkScreen} />
       {/* <Stack.Screen name="GallerySearch" component={GallerySearch} /> */}
     </Stack.Navigator>
   );

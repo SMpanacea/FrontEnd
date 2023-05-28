@@ -1,186 +1,3 @@
-// // main에서 알약 검색 누르면 보이는 화면
-// import axios from 'axios';
-// import React, { useState, useEffect } from 'react';
-// import { StyleSheet, View, TouchableOpacity } from 'react-native';
-// import { Text, Button } from 'react-native-paper';
-// import { launchImageLibrary } from 'react-native-image-picker';
-
-// //license 가져와잇!
-// import BarcodeLicense from '../../Components/BarcodeLicense';
-// const License = BarcodeLicense();
-
-
-// export default function BarcodeMain({ navigation }) {
-//     const [selectedImage, setSelectedImage] = useState(null);
-//     const [barcodeResults, setBarcodeResults] = useState([]); // 바코드 결과값
-//     const [modalVisible, setModalVisible] = React.useState(false);// 모달 표시 여부
-
-
-//     // 갤러리에서 선택한 이미지 처리 함수
-//     const handleImageSelected = (base64) => {
-//       setSelectedImage(base64);
-//     };
-
-//     // 갤러리 열기 함수
-//     const openGallery = async () => {
-//         let options = {
-//             mediaType: 'photo',
-//             includeBase64: true,
-//         };
-//         // let response = await launchImageLibrary(options);
-//         // if (response && response.assets) {
-//         //     if (response.assets[0].base64) {
-//         //         handleImageSelected(response.assets[0].base64);
-//         //     }
-//         // }
-//         let response = await launchImageLibrary(options);
-//         if (response && response.assets) {
-//           if (response.assets[0].base64) {
-//             console.log(response.assets[0].base64);
-//             let results = await DBR.decodeBase64(response.assets[0].base64);
-//             setBarcodeResults(results);
-//           }
-//         }
-//     };
-
-//  // 스캔 함수
-//  const onScanned = async (results) => {
-//     console.log(results);
-//     setBarcodeResults(results);
-
-//     if (results[0]) {
-//       setUseCamera(false);
-
-//       console.log("axios 호출");
-//       axios
-//         .get("http://172.16.37.98:5000/barcode/search", {
-//           params: {
-//             barcode: results[0].barcodeText,
-//           },
-//         })
-//         .then((response) => {
-//           console.log(response.data);
-//           setBarcodeResults(response.data[0]);
-//           setModalVisible(true);
-//           alert(
-//             Object.entries(response.data[0])
-//               .map(([key, value]) => `${key}: ${value}`)
-//               .join("\n")
-//           );
-//         })
-//         .catch((error) => {
-//           console.error(error);
-//         });
-//     }
-
-//     // 바코드가 스캔되고 처리되면 앨범에서 바코드를 읽습니다.
-//     await decodeFromAlbum();
-//   };
-//   const modal_view = (data, boolean_data) => {
-//     console.log("modal_view 호출");
-//     console.log(data);
-//     if (boolean_data) {
-//         console.log("modalVisible true");
-//         return (
-//             <View>
-//                 <Text>들어옴!</Text>
-//                 <Modal
-//                     presentationStyle={"formSheet"}
-//                     animationType="slide"  // 모달 애니메이션 지정
-//                     visible={boolean_data}  // 모달 표시 여부 지정
-//                     onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
-//                 >
-//                     <View>
-//                         <Text>상품 정보</Text>
-//                         {Object.entries(data).map(([key, value]) => (
-//                             <View key={key}>
-//                                 <Text>{key}</Text>
-//                                 <Text>{value}</Text>
-//                             </View>
-//                         ))}
-//                         <Button
-//                             title="Close"
-//                             onPress={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 모달을 닫습니다
-//                         />
-//                     </View>
-//                 </Modal>
-//             </View>
-//         );
-//     }
-// }
-
-//     React.useEffect(() => {
-//         (async () => {
-//             //라이센스 키
-//             await DBR.initLicense(`${License}`);
-//         })();
-//     }, []);
-
-//     React.useEffect(() => {
-//         (async () => {
-//             const status = await Camera.requestCameraPermission();
-//             setHasPermission(status === 'authorized');
-//         })();
-//     }, []);
-
-//     React.useEffect(() => {
-//         if(barcodeResults !== undefined){
-//             if(barcodeResults[0] !== undefined){
-//                 if(barcodeResults[0].barcodeText !== undefined){
-//         console.log("result~~~~~~~~~~~~~~~~~~~~");
-//         console.log(barcodeResults);
-//         console.log(barcodeResults[0]);
-//         console.log(barcodeResults[0].barcodeText);
-//         console.log("end~~~~~~~~~~~~~~~~~~~~~~~~~");
-
-//         onScanned(barcodeResults);
-//         }}}
-//     }, [barcodeResults]);
-
-// return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//       <Button
-//         mode="outlined"
-//         style={styles.down}
-//         contentStyle={styles.button}
-//         labelStyle={{ fontSize: 20 }}
-//         onPress={() => navigation.navigate('BarcodeCamera')}
-//       >
-//         카메라로 바코드 스캔
-//       </Button>
-
-//       <Button
-//         mode="outlined"
-//         style={styles.down}
-//         contentStyle={styles.button}
-//         labelStyle={{ fontSize: 20 }}
-//         onImageSelected={handleImageSelected}
-//         onPress={openGallery}
-//       >
-//         갤러리 바코드 스캔
-//       </Button>
-//       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//         {/* ... */}
-//         {modal_view(barcodeResults, modalVisible)}
-//       </View>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//     button: {
-//         height: 130, 
-//         width: 300, 
-//         alignItems: 'center', 
-//         justifyContent: 'center',
-//     },
-//     down: {
-//         marginBottom:60
-//     }
-// });
-
-
-
 import React, { useState, useEffect, useRef, } from 'react';
 import { SafeAreaView, StyleSheet, View, Modal, Text, TouchableOpacity, Image, InteractionManager, findNodeHandle, AccessibilityInfo } from 'react-native';
 
@@ -322,46 +139,55 @@ export default function BarcodeMain({ navigation }) {
     }
 
 
-    const modal_view = (data, boolean_data) => {
-        console.log("modal_view 호출");
-        console.log(data);
-        if (boolean_data) {
-            console.log("modalVisible true");
-            return (
-                <View>
-                    <Text>들어옴!</Text>
-                    <Modal
-                        presentationStyle={"formSheet"}
-                        animationType="slide"  // 모달 애니메이션 지정
-                        visible={boolean_data}  // 모달 표시 여부 지정
-                        onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
-                    >
-                        <View>
-                            <Text>상품 정보</Text>
-                            {Object.entries(data).map(([key, value]) => (
-                                <View key={key}>
-                                    <Text>{key}</Text>
-                                    <Text>{value}</Text>
-                                </View>
-                            ))}
-                            <Button
-                                title="Close"
-                                onPress={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 모달을 닫습니다
-                            />
-                        </View>
-                    </Modal>
-                </View>
-            );
-        }
+    // const modal_view = (data, boolean_data) => {
+    //     console.log("modal_view 호출");
+    //     console.log(data);
+    //     if (boolean_data) {
+    //         console.log("modalVisible true");
+    //         return (
+    //             <View>
+    //                 <Text>들어옴!</Text>
+    //                 <Modal
+    //                     presentationStyle={"formSheet"}
+    //                     animationType="slide"  // 모달 애니메이션 지정
+    //                     visible={boolean_data}  // 모달 표시 여부 지정
+    //                     onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
+    //                 >
+    //                     <View>
+    //                         <Text>상품 정보</Text>
+    //                         {Object.entries(data).map(([key, value]) => (
+    //                             <View key={key}>
+    //                                 <Text>{key}</Text>
+    //                                 <Text>{value}</Text>
+    //                             </View>
+    //                         ))}
+    //                         <Button
+    //                             title="Close"
+    //                             onPress={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 모달을 닫습니다
+    //                         />
+    //                     </View>
+    //                 </Modal>
+    //             </View>
+    //         );
+    //     }
+    // }
+    if (modalVisible) {
+        console.log("데이터 타입 잘 가져와?", datatype)
+        console.log("nobar", nobar)
+        return (
+            <View >
+
+            </View>
+        );
     }
 
 
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('BarcodeCamera')}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
 
-                <View style={MainButtonStyle.textContainer} >
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down, styles.button]} onPress={() => navigation.navigate('BarcodeCamera')}>
+                <View style={MainButtonStyle.textContainer}>
                     <Text style={MainButtonStyle.text}>카메라로 바코드 스캔하기 &gt; </Text>
                     <Text style={MainButtonStyle.subText}>카메라로 바코드 스캔하여 검색</Text>
                 </View>
@@ -372,11 +198,10 @@ export default function BarcodeMain({ navigation }) {
                 />
             </TouchableOpacity>
 
-            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => decodeFromAlbum()}>
-
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down, styles.button]} onPress={() => decodeFromAlbum()}>
                 <View style={MainButtonStyle.textContainer}>
-                    <Text style={MainButtonStyle.text}>갤러리로 바코드 스캔하기 &gt; </Text>
-                    <Text style={MainButtonStyle.subText}>갤러리로 사진 선택 후 바코드 스캔하여 검색</Text>
+                    <Text style={MainButtonStyle.text}>갤러리에서 바코드 스캔하기 &gt; </Text>
+                    <Text style={MainButtonStyle.subText}>갤러리에서 사진 선택 후 바코드 스캔하여 검색</Text>
                 </View>
                 <LottieView
                     source={require('../../assets/barcode.json') /** 움직이는 LottieView */}
@@ -403,8 +228,107 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     down: {
+        marginBottom: 60,
+        elevation: 3,
+    },
+    down: {
         marginBottom: 60
-    }
+    },
+    container: {
+        flex: 1,
+    },
+    title: {
+        textAlign: 'center',
+        marginVertical: 8,
+    },
+    separator: {
+        marginVertical: 4,
+    },
+    switchView: {
+        alignItems: 'center',
+        flexDirection: "row",
+    },
+    barcodeText: {
+        fontSize: 20,
+        color: 'black',
+        fontWeight: 'bold',
+    },
+    close: {
+        flex: 1,
+        borderWidth: 1,
+    },
+    Informationcontainer: {
+        flex: 1,
+        borderWidth: 1,
+        // marginBottom: 40,
+    },
+    Info: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: "center",
+    },
+    Info2: {
+        flexDirection: 'row',
+        alignItems: "center",
+    },
+    InfoTitle: {
+        marginTop: 10,
+        marginBottom: 15,
+    },
+    InfoIcon: {
+        padding: 10,
+    },
+    Icon: {
+        // borderWidth:1,
+        width: 100,
+        marginLeft: 60,
+
+    },
+    Infotext: {
+        textAlignVertical: 'center'
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 50,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 30,
+        width: '80%',
+        // alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    // button: {
+    //   borderRadius: 20,
+    //   padding: 10,
+    //   elevation: 2,
+    // },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        // textAlign: 'center',
+    },
 });
 
 

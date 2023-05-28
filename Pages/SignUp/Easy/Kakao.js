@@ -16,24 +16,23 @@ export default function App({ route, navigation }) {
 
     useEffect(() => {
         if (email && gender && profile) {
-            console.log("email : ", email);
-            console.log("gender : ", gender);
-            console.log("profile : ", profile);
-        }
-      }, [email, gender, profile]);
+            console.log("kakao email : ", email);
+            console.log("kakao gender : ", gender);
+            console.log("kakao profile : ", profile);
+        }}, [email, gender, profile]);
 
     const getProfile = async () => {
         try {
             const result = await KakaoLogin.getProfile();
             console.log("GetProfile Success", JSON.stringify(result));
-            console.log("email : ", result.email);
+            console.log("result email : ", result.email);
 
             setEmail(result.email);          
             setProfile(result.profileImageUrl);          
             setGender(result.gender === "female" ? "여성" : "남성");
             
-            console.log("email : ", email);
-            await handleSubmit();
+            console.log("getprofile email : ", email);
+            await handleSubmit(result);
         } catch (error) {
             console.log(`GetProfile Fail(code:${error.code})`, error.message);
         }
@@ -53,21 +52,21 @@ export default function App({ route, navigation }) {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (result) => {
+        console.log("handle result : ", result);
+        console.log("1email : ", result.email);
+        console.log("2gender : ", result.gender);
+        console.log("3profile : ", result.profileImageUrl);
         
-        console.log("1email : ", email);
-        console.log("2gender : ", gender);
-        console.log("3profile : ", profile);
-
         try {
             const res = await axios.post(`${IP}/user/easylogin`, {
-                uid: email,
+                uid: result.email,
                 upw: null,
-                email: email,
+                email: result.email,
                 nickname: null,
                 birth: null,
-                gender: gender,
-                profile: profile
+                gender: (result.gender === "FEMALE" ? "여성" : "남성"),
+                profile: result.profileImageUrl
             });
             console.log("res.data : ", res.data);
             if (res.data === false) {
@@ -77,8 +76,6 @@ export default function App({ route, navigation }) {
                 const token = res.data;
                 console.log("token : ", token);
                 await AsyncStorage.setItem('token', token);
-                const getToken =  await AsyncStorage.getItem('token');
-                console.log("횐갑 getToken : ", getToken);
                 await AsyncStorage.setItem('loginType', "Ka");
                 route.params.setLoggedIn(true);
                 navigation.navigate("bottom");
@@ -92,7 +89,7 @@ export default function App({ route, navigation }) {
         <TouchableOpacity onPress={login}>
             <Image source={KakaoButton} style={styles.image} />
         </TouchableOpacity>
-    );
+    );    
 }
 
 const styles = StyleSheet.create({

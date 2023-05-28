@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import bookmarkImage from '../assets/star.png'; //색별
 import bookmarkedImage from '../assets/binstar.png'; //빈별
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 서버 포트
 import ServerPort from './ServerPort';
@@ -13,8 +14,12 @@ const IP = ServerPort();
 function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, setBookmark}){
   const [bookmarked2, setBookmark2] = useState(bookmarked) //bookmared를 받았으니 별활성화 할지 안 할지의 값을 받은거임 그래서 초기값으로 설정해줬으니 자기값임(부모값을 자식값으로 넣어줌)
   const [showImage, setShowImage] = useState(false);
-  
-  useEffect(() => {
+  let getToken;
+  console.log("token0:", getToken);
+
+  useEffect( async () => {
+    getToken = await AsyncStorage.getItem('token'); 
+    console.log("token1:", getToken);
     const timer = setTimeout(() => {
       setShowImage(true);
     }, 3000);
@@ -26,6 +31,9 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
     setBookMarked(data)//부모의 클릭함수를 실행시킴
     setBookmark2(!bookmarked2)//나의 bookmark활성화 비활성화 값을 변경(나는 BookMarkButton임)
   }
+
+  
+  console.log("token2:", getToken);
 
   // React.useEffect(()=>{
 
@@ -63,7 +71,7 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
     itemName: medicinedetail.itemName, 
     itemImage: medicinedetail.itemImage, 
     updateDe:medicinedetail.updateDe,
-    token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
+    token: getToken
   };
 
     if(bookmarked2){

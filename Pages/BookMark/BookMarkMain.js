@@ -20,6 +20,9 @@ import Card from '../../Components/Card';
 // 로딩
 import Loading from '../../Components/Loading';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
 const IP = ServerPort();
@@ -30,13 +33,16 @@ function BookMarkMain({navigation}) {
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
 
   //즐겨찾기한 약 가져오는 axios인데 로딩페이지 넣어서 다시 만들어라!
-  React.useEffect(()=>{
+  React.useEffect( async () => {
+    const getToken = await AsyncStorage.getItem('token'); 
+    console.log("bookmark token : ", getToken);
     const Bookmarklsit = () => {
       axios.post(`${IP}/medicine/bookmarkall`,{
         //토큰만 보내면 즐겨찾기 가져올 수 있는 건가 아님 더 보내야 되는 건가
-        token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ"//걍 지정해줌
+        token : getToken
       })
       .then(function(res){
+        console.log("bookmark res.data : ", res.data);
         setMedicinedata(res.data);
         console.log("bookmarkall에서 가져온 놈임",medicinedata);
       })
@@ -71,6 +77,7 @@ function BookMarkMain({navigation}) {
 const styles = StyleSheet.create({
   c:{
     flex: 1,
+    backgroundColor:'white'
   },
   container: {
      width: width,
@@ -79,7 +86,6 @@ const styles = StyleSheet.create({
     paddingTop:20,
     paddingRight:20,
     paddingLeft:20,
-    backgroundColor:'#eaeaea'
   },
   title: {
     borderBottomWidth:1,
