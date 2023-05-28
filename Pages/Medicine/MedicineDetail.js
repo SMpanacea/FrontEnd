@@ -34,8 +34,11 @@ function MedicineDetail({ navigation, route }) {
   const { medicinedatitemSeq } = route.params;//다른 컴포넌트에서 넘겨받은 약 고유값
   const [bookmark, setBookmark2] = React.useState(route.params.bookmark); //bookmarklist를 받아서 bookmarklist로 초기값 설정해줌
   const { setBookmark } = route.params; //부모의 booklist를 변경해주는 함수
-  const [bookmarked, setBookMarked] = React.useState(bookmark.includes(medicinedatitemSeq)); //별표를 성화할지 비활성화 해줄 true, false값
-
+  // const [bookmarked, setBookMarked] = React.useState(bookmark.includes(medicinedatitemSeq)); //별표를 성화할지 비활성화 해줄 true, false값
+  const [bookmarked, setBookMarked] = React.useState(bookmark && bookmark.includes(medicinedatitemSeq)); //값이 있는지 없는지 판단해서 있으면 별표 활성화해줄 어쩌꾸,.,
+  // const [token, setToken] = React.useState(route.params.token);
+  const token = route.params.token;
+  console.log("token깔깔", token)
 
   const [medicinedetail, setMedicinedetail] = React.useState(null);
   const [medicinname, setMedicinName] = React.useState("");
@@ -81,8 +84,22 @@ function MedicineDetail({ navigation, route }) {
       headerTitle: medicinname, //header 약 이름 출력
       headerRight: () => (
         <View style={styles.headerRightContainer}>
-          <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} />
-          {/*//header오른쪽에 bookMarkbutton component 불러오기 //값이랑 함수들 다 넘겨줌*/}
+          {/* {bookmarked.length > 0 && (
+            <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} />
+            //header오른쪽에 bookMarkbutton component 불러오기 //값이랑 함수들 다 넘겨줌
+          )} */}
+          {console.log("과연 크기는?",bookmark)}
+          {/* bookmarmk가 없을 때 별 안 보이게 처리함 */}
+          {/* {bookmark.length === 0 ? null: (
+            //bookmark 크기가 0이면 별 아예 안 보이게 만들어줌
+            <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} token={token}/>
+            //header오른쪽에 bookMarkbutton component 불러오기 //값이랑 함수들 다 넘겨줌
+          )} */}
+           {/* 걍 값 다 넘기고 bookMarkButton내부에서 로그인 창으로 넘어가게 만들어줌 */}
+            <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} token={token}/>
+            
+         
+
         </View>
       ),
     });

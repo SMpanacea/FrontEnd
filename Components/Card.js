@@ -8,13 +8,14 @@ import LottieView from 'lottie-react-native';
 
 const LeftContent = props => <Avatar.Icon {...props} icon="pill" backgroundColor='#51868C' />
 
-const MyComponent = ({ medicinedata, bookmark, setBookmark }) => {
+const MyComponent = ({ medicinedata, bookmark, setBookmark, token }) => {
   const navigation = useNavigation();
   console.log("bookmarkjksadhk", bookmark)
   const handlePress = (itemSeq, bookmark) => {
     console.log("itemSeq나와라@", itemSeq)
     console.log("bookmark13kjsd", bookmark)
-    navigation.navigate('Detail', { medicinedatitemSeq: itemSeq, bookmark: bookmark, setBookmark: setBookmark })// bookmark, bookmarklist 변경하는 함수 그대로 MedicineDetail로 넘겨주는 통로임!!!!!! 
+    console.log("token있나?", token)
+    navigation.navigate('Detail', { medicinedatitemSeq: itemSeq, bookmark: bookmark, setBookmark: setBookmark, token: token })// bookmark, bookmarklist 변경하는 함수 그대로 MedicineDetail로 넘겨주는 통로임!!!!!! 
   }
 
   return (
