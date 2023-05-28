@@ -99,7 +99,7 @@ const Auth = () => {
       <Stack.Screen name="MyLikesList" component={MyLikesList} />
       <Stack.Screen name="MyCommentsList" component={MyCommentsList} />
       <Stack.Screen name="PillDetectionMain" component={PillDetectionMain} />
-      <Stack.Screen name="galarySearch" component={galarySearch} />
+      
       <Stack.Screen name="BarcodeCamera" component={BarcodeCamera} />
       <Stack.Screen name="CameraSearchMain" component={CameraSearchMain} />
       <Stack.Screen name="TextSearch" component={TextSearch} />

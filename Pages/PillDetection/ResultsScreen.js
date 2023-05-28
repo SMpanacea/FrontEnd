@@ -109,7 +109,7 @@ export default function ResultsScreen({ image, boundingBoxes, onReset, onNextImg
         }}
         onContext2D={setCtx}
       />
-      <View style={styles.pictureContainer} ref={ref} accessibilityRole="button" accessible={true} accessibilityLabel="알 약이 감지되었습니다" accessibilityHint="사진 촬영"  >
+      <View style={styles.pictureContainer} ref={ref} accessibilityRole="button" accessible={true} accessibilityLabel="알 약이 감지되었습니다" accessibilityHint="다음 사진 촬영"  >
         <TouchableOpacity onPress={onNextImg} style={styles.continueButton} importantForAccessibility="no-hide-descendants">
           <Text style={styles.buttonLabel} >Continue</Text>
         </TouchableOpacity>
