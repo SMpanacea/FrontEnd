@@ -35,9 +35,6 @@ export default function PillDetectionMain({ navigation }) {
   const [checkLastCapture, setCheckLastCapture] = useState(false);
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
 
-
-
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -104,6 +101,7 @@ export default function PillDetectionMain({ navigation }) {
 
   // 사진 서버에 보내기
   const sendImageToServer = async () => {
+    setScreenState(ScreenStates.LOADING);
     console.log("send!!");
     const frontValue = { front: imgArray[0], back: imgArray[1] };
     fetch(`${IP}/medicine/imageFix`, {  // 여기에 보내고자 하는 URL을 넣습니다.
@@ -114,6 +112,7 @@ export default function PillDetectionMain({ navigation }) {
       body: JSON.stringify(frontValue),
     })
       .then((response) => {
+        
         return response.json();  // Promise 반환
       })  // 서버에서 돌아온 응답을 JSON 형태로 파싱합니다.
       .then((json) => {
