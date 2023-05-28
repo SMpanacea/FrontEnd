@@ -89,10 +89,16 @@ function MedicineDetail({ navigation, route }) {
             //header오른쪽에 bookMarkbutton component 불러오기 //값이랑 함수들 다 넘겨줌
           )} */}
           {console.log("과연 크기는?",bookmark)}
-          {bookmark.length === 0 ? null: (
+          {/* bookmarmk가 없을 때 별 안 보이게 처리함 */}
+          {/* {bookmark.length === 0 ? null: (
+            //bookmark 크기가 0이면 별 아예 안 보이게 만들어줌
             <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} token={token}/>
             //header오른쪽에 bookMarkbutton component 불러오기 //값이랑 함수들 다 넘겨줌
-          )}
+          )} */}
+           {/* 걍 값 다 넘기고 bookMarkButton내부에서 로그인 창으로 넘어가게 만들어줌 */}
+            <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} token={token}/>
+            
+         
 
         </View>
       ),
