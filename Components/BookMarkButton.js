@@ -10,9 +10,11 @@ import ServerPort from './ServerPort';
 const IP = ServerPort();
 
 
-function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, setBookmark, token}){
+function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, setBookmark, token ,onPress }){
   const [bookmarked2, setBookmark2] = useState(bookmarked) //bookmared를 받았으니 별활성화 할지 안 할지의 값을 받은거임 그래서 초기값으로 설정해줬으니 자기값임(부모값을 자식값으로 넣어줌)
   const [showImage, setShowImage] = useState(false);
+
+  const navigation = useNavigation(); // navigation 객체 가져오기
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -42,9 +44,14 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
 
   console.log("도키도키", bookmarked)
   const handleBookmark = () => { //bookmark핸들러
-    setBookmark(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
+    
 
+    if(bookmark.length === 0){
+      navigation.navigate('MyPage')
+    }else{
+      setBookmark(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
 
+    }
 
     console.log("토큰?", token)
 
@@ -100,7 +107,7 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
   };
 
   return (
-    <TouchableOpacity onPress={handleBookmark} accessibilityLabel='즐겨찾기' accessibilityRole='button'> 
+    <TouchableOpacity onPress={handleBookmark} accessibilityLabel='즐겨찾기' accessibilityRole='button' > 
       <View style={styles.bookmarkbutton}>
         {showImage && <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />}
         {/* <Image source={bookmarked2 ?  bookmarkImage : bookmarkedImage} style={styles.image} />  */}
