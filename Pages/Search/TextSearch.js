@@ -12,6 +12,9 @@ import Search from '../../Components/Search';
 import Icon4 from 'react-native-vector-icons/FontAwesome';
 import Card from '../../Components/Card';
 
+//토큰
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // 로딩
 import Loading from '../../Components/Loading';
 
@@ -90,13 +93,16 @@ function TextSearch({ navigation }) {
     fetchData();
   }, [page]); // page가 변경될 때마다 실행
 
-  React.useEffect(() => {
+  React.useEffect( async() => {
+    const getToken = await AsyncStorage.getItem('token'); //로그인되어있다면, 토큰을 async-storage에서 가져옴. 가져와서 변수에 저장시켜줄 것. 토큰을 서버에 보내라
+    console.log("textsearch getToken : ", getToken)
     const getBookmarkList = async () => {
       try {
         const res = await axios.post(`${IP}/medicine/bookmarklist`, {
           token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ",
+          getToken,
         });
+        console.log("textsearch res data : ", res.data);
         setBookmark(res.data);
       } catch (e) {
         console.log("즐겨찾기 리스트 못 가져옴,,,", e);
@@ -120,7 +126,7 @@ function TextSearch({ navigation }) {
 
                   <TextInput
                     multiline
-                    placeholder='약품의 이름을 입력해 주세요'
+                    placeholder='검색어를 입력해 주세요'
                     style={styles.input}
                     value={input} // 현재 message 값을 입력 값으로 설정
                     onChangeText={(text) => setInput(text)}
@@ -310,4 +316,3 @@ const styles = StyleSheet.create({
 });
 
 export default TextSearch;
-

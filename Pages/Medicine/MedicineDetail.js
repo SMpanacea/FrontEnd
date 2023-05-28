@@ -116,7 +116,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.efcyQesitm}</Text>
                       </Card.Content>
                     </Card>
@@ -132,7 +132,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.useMethodQesitm}</Text>
                       </Card.Content>
                     </Card>
@@ -149,7 +149,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.atpnWarnQesitm}</Text>
                       </Card.Content>
                     </Card>
@@ -166,7 +166,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.atpnQesitm}</Text>
                       </Card.Content>
                     </Card>
@@ -182,7 +182,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content  style={{ backgroundColor: '#F5FAFD' }}>
                         {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.intrcQesitm}</Text>
                       </Card.Content>
@@ -199,7 +199,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.seQesitm}</Text>
                       </Card.Content>
                     </Card>
@@ -215,7 +215,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.depositMethodQesitm}</Text>
                       </Card.Content>
                     </Card>
@@ -231,7 +231,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.entpName}</Text>
                       </Card.Content>
                     </Card>
@@ -247,7 +247,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.itemSeq}</Text>
                       </Card.Content>
                     </Card>
@@ -263,7 +263,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.openDe}</Text>
                       </Card.Content>
                     </Card>
@@ -279,7 +279,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">{medicinedetail.updateDe}</Text>
                       </Card.Content>
                     </Card>
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: 'white',
 
   },
   title: {
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
   },
   image: {
     borderWidth: 1,
-    borderColor: '#eaeaea',
+    borderColor: 'white',
     width: '100%',
     height: 350, // 원하는 세로 크기로 변경해주세요
     borderBottomLeftRadius: 50,
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
   },
   meditextbox: {
     flex: 1,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: 'white',
     width: width,
     padding: 20,
   },
@@ -351,8 +351,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   InfoIcon: {
-    borderWidth: 1,
-    borderColor: '#F2F2F2',
+    // borderWidth: 1, 안예쁘게 출력되서 주석처리함;;
+    // borderColor: '#F2F2F2',
     padding: 10,
   },
   Infocontent: {

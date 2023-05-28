@@ -213,7 +213,7 @@ export default function BarcodeMain({navigation}) {
                     {nobar === true ? (
                       <View>
                         <Card>
-                        <Card.Content>
+                        <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                           <Text variant="bodyMedium">바코드에 등록된 정보가 없습니다.</Text>
                         </Card.Content>
                       </Card>
@@ -300,9 +300,9 @@ export default function BarcodeMain({navigation}) {
 
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => navigation.navigate('BarcodeCamera')}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor:'white' }}>
 
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down, styles.button]} onPress={() => navigation.navigate('BarcodeCamera')}>
                 <View style={MainButtonStyle.textContainer}>
                     <Text style={MainButtonStyle.text}>카메라로 바코드 스캔하기 &gt; </Text>
                     <Text style={MainButtonStyle.subText}>카메라로 바코드 스캔하여 검색</Text>
@@ -314,11 +314,10 @@ export default function BarcodeMain({navigation}) {
                 />
             </TouchableOpacity>
 
-            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down]} onPress={() => decodeFromAlbum()}>
-
+            <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down, styles.button]} onPress={() => decodeFromAlbum()}>
                 <View style={MainButtonStyle.textContainer}>
-                    <Text style={MainButtonStyle.text}>갤러리로 바코드 스캔하기 &gt; </Text>
-                    <Text style={MainButtonStyle.subText}>갤러리로 사진 선택 후 바코드 스캔하여 검색</Text>
+                    <Text style={MainButtonStyle.text}>갤러리에서 바코드 스캔하기 &gt; </Text>
+                    <Text style={MainButtonStyle.subText}>갤러리에서 사진 선택 후 바코드 스캔하여 검색</Text>
                 </View>
                 <LottieView
                     source={require('../../assets/barcode.json') /** 움직이는 LottieView */}
@@ -357,10 +356,7 @@ export default function BarcodeMain({navigation}) {
 
 const styles = StyleSheet.create({
     button: {
-        height: 130, 
-        width: 300, 
-        alignItems: 'center', 
-        justifyContent: 'center',
+      elevation: 3,
     },
     down: {
         marginBottom:60
@@ -387,19 +383,7 @@ const styles = StyleSheet.create({
     close:{
       flex:1,
       borderWidth: 1,
-    },
-    button: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      // borderWidth: 1,
-      marginBottom: 10,
-      marginTop: 20,
-      borderRadius: 5,
-      height: 150,
-      padding: 10,
-      elevation: 2,
-    },
-        
+    },        
     Informationcontainer: {
       flex: 1,
       borderWidth:1,
