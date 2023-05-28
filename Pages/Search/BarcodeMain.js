@@ -331,7 +331,7 @@ export default function BarcodeMain({navigation}) {
       }
 
     return (
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1, backgroundColor:"white"}}>
                 {/*로딩 표시*/}
             {isLoading && isLoading ?
               <Loading/>
