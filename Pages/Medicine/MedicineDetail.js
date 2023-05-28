@@ -43,7 +43,7 @@ function MedicineDetail({ navigation, route }) {
   const [medicinedetail, setMedicinedetail] = React.useState(null);
   const [medicinname, setMedicinName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
-  
+
   React.useEffect(() => {
     console.log('cliked 재랜더링되었습니다.');
     console.log("bo", bookmark);
@@ -81,6 +81,11 @@ function MedicineDetail({ navigation, route }) {
   // navigation 기본 제공 header이름 수정
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+          <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+        </TouchableOpacity>
+      ),
       headerTitle: medicinname, //header 약 이름 출력
       headerRight: () => (
         <View style={styles.headerRightContainer}>
@@ -88,20 +93,27 @@ function MedicineDetail({ navigation, route }) {
             <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} />
             //header오른쪽에 bookMarkbutton component 불러오기 //값이랑 함수들 다 넘겨줌
           )} */}
-          {console.log("과연 크기는?",bookmark)}
+          {console.log("과연 크기는?", bookmark)}
           {/* bookmarmk가 없을 때 별 안 보이게 처리함 */}
           {/* {bookmark.length === 0 ? null: (
             //bookmark 크기가 0이면 별 아예 안 보이게 만들어줌
             <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} token={token}/>
             //header오른쪽에 bookMarkbutton component 불러오기 //값이랑 함수들 다 넘겨줌
           )} */}
-           {/* 걍 값 다 넘기고 bookMarkButton내부에서 로그인 창으로 넘어가게 만들어줌 */}
-            <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} token={token}/>
-            
-         
+          {/* 걍 값 다 넘기고 bookMarkButton내부에서 로그인 창으로 넘어가게 만들어줌 */}
+          <BookMarkButton medicinedetail={medicinedetail} bookmarked={bookmarked} setBookMarked={click} bookmark={bookmark} setBookmark={setBookmark} token={token} />
+
+
 
         </View>
       ),
+      headerStyle: {
+        elevation: 10, // 안드로이드 그림자 효과
+        shadowOpacity: 0.5, // iOS 그림자 효과
+        shadowColor: 'black', // 그림자 색상 설정
+        shadowOffset: { width: 0, height: 2 }, // 그림자 오프셋 설정
+        shadowRadius: 4, // 그림자 반경 설정
+      },
     });
   }, [medicinname])
 
@@ -199,7 +211,7 @@ function MedicineDetail({ navigation, route }) {
                   </View>
                   <View>
                     <Card>
-                      <Card.Content  style={{ backgroundColor: '#F5FAFD' }}>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         {/* <Text variant="titleLarge"></Text> */}
                         <Text variant="bodyMedium">{medicinedetail.intrcQesitm}</Text>
                       </Card.Content>

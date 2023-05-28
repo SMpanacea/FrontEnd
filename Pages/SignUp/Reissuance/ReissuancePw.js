@@ -2,8 +2,8 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from "react";
 import { View, SafeAreaView, StyleSheet, TouchableOpacity, Alert,
-    InteractionManager, findNodeHandle, AccessibilityInfo } from 'react-native';
-import { Text, TextInput, Button, DefaultTheme } from 'react-native-paper';
+    InteractionManager, findNodeHandle, AccessibilityInfo, Image } from 'react-native';
+import { Text, TextInput, Button, DefaultTheme, TouchableRipple } from 'react-native-paper';
 
 // 서버 포트
 import ServerPort from '../../../Components/ServerPort';
@@ -28,6 +28,24 @@ export default function ReissuancePw({ navigation }) {
             }
         })
     }, []);
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableRipple onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+                    <Image source={require('../../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+                </TouchableRipple>
+            ),
+            headerTitle: "비밀번호 찾기",
+            headerStyle: {
+                elevation: 10, // 안드로이드 그림자 효과
+                shadowOpacity: 0.5, // iOS 그림자 효과
+                shadowColor: 'black', // 그림자 색상 설정
+                shadowOffset: { width: 0, height: 2 }, // 그림자 오프셋 설정
+                shadowRadius: 4, // 그림자 반경 설정
+            },
+        });
+    }, [])
 
     const customTheme = {
         ...DefaultTheme,

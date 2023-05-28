@@ -1,15 +1,17 @@
 // 아이디 찾기 화면
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from "react";
-import { View, SafeAreaView, StyleSheet, Alert, TouchableOpacity,
-    InteractionManager, findNodeHandle, AccessibilityInfo } from 'react-native';
-import { Text, TextInput, Button, DefaultTheme } from 'react-native-paper';
+import {
+    View, SafeAreaView, StyleSheet, Alert, TouchableOpacity,
+    InteractionManager, findNodeHandle, AccessibilityInfo, Image
+} from 'react-native';
+import { Text, TextInput, Button, DefaultTheme, TouchableRipple } from 'react-native-paper';
 
 // 서버 포트
 import ServerPort from '../../../Components/ServerPort';
 const IP = ServerPort();
 
-export default function ReissuanceId() {
+export default function ReissuanceId({navigation}) {
     const [id, setId] = useState('');
     const [email, setEmail] = useState('');
     const [emailNum, setEmailNum] = useState('');
@@ -27,13 +29,31 @@ export default function ReissuanceId() {
         })
     }, []);
 
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableRipple onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+                    <Image source={require('../../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+                </TouchableRipple>
+            ),
+            headerTitle: "아이디 찾기",
+            headerStyle: {
+                elevation: 10, // 안드로이드 그림자 효과
+                shadowOpacity: 0.5, // iOS 그림자 효과
+                shadowColor: 'black', // 그림자 색상 설정
+                shadowOffset: { width: 0, height: 2 }, // 그림자 오프셋 설정
+                shadowRadius: 4, // 그림자 반경 설정
+            },
+        });
+    }, [])
+
     const customTheme = {
         ...DefaultTheme,
         colors: {
-          ...DefaultTheme.colors,
-          primary: '#51868C',
+            ...DefaultTheme.colors,
+            primary: '#51868C',
         },
-      };
+    };
 
     const handleInputEmail = () => {
         const regExp3 = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
@@ -92,13 +112,13 @@ export default function ReissuanceId() {
                 ]
             )
             try {
-                    const res = await axios.post(`${IP}/user/findid`, {
-                        email: email
-                    });
-                    console.log("res.data : ", res.data);
-                    const uId = res.data;
-                    setId(uId);
-                    console.log(id);
+                const res = await axios.post(`${IP}/user/findid`, {
+                    email: email
+                });
+                console.log("res.data : ", res.data);
+                const uId = res.data;
+                setId(uId);
+                console.log(id);
             } catch (error) {
                 console.log(error);
             }
@@ -154,60 +174,60 @@ export default function ReissuanceId() {
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: 'white'}}>
-        <SafeAreaView style={styles.box} keyboardShouldPersistTaps="handled">
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
+            <SafeAreaView style={styles.box} keyboardShouldPersistTaps="handled">
 
-            <TouchableOpacity ref={screanReaderFocus} accessibilityLabel="아이디 찾기">
-                <Text importantForAccessibility='no-hide-descendants'
-                    style={styles.text}>아이디 찾기</Text>
-            </TouchableOpacity>
+                <TouchableOpacity ref={screanReaderFocus} accessibilityLabel="아이디 찾기">
+                    <Text importantForAccessibility='no-hide-descendants'
+                        style={styles.text}>아이디 찾기</Text>
+                </TouchableOpacity>
 
-            <View style={[styles.row, styles.down]}>
-                <TextInput
-                    accessibilityLabel="이메일"
-                    label={"이메일"}
-                    style={[styles.dateInput]}
-                    theme={customTheme}
-                    onChangeText={setEmail}
-                    maxLength={40}
-                />
+                <View style={[styles.row, styles.down]}>
+                    <TextInput
+                        accessibilityLabel="이메일"
+                        label={"이메일"}
+                        style={[styles.dateInput]}
+                        theme={customTheme}
+                        onChangeText={setEmail}
+                        maxLength={40}
+                    />
 
-                <Button
-                    accessibilityLabel="인증번호 받기"
-                    mode="outlined"
-                    contentStyle={{ height: 50, alignItems: 'center' }}
-                    labelStyle={{ fontSize: 15, color: '#51868C' }}
-                    theme={customTheme}
-                    onPress={handleInputEmail}
-                >인증</Button>
-            </View>
-
-            {isShown && (
-                <View>
-                    <View style={[styles.row]}>
-                        <TextInput
-                            accessibilityLabel="이메일 인증번호"
-                            label={"이메일 인증번호"}
-                            style={[styles.dateInput]}
-                            theme={customTheme}
-                            onChangeText={setEmailNum}
-                            keyboardType="numeric"
-                            maxLength={6}
-                        />
-                        <Button
-                            accessibilityLabel="인증번호 확인하기"
-                            mode="outlined"
-                            contentStyle={{ height: 50, alignItems: 'center' }}
-                            labelStyle={{ fontSize: 15, color: '#51868C' }}
-                            theme={customTheme}
-                            onPress={handleInputEmailNum}
-                        >확인</Button>
-                    </View>
+                    <Button
+                        accessibilityLabel="인증번호 받기"
+                        mode="outlined"
+                        contentStyle={{ height: 50, alignItems: 'center' }}
+                        labelStyle={{ fontSize: 15, color: '#51868C' }}
+                        theme={customTheme}
+                        onPress={handleInputEmail}
+                    >인증</Button>
                 </View>
-            )}
-            {id !== '' ?
-                (<Text style={styles.text2}>당신의 아이디는 ' {id} ' 입니다</Text>) : null}
-        </SafeAreaView>
+
+                {isShown && (
+                    <View>
+                        <View style={[styles.row]}>
+                            <TextInput
+                                accessibilityLabel="이메일 인증번호"
+                                label={"이메일 인증번호"}
+                                style={[styles.dateInput]}
+                                theme={customTheme}
+                                onChangeText={setEmailNum}
+                                keyboardType="numeric"
+                                maxLength={6}
+                            />
+                            <Button
+                                accessibilityLabel="인증번호 확인하기"
+                                mode="outlined"
+                                contentStyle={{ height: 50, alignItems: 'center' }}
+                                labelStyle={{ fontSize: 15, color: '#51868C' }}
+                                theme={customTheme}
+                                onPress={handleInputEmailNum}
+                            >확인</Button>
+                        </View>
+                    </View>
+                )}
+                {id !== '' ?
+                    (<Text style={styles.text2}>당신의 아이디는 ' {id} ' 입니다</Text>) : null}
+            </SafeAreaView>
         </View>
     )
 }

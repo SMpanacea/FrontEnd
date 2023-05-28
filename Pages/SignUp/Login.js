@@ -114,17 +114,17 @@ export default function Login({ route, navigation }) {
 
                 <View style={styles.row}>
                     <TouchableOpacity accessibilityLabel='아이디 찾기'
-                        onPress={() => { navigation.navigate("ReissuanceId") }}>
+                        onPress={() => navigation.navigate("ReissuanceId") }>
                         <Text variant="titleMedium" style={styles.input}>아이디</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => { navigation.navigate("ReissuancePw") }}>
+                    <TouchableOpacity onPress={() => navigation.navigate("ReissuancePw") }>
                         <Text variant="titleMedium" style={styles.input}>/비밀번호 찾기</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity accessibilityLabel='회원가입 하기'
                         style={{ flex: 1, alignItems: "flex-end", marginBottom: 30 }}
-                        onPress={() => { navigation.navigate("Join") }}>
+                        onPress={() => navigation.navigate("Join") }>
                         <Text variant="titleMedium">회원가입</Text>
                     </TouchableOpacity>
                 </View>
@@ -139,7 +139,7 @@ export default function Login({ route, navigation }) {
 
                 <View importantForAccessibility="no-hide-descendants" style={styles.horizontalLine} />
 
-                <Text variant="titleMedium" style={styles.down2}>간편 로그인</Text>
+                <Text variant="titleMedium" style={styles.down2} importantForAccessibility='no-hide-descendants'>간편 로그인</Text>
 
                 <View style={styles.kakaoContainer} accessibilityLabel='카카오 로그인 하기'>
                     <Kakao importantForAccessibility="no-hide-descendants" navigation={navigation} route={route} />
