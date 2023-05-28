@@ -30,12 +30,15 @@ export default function PillDetectionMain({ navigation }) {
   const [image, setImage] = useState(null);
   const [boundingBoxes, setBoundingBoxes] = useState(null);
   const [screenState, setScreenState] = useState(ScreenStates.CAMERA);
-
+  const [errorState, setErrorState] = useState(false);
+  const [isFront, setIsFront] = useState(true);
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
 
-  
+
+
 
   useLayoutEffect(() => {
+    console.log("이게 넘겨주는 거여", errorState);
     navigation.setOptions({
       headerLeft: () => (
         <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
@@ -55,6 +58,8 @@ export default function PillDetectionMain({ navigation }) {
       screenReaderChangedSubscription.remove();
     };
   }, []);
+
+
   //imgArray = [];//이미지 base64 데이터 배열
   // 리셋 핸들러 함수
   const handleReset = useCallback(async () => {
@@ -64,12 +69,13 @@ export default function PillDetectionMain({ navigation }) {
     }
     setImage(null);
     setBoundingBoxes(null);
-
+    setErrorState(false);
     console.log('imgArray.length', imgArray.length)
   }, [image, setScreenState]);
 
   //이미지 추가 후 두번쨰 이미지 촬영
   const handleNextImg = useCallback(async () => {
+    setIsFront(false);
     //이미지 객체를 file로 저장
     const imagePath = await ImageUtil.toFile(image);
     console.log('imagePath', imagePath);
@@ -82,7 +88,6 @@ export default function PillDetectionMain({ navigation }) {
         if (imgArray.length === 2) {  //photos 배열의 길이가 2이면
           alert('전송 완료')
           sendImageToServer(); // 두 개의 사진 데이터를 전달
-
         }
       })
       .catch((error) => {
@@ -139,10 +144,11 @@ export default function PillDetectionMain({ navigation }) {
       setBoundingBoxes(newBoxes);
       // 결과 화면으로 전환하여 감지된 객체를 표시합니다
       setScreenState(ScreenStates.RESULTS);
+      setErrorState(false);
     } catch (err) {
-
       // 객체가 검줄 되지 않거나 오류가 발생한 경우 새로운 사진을 찍기 위해 카메라 화면으로 돌아갑니다
       console.log(err);
+      setErrorState(true)
       handleReset();
     }
   }
@@ -150,7 +156,7 @@ export default function PillDetectionMain({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       {screenState === ScreenStates.CAMERA && (
-        <CameraScreen onCapture={handleImage} />
+        <CameraScreen onCapture={handleImage} errorState={errorState} isFront={isFront} />
       )}
       {screenState === ScreenStates.LOADING && <LoadingScreen />}
       {screenState === ScreenStates.RESULTS && (
