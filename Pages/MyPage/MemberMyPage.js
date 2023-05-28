@@ -1,24 +1,14 @@
 // 회원가입한 후 보이는 mypage화면
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
-import {
-  SafeAreaView, StyleSheet, View, Image, InteractionManager,
-  findNodeHandle, AccessibilityInfo
-} from 'react-native';
-import { Text, DefaultTheme, Button, Title, Surface } from 'react-native-paper';
+import {  SafeAreaView, StyleSheet, View, Image, InteractionManager,
+  findNodeHandle, AccessibilityInfo, TouchableOpacity } from 'react-native';
+import { Text, DefaultTheme, Button, Surface } from 'react-native-paper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// navigation
-import 'react-native-gesture-handler';
-
-// 외부에서 불러온 것들
-import Man from '../../assets/man.jpg'
-import Icon from 'react-native-vector-icons/FontAwesome';
-import BookMarkModal from '../BookMark/BookMarkModal';
-
-// 약목록 보여주는 component
-import List from '../../Components/Lists';
+import { MainButtonStyle } from '../css/MainButtonCSS'
+import LottieView from 'lottie-react-native';
+import 'react-native-gesture-handler';  // navigation
 
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
@@ -75,6 +65,7 @@ function MemberMyPage({ route, navigation }) {
     })
     const { data } = route.params;
     console.log("data : ", data);
+    console.log("data type : ", typeof(data));
     if (data) {
       setId(data.id);
       setEmail(data.email);
@@ -106,12 +97,12 @@ function MemberMyPage({ route, navigation }) {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center' }}>
       <SafeAreaView style={styles.box}>
         <Surface style={styles.memberbox}>
 
           <View style={{ flex: 1, marginBottom: 10, marginTop: 10 }}>
-            <Image source={{ uri: img }} style={{ flex: 1 }} />
+            <Image source={{ uri: img }} style={{ flex: 1, borderRadius: 20 }} />
           </View>
 
           <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
@@ -120,7 +111,7 @@ function MemberMyPage({ route, navigation }) {
                 accessibilityLabel='프로필 조회하기'
                 mode="outlined"
                 style={[styles.button, styles.down]}
-                labelStyle={{ fontSize: 18, color: '#51868C' }}
+                labelStyle={{ fontSize: 17, color: '#51868C' }}
                 theme={customTheme}
                 onPress={() => {
                   navigation.navigate("MemberInfo", {
@@ -140,19 +131,24 @@ function MemberMyPage({ route, navigation }) {
               accessibilityLabel='로그아웃 하기'
               mode="outlined"
               style={styles.button}
-              labelStyle={{ fontSize: 18, color: '#51868C' }}
+              labelStyle={{ fontSize: 17, color: '#51868C' }}
               theme={customTheme}
               onPress={handleLogout}>로그아웃</Button>
           </View>
         </Surface>
 
-        <Surface style={styles.bookmarkbox}>
-          <View style={styles.bookmarktitle}>
-            <Title style={{ fontSize: 20 }}>즐겨찾기한 약</Title>
+        <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down, styles.button2]} 
+        onPress={() => navigation.navigate('BookMarkScreen')}
+        >
+          <View style={MainButtonStyle.textContainer}>
+            <Text style={MainButtonStyle.text}>즐겨찾기 조회 &gt; </Text>
           </View>
-          <View style={styles.bookmarkimgcontainer}>
-          </View>
-        </Surface>
+          <LottieView
+            source={require('../../assets/bookmark.json') /** 움직이는 LottieView */}
+            style={MainButtonStyle.mainSerachImage}
+            autoPlay loop
+          />
+        </TouchableOpacity>
       </SafeAreaView>
     </View>
   );
@@ -185,7 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 25,
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 35,
     padding: 15,
     shadowColor: '#000',
     shadowOffset: {
@@ -230,13 +226,14 @@ const styles = StyleSheet.create({
     },
   },
   button: {
-    padding: 10,
-    width: 160,
     marginLeft: 11
   },
   down: {
-    marginBottom: 35
+    marginBottom: 15
   },
+  button2: {
+      elevation: 3,
+  }
 });
 
 export default MemberMyPage;

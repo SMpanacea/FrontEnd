@@ -177,7 +177,7 @@ export default function Barcode({navigation}) {
     if(modalVisible){
       console.log("nobar", nobar)
         return (
-          <View >
+          <View style={{ flex: 1, backgroundColor: 'white' }} >
             <Modal
               presentationStyle={"formSheet"}
               animationType="slide"  // 모달 애니메이션 지정
@@ -190,7 +190,7 @@ export default function Barcode({navigation}) {
                   {nobar === true ? (
                     <View>
                       <Card>
-                      <Card.Content>
+                      <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                         <Text variant="bodyMedium">바코드에 등록된 정보가 없습니다.</Text>
                       </Card.Content>
                     </Card>
@@ -211,7 +211,7 @@ export default function Barcode({navigation}) {
                               <Text style={styles.InfoTitle}>제품명</Text>
                             </View>
                             <Card>
-                              <Card.Content>
+                              <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                                 <Text variant="bodyMedium">{pnm}</Text>
                               </Card.Content>
                             </Card>
@@ -224,7 +224,7 @@ export default function Barcode({navigation}) {
                               <Text style={styles.InfoTitle}>제조사명</Text>
                             </View>
                             <Card>
-                              <Card.Content>
+                              <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                                 <Text variant="bodyMedium">{bnm}</Text>
                               </Card.Content>
                             </Card>
@@ -238,7 +238,7 @@ export default function Barcode({navigation}) {
                               <Text style={styles.InfoTitle}>식품 유형</Text>
                             </View>
                             <Card>
-                              <Card.Content>
+                              <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                                 <Text variant="bodyMedium">{dcnm}</Text>
                               </Card.Content>
                             </Card>
@@ -251,7 +251,7 @@ export default function Barcode({navigation}) {
                               <Text style={styles.InfoTitle}>유통/소비기한</Text>
                             </View>
                             <Card>
-                              <Card.Content>
+                              <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                                 <Text variant="bodyMedium">{daycnt}</Text>
                               </Card.Content>
                             </Card>
@@ -290,13 +290,13 @@ export default function Barcode({navigation}) {
                           }
                       </View>
                           {barname ? (
-                            <View style={{marginBottom:10,}}>
+                            <View style={{marginBottom:10}}>
                               <View style={styles.Info2}>
                                 <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
                                 <Text style={styles.InfoTitle}>제품명</Text>
                               </View>
                               <Card>
-                                <Card.Content>
+                                <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                                   <Text variant="bodyMedium">{barname}</Text>
                                 </Card.Content>
                               </Card>
@@ -309,7 +309,7 @@ export default function Barcode({navigation}) {
                                 <Text style={styles.InfoTitle}>제조사명</Text>
                               </View>
                               <Card>
-                                <Card.Content>
+                                <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
                                   <Text variant="bodyMedium">{barme}</Text>
                                 </Card.Content>
                               </Card>
@@ -320,10 +320,7 @@ export default function Barcode({navigation}) {
                           <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
                             <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
                           </TouchableRipple>
-
                         </ScrollView>
-                        
-
                       </View>
                     ): null}
 

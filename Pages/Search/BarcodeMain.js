@@ -1,7 +1,6 @@
 //BarcodeMain에서 갤러리 들어가서 바코드 검사하는 코드까지 있는 페이지임
-
-import * as React from 'react';
-import { StyleSheet, View, Modal, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef, } from 'react';
+import { SafeAreaView, StyleSheet, View, Modal, Text, TouchableOpacity, Image, InteractionManager, findNodeHandle, AccessibilityInfo, ScrollView  } from 'react-native';
 import { TouchableRipple} from 'react-native-paper';
 import * as DBR from 'vision-camera-dynamsoft-barcode-reader';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -373,7 +372,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     down: {
-        marginBottom:60
+        marginBottom: 60,
+        elevation: 3,
+    },
+    down: {
+        marginBottom: 60
     },
     container: {
         flex: 1,
@@ -381,6 +384,13 @@ const styles = StyleSheet.create({
     title: {
         textAlign: 'center',
         marginVertical: 8,
+    },
+    separator: {
+        marginVertical: 4,
+    },
+    switchView: {
+        alignItems: 'center',
+        flexDirection: "row",
     },
     barcodeText: {
         fontSize: 20,
@@ -467,5 +477,81 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'white',
+    },
+    close: {
+        flex: 1,
+        borderWidth: 1,
+    },
+    Informationcontainer: {
+        flex: 1,
+        borderWidth: 1,
+        // marginBottom: 40,
+    },
+    Info: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: "center",
+    },
+    Info2: {
+        flexDirection: 'row',
+        alignItems: "center",
+    },
+    InfoTitle: {
+        marginTop: 10,
+        marginBottom: 15,
+    },
+    InfoIcon: {
+        padding: 10,
+    },
+    Icon: {
+        // borderWidth:1,
+        width: 100,
+        marginLeft: 60,
+
+    },
+    Infotext: {
+        textAlignVertical: 'center'
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 50,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 30,
+        width: '80%',
+        // alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    // button: {
+    //   borderRadius: 20,
+    //   padding: 10,
+    //   elevation: 2,
+    // },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        marginBottom: 15,
+        // textAlign: 'center',
     },
 });

@@ -325,7 +325,7 @@ export default function MemberInfoEdit({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F7F7F7',
+        backgroundColor: 'white',
     },
     scrollViewContent: {
         flexGrow: 1,

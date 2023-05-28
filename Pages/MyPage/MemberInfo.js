@@ -58,9 +58,9 @@ export default function MemberInfo({ navigation, route }) {
       const res = await axios.post(`${IP}/user/withdrawal`, {
         token: getToken
       })
-
+      console.log("delData res.data : ", res.data);
       if (res.data === true) {
-
+        await AsyncStorage.removeItem('token'); // 로컬 스토리지에서 토큰을 삭제
         if (loginType === "Ka") { //카카오 세션 삭제
           KakaoLogin.unlink().then((result) => {
             console.log('Withdrawal Success', JSON.stringify(result));
@@ -68,11 +68,11 @@ export default function MemberInfo({ navigation, route }) {
             console.log(`Withdrawal Failed (code: ${error.code})`, error.message);
           });
         }
-
-        await AsyncStorage.removeItem('token'); // 로컬 스토리지에서 토큰을 삭제
         await AsyncStorage.removeItem('loginType');
-        route.params.setLoggedIn(false);
-        navigation.navigate("bottom");
+        // route.params.setLoggedIn(false);
+        console.log("4");
+        navigation.navigate("bottom", {loggedIn:false});
+        console.log("5");
 
       } else {
         Alert.alert(
@@ -90,7 +90,6 @@ export default function MemberInfo({ navigation, route }) {
       console.log(err);
     }
   }
-
 
   return (
     <View style={styles.container}>

@@ -127,7 +127,7 @@ function TextSearch({ navigation }) {
 
                   <TextInput
                     multiline
-                    placeholder='약품의 이름을 입력해 주세요'
+                    placeholder='검색어를 입력해 주세요'
                     style={styles.input}
                     value={input} // 현재 message 값을 입력 값으로 설정
                     onChangeText={(text) => setInput(text)}
@@ -317,4 +317,3 @@ const styles = StyleSheet.create({
 });
 
 export default TextSearch;
-
