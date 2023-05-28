@@ -81,7 +81,7 @@ function MedicineCamera({navigation}) {
         <Loading /> // 로딩 중인 동안 로딩 스피너 표시
       ) : (
         <View style={styles.container}>
-          <ScrollView style={{margin:10}}>
+          <ScrollView showsVerticalScrollIndicator={false} style={{margin:10}}>
             <Card
               medicinedata={medicinedata} 
               bookmark = {bookmark} //bookmark list넘겨줌

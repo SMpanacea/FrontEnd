@@ -110,7 +110,7 @@ function MedicineDetail({ navigation, route }) {
       {isLoading ? (
         <Loading /> //로딩 중인 동안 로딩 스피너
       ) : (
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.imagebox}>
             {medicinedetail && medicinedetail.itemImage !== null ?
               <Image source={{ uri: medicinedetail.itemImage }} resizeMode="contain" style={styles.image} /> :

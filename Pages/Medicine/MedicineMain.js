@@ -139,7 +139,7 @@ function MedicineMain({ navigation, route }) {
       ) : (
         <View style={styles.container} >
           {medicinedata && medicinedata.length > 0 ? (
-          <ScrollView style={{ margin: 10 }} refreshControl={
+          <ScrollView showsVerticalScrollIndicator={false} style={{ margin: 10 }} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
             {json.map((item, idx) => {

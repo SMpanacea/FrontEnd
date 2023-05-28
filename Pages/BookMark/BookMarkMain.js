@@ -61,7 +61,7 @@ function BookMarkMain({navigation}) {
       <Loading /> // 로딩 중인 동안 로딩 3초간 스피너 표시
     ) : (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <TouchableOpacity onPress={()=>{navigation.navigate("MedicineDetail")}}>
             <Card medicinedata={medicinedata} />
             {/* <List /> */}

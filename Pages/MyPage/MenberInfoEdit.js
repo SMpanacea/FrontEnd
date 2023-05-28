@@ -224,7 +224,7 @@ export default function MemberInfoEdit({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
                 <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                     
                     <TouchableOpacity onPress={handleImagePicker}

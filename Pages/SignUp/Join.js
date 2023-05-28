@@ -430,7 +430,7 @@ export default function Join({ navigation }) {
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
         <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
                 <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                     <View style={styles.box}>
                         <Text style={styles.text}>계정 만들기</Text>
