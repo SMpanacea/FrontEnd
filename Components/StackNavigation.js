@@ -58,7 +58,19 @@ import BarcodeMain from '../Pages/Search/BarcodeMain';
 const Auth = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='bottom' component={BottomTab} options={{ headerShown: false, tabBarStyle: { display: 'none' } }} />
+      <Stack.Screen name='bottom' component={BottomTab} 
+      options={{ 
+        headerTitle: 'Panacea', 
+        headerStyle: {
+          elevation: 10, // 안드로이드 그림자 효과
+          shadowOpacity: 0.5, // iOS 그림자 효과
+          shadowColor: 'black', // 그림자 색상 설정
+          shadowOffset: { width: 0, height: 2 }, // 그림자 오프셋 설정
+          shadowRadius: 4, // 그림자 반경 설정
+        },
+         headerTitleAlign: 'center', 
+         tabBarStyle: { display: 'none' } }} 
+      />
       {/* <Stack.Screen name="CameraList" component={MedicineCamera} options={ {headerShown:false,tabBarStyle: {display: 'none'}}}/> */}
       <Stack.Screen name="CameraList" options={{ headerShown: false }}>
         {(props) => <MedicineCamera {...props} navigation={props.navigation} />}

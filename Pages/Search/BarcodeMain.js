@@ -62,6 +62,13 @@ export default function BarcodeMain({navigation}) {
               </TouchableOpacity>
           ),
           headerTitle: "바코드 검색",
+          headerStyle: {
+            elevation: 10, // 안드로이드 그림자 효과
+            shadowOpacity: 0.5, // iOS 그림자 효과
+            shadowColor: 'black', // 그림자 색상 설정
+            shadowOffset: { width: 0, height: 2 }, // 그림자 오프셋 설정
+            shadowRadius: 4, // 그림자 반경 설정
+          },
         });
       }, [])
 
