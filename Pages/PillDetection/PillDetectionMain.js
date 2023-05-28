@@ -32,13 +32,10 @@ export default function PillDetectionMain({ navigation }) {
   const [screenState, setScreenState] = useState(ScreenStates.CAMERA);
   const [errorState, setErrorState] = useState(false);
   const [isFront, setIsFront] = useState(true);
+  const [checkLastCapture, setCheckLastCapture] = useState(false);
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
 
-
-
-
   useLayoutEffect(() => {
-    console.log("이게 넘겨주는 거여", errorState);
     navigation.setOptions({
       headerLeft: () => (
         <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
@@ -76,6 +73,7 @@ export default function PillDetectionMain({ navigation }) {
   //이미지 추가 후 두번쨰 이미지 촬영
   const handleNextImg = useCallback(async () => {
     setIsFront(false);
+    setCheckLastCapture(true);
     //이미지 객체를 file로 저장
     const imagePath = await ImageUtil.toFile(image);
     console.log('imagePath', imagePath);
@@ -86,7 +84,7 @@ export default function PillDetectionMain({ navigation }) {
         imgArray.push(base64Data);
         console.log('imgArray.length', imgArray.length)
         if (imgArray.length === 2) {  //photos 배열의 길이가 2이면
-          alert('전송 완료')
+          //alert('전송 완료')
           sendImageToServer(); // 두 개의 사진 데이터를 전달
         }
       })
@@ -103,6 +101,7 @@ export default function PillDetectionMain({ navigation }) {
 
   // 사진 서버에 보내기
   const sendImageToServer = async () => {
+    setScreenState(ScreenStates.LOADING);
     console.log("send!!");
     const frontValue = { front: imgArray[0], back: imgArray[1] };
     fetch(`${IP}/medicine/imageFix`, {  // 여기에 보내고자 하는 URL을 넣습니다.
@@ -113,12 +112,7 @@ export default function PillDetectionMain({ navigation }) {
       body: JSON.stringify(frontValue),
     })
       .then((response) => {
-        // console.log("여긴 안들어와?")
-        // console.log('전송 완료2', response);
-        // console.log('전송 완료', response);
-        // console.log(response);
-        // console.log("이게 바로나오면 위 출력 무시...")
-        // response.json();
+        
         return response.json();  // Promise 반환
       })  // 서버에서 돌아온 응답을 JSON 형태로 파싱합니다.
       .then((json) => {
@@ -165,6 +159,7 @@ export default function PillDetectionMain({ navigation }) {
           boundingBoxes={boundingBoxes}
           onReset={handleReset}
           onNextImg={handleNextImg}
+          checkLastCapture={checkLastCapture}
         />
       )}
     </SafeAreaView>

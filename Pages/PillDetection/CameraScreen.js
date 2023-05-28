@@ -33,7 +33,7 @@ export default function CameraScreen({ onCapture, errorState, isFront }) {
         if (reactTag) {
           AccessibilityInfo.setAccessibilityFocus(reactTag);
         }
-      }, 3000); // 3초 지연. 이 시간은 필요에 따라 조정하십시오.
+      }, 3000); // 3초 지연
     } else {
       InteractionManager.runAfterInteractions(() => {
         const reactTag = findNodeHandle(ref.current);

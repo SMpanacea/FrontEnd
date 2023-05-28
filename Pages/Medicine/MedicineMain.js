@@ -31,6 +31,7 @@ function MedicineMain({ navigation, route }) {
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
 
   React.useLayoutEffect(() => {
+    AccessibilityInfo.announceForAccessibility("알약 결과가 도출되었습니다.");
     navigation.setOptions({
       headerLeft: () => (
           <TouchableOpacity onPress={() => navigation.popToTop()} accessibilityLabel='뒤로가기'>
