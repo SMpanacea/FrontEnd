@@ -30,13 +30,6 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
     setBookmark2(!bookmarked2)//나의 bookmark활성화 비활성화 값을 변경(나는 BookMarkButton임)
   }
 
-  
-  console.log("token2:", getToken);
-
-  // React.useEffect(()=>{
-
-  // },[])
-  // const [rander, setRender] = React.useState(false);
 
   useEffect(() => {
     console.log('cliked 컴포넌트가 재랜더링되었습니다.');
