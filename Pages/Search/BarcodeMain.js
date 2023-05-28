@@ -7,7 +7,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import axios from 'axios';
 import LottieView from 'lottie-react-native';
 import { MainButtonStyle } from '../css/MainButtonCSS'
-
+import { useFocusEffect } from '@react-navigation/native';
 
 // 서버
 import ServerPort from '../../Components/ServerPort';
