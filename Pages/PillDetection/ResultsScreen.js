@@ -19,7 +19,7 @@ const objectColors = [
 // iOS와 Android에서의 텍스트 위치를 조절하기 위한 상수입니다.
 const textBaselineAdjustment = Platform.OS == "ios" ? 7 : 4;
 
-export default function ResultsScreen({ image, boundingBoxes, onReset, onNextImg }) {
+export default function ResultsScreen({ image, boundingBoxes, onReset, onNextImg, checkLastCapture }) {
   const ref = useRef(null);
   useEffect(() => {
     InteractionManager.runAfterInteractions(() => {
@@ -100,6 +100,14 @@ export default function ResultsScreen({ image, boundingBoxes, onReset, onNextImg
     },
     [ctx, layout, image, boundingBoxes] // dependencies for useCallback
   );
+  const getAccessibilityLabel = () => {
+    console.log('getAccessibilityLabel', checkLastCapture)
+    if (checkLastCapture) {
+      return '알약 사진 제출';
+    } else {
+      return '알약 뒷면 사진 촬영';
+    }
+  };
   return (
     <View style={styles.container}>
       <Canvas
@@ -109,7 +117,7 @@ export default function ResultsScreen({ image, boundingBoxes, onReset, onNextImg
         }}
         onContext2D={setCtx}
       />
-      <View style={styles.pictureContainer} ref={ref} accessibilityRole="button" accessible={true} accessibilityLabel="알 약이 감지되었습니다" accessibilityHint="다음 사진 촬영"  >
+      <View style={styles.pictureContainer} ref={ref} accessibilityRole="button" accessible={true} accessibilityLabel="알 약이 감지되었습니다" accessibilityHint={getAccessibilityLabel()}  >
         <TouchableOpacity onPress={onNextImg} style={styles.continueButton} importantForAccessibility="no-hide-descendants">
           <Text style={styles.buttonLabel} >Continue</Text>
         </TouchableOpacity>
