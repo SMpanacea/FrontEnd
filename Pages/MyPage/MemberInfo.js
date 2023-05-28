@@ -71,6 +71,7 @@ export default function MemberInfo({ navigation, route }) {
         await AsyncStorage.removeItem('loginType');
         // route.params.setLoggedIn(false);
         console.log("4");
+        console.log("값이 뭐야?", loggedIn)
         navigation.navigate("bottom", {loggedIn:false});
         console.log("5");
 
