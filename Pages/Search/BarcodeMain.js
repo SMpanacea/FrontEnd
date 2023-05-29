@@ -53,15 +53,15 @@ export default function BarcodeMain({ navigation }) {
   };
 
   // 여기서 터지 이거 머선 코드임??????????????? 도와줘요!!!!
-  // useFocusEffect(() => {
-  //   InteractionManager.runAfterInteractions(() => {
-  //     const reactTag = findNodeHandle(screanReaderFocus.current);
-  //     if (reactTag) {
-  //       console.log("findNodeHandle")
-  //       AccessibilityInfo.setAccessibilityFocus(reactTag);
-  //     }
-  //   })
-  // }, []);
+  useFocusEffect(() => {
+    InteractionManager.runAfterInteractions(() => {
+      const reactTag = findNodeHandle(screanReaderFocus.current);
+      if (reactTag) {
+        console.log("findNodeHandle")
+        AccessibilityInfo.setAccessibilityFocus(reactTag);
+      }
+    })
+  }, []);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -202,8 +202,8 @@ export default function BarcodeMain({ navigation }) {
                     </Card.Content>
                   </Card>
                   {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
-                  <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false); setUseCamera(true); setNobar(!nobar); }}>
-                    <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button' />
+                  <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false); setUseCamera(true); setNobar(!nobar); }} accessibilityLabel='닫기' accessibilityRole='button' accessibilityHint='바코드를 인식하러 돌아갑니다'>
+                    <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button' importantForAccessibility='no-hide-descendants'/>
                   </TouchableRipple>
                 </View>
               ) : (
@@ -213,7 +213,7 @@ export default function BarcodeMain({ navigation }) {
                     <View>
                       {pnm && pnm ? (
                         <View style={{ marginBottom: 10, }}>
-                          <View style={styles.Info2}>
+                          <View style={styles.Info2} accessible={true}>
                             <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
                             <Text style={styles.InfoTitle}>제품명</Text>
                           </View>
@@ -226,7 +226,7 @@ export default function BarcodeMain({ navigation }) {
                       ) : null}
                       {bnm && bnm ? (
                         <View style={{ marginBottom: 10, }}>
-                          <View style={styles.Info2}>
+                          <View style={styles.Info2} accessible={true}>
                             <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
                             <Text style={styles.InfoTitle}>제조사명</Text>
                           </View>
@@ -240,7 +240,7 @@ export default function BarcodeMain({ navigation }) {
 
                       {dcnm && dcnm ? (
                         <View style={{ marginBottom: 10, }}>
-                          <View style={styles.Info2}>
+                          <View style={styles.Info2} accessible={true}>
                             <Icon style={styles.InfoIcon} name="bread-slice" size={20} color="black" />
                             <Text style={styles.InfoTitle}>식품 유형</Text>
                           </View>
@@ -253,7 +253,7 @@ export default function BarcodeMain({ navigation }) {
                       ) : null}
                       {daycnt && daycnt ? (
                         <View style={{ marginBottom: 10, }}>
-                          <View style={styles.Info2}>
+                          <View style={styles.Info2} accessible={true}>
                             <Icon style={styles.InfoIcon} name="calendar-day" size={20} color="black" />
                             <Text style={styles.InfoTitle}>유통/소비기한</Text>
                           </View>
@@ -266,8 +266,8 @@ export default function BarcodeMain({ navigation }) {
                       ) : null}
 
                       {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
-                      <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false); setUseCamera(true); }}>
-                        <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button' />
+                      <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false); setUseCamera(true); }} accessibilityLabel='닫기' accessibilityRole='button' accessibilityHint='바코드를 인식하러 돌아갑니다'>
+                        <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button' importantForAccessibility='no-hide-descendants'/>
                       </TouchableRipple>
 
                     </View>
@@ -279,7 +279,7 @@ export default function BarcodeMain({ navigation }) {
                         <ScrollView 
                         showsVerticalScrollIndicator={false} // 스크롤바 표시 여부 설정 없애버림
                         >
-                        <View style={styles.imagebox}>
+                        <View style={styles.imagebox} importantForAccessibility='no-hide-descendants'>
                           {barimage !== null ?
                           <View style={{marginBottom:10,}}>
                             <View style={styles.Info2}>
@@ -298,7 +298,7 @@ export default function BarcodeMain({ navigation }) {
                       </View>
                           {barname ? (
                             <View style={{marginBottom:10}}>
-                              <View style={styles.Info2}>
+                              <View style={styles.Info2} accessible={true}>
                                 <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
                                 <Text style={styles.InfoTitle}>제품명</Text>
                               </View>
@@ -311,7 +311,7 @@ export default function BarcodeMain({ navigation }) {
                           ) : null}
                          {barme ? (
                             <View style={{marginBottom:10,}}>
-                              <View style={styles.Info2}>
+                              <View style={styles.Info2} accessible={true}>
                                 <Icon style={styles.InfoIcon} name="boxes" size={20} color="black" />
                                 <Text style={styles.InfoTitle}>제조사명</Text>
                               </View>
@@ -324,8 +324,8 @@ export default function BarcodeMain({ navigation }) {
                           ) : null}
                         
                           {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
-                          <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}}>
-                            <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button'/>
+                          <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false);setUseCamera(true);}} accessibilityLabel='닫기' accessibilityRole='button' accessibilityHint='바코드를 인식하러 돌아갑니다'>
+                            <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button' importantForAccessibility='no-hide-descendants'/>
                           </TouchableRipple>
                         </ScrollView>
                       </View>

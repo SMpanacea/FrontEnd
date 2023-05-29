@@ -347,7 +347,7 @@ export default function Barcode({ navigation }) {
                         ) : null}
 
                         {/* 모달 닫기 버튼 클릭 시 모달을 닫는 동시에 카메라 켜기*/}
-                        <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false); setUseCamera(true); }} ccessibilityLabel='닫기' accessibilityRole='button' accessibilityHint='바코드를 인식하러 돌아갑니다'>
+                        <TouchableRipple style={styles.button} onPress={() => { setModalVisible(false); setUseCamera(true); }} accessibilityLabel='닫기' accessibilityRole='button' accessibilityHint='바코드를 인식하러 돌아갑니다'>
                           <Icon name="times" style={styles.Icon} color='black' size={50} accessibilityLabel='닫기' accessibilityRole='button' importantForAccessibility='no-hide-descendants'/>
                         </TouchableRipple>
                       </ScrollView>
