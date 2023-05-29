@@ -317,11 +317,7 @@ export default function Join({ navigation }) {
                 Alert.alert(
                     '회원가입에 실패하였습니다',
                     '다시 시도해 주세요',
-                    [
-                        {
-                            text: '확인',
-                        }
-                    ],
+                    [{ text: "확인" }],
                     { cancelable: false }
                 );
             } else {
@@ -332,7 +328,7 @@ export default function Join({ navigation }) {
                     [
                         {
                             text: '확인',
-                            onPress: ()=>{ navigation.navigate("Login") }
+                            onPress: ()=>{ navigation.navigate("bottom") }
                         }
                     ],
                     { cancelable: false }
@@ -345,14 +341,20 @@ export default function Join({ navigation }) {
 
     //모든 폼이 정상 입력됐는 지 확인
     const onFinish = () => {
+        if(id===''||pw===''||email===''||nickname===''||gender===''||birth==='') {
+            Alert.alert(
+                '',
+                '값을 모두 입력해 주세요',
+                [{ text: "확인" }],
+                { cancelable: false }
+            );
+            return;
+        }
         if (idError == false || regId == false) {
             Alert.alert(
+                '',
                 '아이디를 확인해 주세요',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
+                [{ text: "확인" }],
                 { cancelable: false }
             );
             return;
@@ -360,11 +362,7 @@ export default function Join({ navigation }) {
             Alert.alert(
                 '',
                 '비밀번호를 확인해 주세요',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
+                [{ text: "확인" }],
                 { cancelable: false }
             );
             return;
@@ -372,11 +370,7 @@ export default function Join({ navigation }) {
             Alert.alert(
                 '',
                 '비밀번호가 일치하지 않습니다',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
+                [{ text: "확인" }],
                 { cancelable: false }
             );
             return;
@@ -384,11 +378,7 @@ export default function Join({ navigation }) {
             Alert.alert(
                 '',
                 '이메일을 확인해 주세요',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
+                [{ text: "확인" }],
                 { cancelable: false }
             );
             return;
@@ -396,11 +386,7 @@ export default function Join({ navigation }) {
             Alert.alert(
                 '',
                 '이메일 인증을 완료해 주세요',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
+                [{ text: "확인" }],
                 { cancelable: false }
             );
             return;
@@ -408,11 +394,7 @@ export default function Join({ navigation }) {
             Alert.alert(
                 '',
                 '닉네임을 확인해 주세요',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
+                [{ text: "확인" }],
                 { cancelable: false }
             );
             return;
@@ -420,11 +402,7 @@ export default function Join({ navigation }) {
             Alert.alert(
                 '',
                 '생년월일을 확인해 주세요',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
+                [{ text: "확인" }],
                 { cancelable: false }
             );
             return;
@@ -432,11 +410,7 @@ export default function Join({ navigation }) {
             Alert.alert(
                 '',
                 '성별을 선택해 주세요',
-                [
-                    {
-                        text: '확인',
-                    },
-                ],
+                [{ text: "확인" }],
                 { cancelable: false }
             );
             return;
