@@ -187,7 +187,7 @@ export default function BarcodeMain({ navigation }) {
     return (
       <View style={{ flex: 1, backgroundColor: 'white' }}>
         <Modal
-          presentationStyle={"formSheet"}
+          // presentationStyle={"formSheet"}
           animationType="slide"  // 모달 애니메이션 지정
           onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
           transparent={true} // 투명한 모달로 설정        
