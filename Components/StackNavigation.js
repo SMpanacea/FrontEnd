@@ -40,10 +40,7 @@ import ReissuancePw from '../Pages/SignUp/Reissuance/ReissuancePw';
 import ResetPw from '../Pages/SignUp/Reissuance/ResetPw';
 import MemberInfo from '../Pages/MyPage/MemberInfo';
 import MemberMyPage from '../Pages/MyPage/MemberMyPage';
-import MyBoardsList from '../Pages/MyPage/MyBoardsList';
 import MemberInfoEdit from '../Pages/MyPage/MenberInfoEdit';
-import MyLikesList from '../Pages/MyPage/MyLikesList';
-import MyCommentsList from '../Pages/MyPage/MyCommentsList';
 import PillDetectionMain from '../Pages/PillDetection/PillDetectionMain';
 import galarySearch from '../Pages/PillDetection/galarySearch';
 import BarcodeCamera from '../Pages/Search/BarcodeCamera';
@@ -94,12 +91,8 @@ const Auth = () => {
       <Stack.Screen name="ResetPw" component={ResetPw} />
       <Stack.Screen name="MemberInfo" component={MemberInfo} />
       <Stack.Screen name="MemberMyPage" component={MemberMyPage} />
-      <Stack.Screen name="MyBoardsList" component={MyBoardsList} />
       <Stack.Screen name="MemberInfoEdit" component={MemberInfoEdit} />
-      <Stack.Screen name="MyLikesList" component={MyLikesList} />
-      <Stack.Screen name="MyCommentsList" component={MyCommentsList} />
       <Stack.Screen name="PillDetectionMain" component={PillDetectionMain} />
-      
       <Stack.Screen name="BarcodeCamera" component={BarcodeCamera} />
       <Stack.Screen name="CameraSearchMain" component={CameraSearchMain} />
       <Stack.Screen name="TextSearch" component={TextSearch} />

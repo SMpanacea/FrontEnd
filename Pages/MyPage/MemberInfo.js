@@ -1,7 +1,7 @@
 // 회원정보 확인 화면
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet, View, TouchableOpacity, Image, Alert, InteractionManager,
   findNodeHandle, AccessibilityInfo } from 'react-native';
@@ -14,6 +14,8 @@ const IP = ServerPort();
 
 export default function MemberInfo({ navigation, route }) {
   const { userData } = route.params;
+  const {setWidthdraw} = route.params;
+  const [widthdraw, setWidthdraw2] = useState(route.params.widthdraw);
 
   const screanReaderFocus = useRef(null);
   useEffect(() => {
@@ -58,9 +60,11 @@ export default function MemberInfo({ navigation, route }) {
       const res = await axios.post(`${IP}/user/withdrawal`, {
         token: getToken
       })
-      console.log("delData res.data : ", res.data);
       if (res.data === true) {
         await AsyncStorage.removeItem('token'); // 로컬 스토리지에서 토큰을 삭제
+        setWidthdraw(true);
+        console.log("탈퇴 불린값", widthdraw);
+        setWidthdraw2(true);
         if (loginType === "Ka") { //카카오 세션 삭제
           KakaoLogin.unlink().then((result) => {
             console.log('Withdrawal Success', JSON.stringify(result));
@@ -69,12 +73,7 @@ export default function MemberInfo({ navigation, route }) {
           });
         }
         await AsyncStorage.removeItem('loginType');
-        // route.params.setLoggedIn(false);
-        console.log("4");
-        console.log("값이 뭐야?", loggedIn)
-        navigation.navigate("bottom", {loggedIn:false});
-        console.log("5");
-
+        navigation.navigate('bottom', { myVariable:true }); // 변수를 전달하여 화면 이동
       } else {
         Alert.alert(
           '탈퇴에 실패하였습니다',
@@ -92,6 +91,18 @@ export default function MemberInfo({ navigation, route }) {
     }
   }
 
+  const formatEmailForAccessibility = (text) => {
+    // 이메일을 알파벳으로 읽어주기 위해 띄어쓰기와 문자 변환 추가
+    const spacedEmail = text.replace(/(.{1})/g, '$1 ');
+
+    // @를 at로, .를 dot으로 변환
+    const transformedEmail = spacedEmail
+      .replace(/@/g, '골뱅이')
+      .replace(/\./g, '쩜');
+
+    return transformedEmail;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer} ref={screanReaderFocus} accessibilityLabel="프로필 사진" >
@@ -105,7 +116,7 @@ export default function MemberInfo({ navigation, route }) {
         </View>
         <View style={styles.userInfoItem}>
           <Text style={styles.label}>이메일</Text>
-          <Text style={styles.content}>{userData.email}</Text>
+          <Text style={styles.content} accessibilityLabel={formatEmailForAccessibility(userData.email)}>{userData.email}</Text>
         </View>
         <View style={styles.userInfoItem}>
           <Text style={styles.label}>닉네임</Text>

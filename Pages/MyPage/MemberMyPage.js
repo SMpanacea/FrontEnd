@@ -1,8 +1,10 @@
 // 회원가입한 후 보이는 mypage화면
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
-import {  SafeAreaView, StyleSheet, View, Image, InteractionManager,
-  findNodeHandle, AccessibilityInfo, TouchableOpacity } from 'react-native';
+import {
+  SafeAreaView, StyleSheet, View, Image, InteractionManager,
+  findNodeHandle, AccessibilityInfo, TouchableOpacity, Dimensions
+} from 'react-native';
 import { Text, DefaultTheme, Button, Surface } from 'react-native-paper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,7 +18,9 @@ const IP = ServerPort();
 
 function MemberMyPage({ route, navigation }) {
   const { data } = route.params;
-  console.log("data : ", data);
+  console.log("MemberMyPage data : ", data);
+  const { myVariable } = route.params; // 전달받은 변수 값 가져오기
+  console.log("MemberMyPage myVariable : ", myVariable);
 
   const [id, setId] = useState('');
   const [email, setEmail] = useState('');
@@ -24,6 +28,7 @@ function MemberMyPage({ route, navigation }) {
   const [img, setImg] = useState('');
   const [birth, setBirth] = useState('');
   const [gender, setGender] = useState('');
+  const [widthdraw, setWidthdraw] = useState(false);
 
   const screanReaderFocus = useRef(null);
 
@@ -37,13 +42,11 @@ function MemberMyPage({ route, navigation }) {
 
   const fetchUserData = async () => {
     const getToken = await AsyncStorage.getItem('token');
-    console.log("fetchUserData getToken : ", getToken)
     const res = await axios.post(`${IP}/user/info`, {
       token: getToken
     });
     const flag = res.data;
     console.log("flag : ", flag)
-    console.log("flag profile : ", flag.profile);
     if (res.data === false) {
       console.log("왜안됨")
     } else {
@@ -57,6 +60,15 @@ function MemberMyPage({ route, navigation }) {
   };
 
   useEffect(() => {
+    console.log("여기 탈퇴 불린값", widthdraw);
+    if(widthdraw){
+      route.params.setLoggedIn(false);
+      navigation.navigate("bottom");
+      setWidthdraw(false);
+    }
+  },[widthdraw])
+
+  useEffect(() => { 
     InteractionManager.runAfterInteractions(() => {
       const reactTag = findNodeHandle(screanReaderFocus.current);
       if (reactTag) {
@@ -64,8 +76,6 @@ function MemberMyPage({ route, navigation }) {
       }
     })
     const { data } = route.params;
-    console.log("data : ", data);
-    console.log("data type : ", typeof(data));
     if (data) {
       setId(data.id);
       setEmail(data.email);
@@ -73,15 +83,26 @@ function MemberMyPage({ route, navigation }) {
       setBirth(data.birth);
       setGender(data.gender);
       setImg(data.img);
+      console.log("id: ", data.id);
       console.log("nickname: ", data.nickname);
     } else {
       fetchUserData();
     }
-  }, [route.params]);
+    if (myVariable) {
+      route.params.setLoggedIn(false);
+      navigation.navigate("bottom");
+      myVariable = 'false'
+    }
+  }, [myVariable, route.params]);
 
   const handleLogout = async () => {    //로그아웃
     const loginType = await AsyncStorage.getItem('loginType');
+    const token = await AsyncStorage.getItem('token'); // 로컬 스토리지에서 토큰을 삭제
+    console.log("토큰 확인점 : ", token);
     await AsyncStorage.removeItem('token'); // 로컬 스토리지에서 토큰을 삭제
+    const token2 = await AsyncStorage.getItem('token'); // 로컬 스토리지에서 토큰을 삭제
+    console.log("토큰 확인점 : ", token2);
+    console.log("유형 확인점 : ", loginType);
     if (loginType === "Ka") {
       KakaoLogin.logout()
         .then(() => {
@@ -102,13 +123,13 @@ function MemberMyPage({ route, navigation }) {
         <Surface style={styles.memberbox}>
 
           <View style={{ flex: 1, marginBottom: 10, marginTop: 10 }}>
-            <Image source={{ uri: img }} style={{ flex: 1, borderRadius: 20 }} />
+            <Image source={{ uri: img }} style={{ flex: 1, borderRadius: 20, marginLeft: 10 }} />
           </View>
 
           <View style={{ flex: 1, justifyContent: 'center', padding: 10 }}>
-            <View ref={screanReaderFocus} accessibilityLabel="프로필 조회">
+            <View ref={screanReaderFocus} accessibilityLabel="프로필 조회하기">
               <Button
-                accessibilityLabel='프로필 조회하기'
+                importantForAccessibility="no-hide-descendants"
                 mode="outlined"
                 style={[styles.button, styles.down]}
                 labelStyle={{ fontSize: 17, color: '#51868C' }}
@@ -122,8 +143,11 @@ function MemberMyPage({ route, navigation }) {
                       birth,
                       gender,
                       img
-                    }
-                  })
+                    },
+                    widthdraw: widthdraw,
+                    setWidthdraw: setWidthdraw
+                  }
+                  )
                 }}>프로필 조회</Button>
             </View>
 
@@ -137,11 +161,11 @@ function MemberMyPage({ route, navigation }) {
           </View>
         </Surface>
 
-        <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down, styles.button2]} 
-        onPress={() => navigation.navigate('BookMarkScreen')}
+        <TouchableOpacity style={[MainButtonStyle.button, MainButtonStyle.down, styles.button2]}
+          onPress={() => navigation.navigate('BookMarkScreen')}
         >
-          <View style={MainButtonStyle.textContainer}>
-            <Text style={MainButtonStyle.text}>즐겨찾기 조회 &gt; </Text>
+          <View style={MainButtonStyle.textContainer} accessibilityLabel="즐겨찾기 조회하기">
+            <Text style={MainButtonStyle.text} importantForAccessibility="no-hide-descendants">즐겨찾기 조회 &gt; </Text>
           </View>
           <LottieView
             source={require('../../assets/bookmark.json') /** 움직이는 LottieView */}
@@ -232,7 +256,7 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   button2: {
-      elevation: 3,
+    elevation: 3,
   }
 });
 

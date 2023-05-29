@@ -16,6 +16,7 @@ const IP = ServerPort();
 
 export default function MemberInfoEdit({ navigation, route }) {
     const { userData } = route.params;
+    console.log("MemberInfoEdit userdata : ", userData);
 
     const [img, setImg] = useState(userData.img);
     const [email, setEmail] = useState(userData.email);
@@ -128,9 +129,10 @@ export default function MemberInfoEdit({ navigation, route }) {
 
     //서버에 이미지 송신
     const handleSubmit = async (base64Image) => {
+        console.log
         try {
             const res = await axios.post(`${IP}/user/update`, {
-                uid: id,
+                uid: userData.id,
                 image: base64Image
             });
             const response = res.data;
@@ -173,7 +175,7 @@ export default function MemberInfoEdit({ navigation, route }) {
 
         try {
             const res = await axios.post(`${IP}/user/update`, {
-                uid: id,
+                uid: userData.id,
                 email: email,
                 nickname: nickname,
                 birth: birth,
@@ -222,6 +224,20 @@ export default function MemberInfoEdit({ navigation, route }) {
         }
     }
 
+    const formatEmailForAccessibility = (email) => {
+        // 이메일을 알파벳으로 읽어주기 위해 띄어쓰기와 문자 변환 추가
+        const spacedEmail = email.replace(/./g, '$& ').trim();
+      
+        // @를 at로, .를 dot으로 변환
+        const transformedEmail = spacedEmail
+          .replace(/@/g, '골뱅이')
+          .replace(/\./g, '쩜');
+      
+        console.log("talkback email : ", transformedEmail);
+      
+        return transformedEmail;
+      };
+
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
@@ -243,7 +259,9 @@ export default function MemberInfoEdit({ navigation, route }) {
                         <View style={styles.userInfoItem}>
                             <Text style={styles.label}>이메일</Text>
                             <TextInput
+                                accessibilityLabel={formatEmailForAccessibility(email)}
                                 style={styles.input}
+                                theme={customTheme}
                                 value={email}
                                 maxLength={40}
                                 onChangeText={setEmail}
@@ -255,6 +273,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                             <Text style={styles.label}>닉네임</Text>
                             <TextInput
                                 style={styles.input}
+                                theme={customTheme}
                                 value={nickname}
                                 onChangeText={setNickname}
                                 // onEndEditing={handleNicknameChange}
@@ -265,6 +284,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                             <Text style={styles.label}>생년월일</Text>
                             <TextInput
                                 style={styles.input}
+                                theme={customTheme}
                                 value={birth}
                                 onChangeText={setBirth}
                                 // onEndEditing={handleBirthChange}

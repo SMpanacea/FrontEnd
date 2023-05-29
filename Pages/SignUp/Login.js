@@ -50,6 +50,7 @@ export default function Login({ route, navigation }) {
 
     //액시오스 통신
     const onFinish = async () => {
+        console.log("ㅎㅇ1")
         try {
             const res = await axios.post(`${IP}/user/login`, {
                 uid: id,
