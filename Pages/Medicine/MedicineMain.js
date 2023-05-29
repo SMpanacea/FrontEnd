@@ -182,7 +182,32 @@ function MedicineMain({ navigation, route }) {
             }})}
           </ScrollView>
           ): (
-            <Text>결과값이 없음</Text>
+            <View style={{ flex: 1, }}>
+                <Text>검색 결과가 없습니다.</Text>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  {/* <View style={styles.loginbox}>
+                  <TouchableOpacity onPress={() => { search("", 1) }}><Text>다시 돌아가기</Text></TouchableOpacity>
+                </View> */}
+                  <View style={{ flex: 3, height: height / 3.5 }}>
+                  </View>
+                  <View style={{ flex: 1, width: width / 2, height: height / 8, justifyContent: 'center', alignItems: 'center', }}>
+                    <Button
+                      accessibilityLabel='다시 검색하러 가기'
+                      mode="outlined"
+                      // theme={customTheme}
+                      onPress={() => navigation.popToTop()}
+                      labelStyle={{ color: '#447378' }}
+                      contentStyle={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+                    >다시 돌아가기 </Button>
+
+                  </View>
+                  <View style={{ flex: 3, height: height / 2 }}>
+
+                  </View>
+
+                </View>
+
+              </View>
           )}
         </View>
 
