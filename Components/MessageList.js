@@ -17,7 +17,8 @@ const MessageList = ({conversations}) => {
       };
 
     return (
-        <ScrollView
+        <ScrollView 
+        showsVerticalScrollIndicator={false}
         style={{ backgroundColor: theme.colors.white }}
         ref={scrollViewRef}
         onContentSizeChange={() => {

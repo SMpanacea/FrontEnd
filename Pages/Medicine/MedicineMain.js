@@ -20,6 +20,10 @@ import Card from '../../Components/Card';
 // 로딩
 import Loading from '../../Components/Loading';
 
+
+//토큰
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // 서버 포트
 import ServerPort from '../../Components/ServerPort';
 const IP = ServerPort();
@@ -29,6 +33,7 @@ function MedicineMain({ navigation, route }) {
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
   const [page, setPage] = React.useState(1);//다음 page 번호
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
+  const [tokens, setTokens] = React.useState("");
 
   React.useLayoutEffect(() => {
     AccessibilityInfo.announceForAccessibility("알약 결과가 도출되었습니다.");
@@ -124,19 +129,29 @@ function MedicineMain({ navigation, route }) {
 
   //북마크 리스트 가져오는 AXIOS
   const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
-  React.useEffect(() => {
+  React.useEffect(async() => {
+    const getToken = await AsyncStorage.getItem('token');
+    console.log("textsearch getToken: ", getToken);
     const getBookmarkList = async () => {
       try {
         const res = await axios.post(`${IP}/medicine/bookmarklist`, {
           token:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibW9ua2V5MyIsImV4cCI6MTY4NTA5NTAxNCwiaWF0IjoxNjg0NDkwMjE0fQ.F9ZRcSS5Jb6zmFR6awLORFCsSxZvfBKCR1Mra8T00lQ",
+            getToken,
         });
-        setBookmark(res.data);
+        // setBookmark(res.data);
+        setBookmark(res.data || []);// bookmark가 null인 경우 빈 배열로 처리
+        setTokens(getToken)
       } catch (e) {
         console.log("즐겨찾기 리스트 못 가져옴,,,", e);
       }
     };
-    getBookmarkList();
+    if (getToken === null) {
+      // getToken이 null일 때 빈 배열을 처리
+      setBookmark([]); // 또는 다른 기본값을 전달할 수 있음
+    } else {
+      getBookmarkList();
+    }
+    // getBookmarkList();
   }, []);
 
 
@@ -147,7 +162,7 @@ function MedicineMain({ navigation, route }) {
       ) : (
         <View style={styles.container} >
           {medicinedata && medicinedata.length > 0 ? (
-          <ScrollView style={{ margin: 10 }} refreshControl={
+          <ScrollView showsVerticalScrollIndicator={false} style={{ margin: 10 }} refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
             {json.map((item, idx) => {
@@ -157,6 +172,7 @@ function MedicineMain({ navigation, route }) {
               medicinedata={item.items}
               bookmark={bookmark} //bookmark list넘겨줌
               setBookmark={setBookmark} //bookmark list를 변경하는 함수 넘겨줌
+              token={tokens}//token bookmark로 넘겨줌
               onPress={(medicinename, bookmark) => {
                 navigation.navigate('Detail', { medicinename, bookmark })
               }}

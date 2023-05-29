@@ -89,11 +89,9 @@ export default function Barcode({ navigation }) {
   }, []);
 
   React.useEffect(() => {
-    
     (async () => {
       const status = await Camera.requestCameraPermission();
       setHasPermission(status === 'authorized');
-      
     })();
   }, []);
 
@@ -110,14 +108,13 @@ export default function Barcode({ navigation }) {
 
   //스캔 함수
   const onScanned = async (results) => {
-
     console.log(results);
-    setBarcodeResults(results);
+    setBarcodeResults(results);//바코드 결과값 담아줌
+    setIsLoading(true);//로딩 페이지 표시
 
     console.log("호출은 계속 되나?");
     //카메라 사용 안함
     if (results[0]) {
-      setIsLoading(true);//로딩 페이지 표시
       setUseCamera(false);
       console.log("axios 호출");
       await axios
@@ -140,8 +137,9 @@ export default function Barcode({ navigation }) {
             setDatatype(response.data.data_type)
             setBarcodeResults(response.data.data[0]);
             setIsLoading(false); // 로딩 숨김
-            setModalVisible(!modalVisible)//모달 표시
             setCheck(true);
+            setModalVisible(!modalVisible)//모달 표시
+            console.log(modalVisible)
           }
           //알약 바코드 값이 있을 경우
           else if (response.data.data_type === "medicine") {
@@ -151,14 +149,16 @@ export default function Barcode({ navigation }) {
             setBarimage(response.data.data[2])
             setDatatype(response.data.data_type)
             setIsLoading(false); // 로딩 숨김
-            setModalVisible(!modalVisible)//모달 표시
             setCheck(true);
+            setModalVisible(!modalVisible)//모달 표시
+            console.log(modalVisible)
           }
-          else {
+          else {//결과없을 때
             setNobar(true);
             setIsLoading(false); // 로딩 숨김 
-            setModalVisible(!modalVisible)
             setCheck(true);
+            setModalVisible(!modalVisible)
+            console.log(modalVisible)
           }
         })
         .catch((error) => {
@@ -177,36 +177,50 @@ export default function Barcode({ navigation }) {
     const config = {};
     config.rotateImage = false;
     const results = decode(frame, config)
-    
     if (!check) {
       setCheck(true);
       console.log("height: " + frame.height);
       console.log("width: " + frame.width);
       console.log(results);
-      
       REA.runOnJS(setBarcodeResults)(results);
       REA.runOnJS(setFrameWidth)(frame.width);
       REA.runOnJS(setFrameHeight)(frame.height);
     }
   }, [])
 
+
+  // useEffect(() => {
+  //   // `modalVisible` 값이 true로 변경될 때마다 이 코드가 실행됩니다
+  //   if (modalVisible) {
+  //     console.log("왜 안 나와", modalVisible);
+  //     // 모달이 표시되기 전에 수행할 추가 로직이나 동작을 여기에 추가할 수 있습니다
+
+  //     // 비동기 호출이나 데이터 가져오기 등 필요한 작업을 수행할 수도 있습니다
+
+  //     // 모달을 즉시 표시하기 위해 재랜더링을 강제로 트리거합니다
+  //     // 재랜더링을 트리거할 수 있는 어떤 상태 변수를 사용할 수 있습니다
+  //     // 이 예시에서는 `modalVisible` 자체를 사용합니다
+  //     setModalVisible(true);
+  //   }
+  // }, [modalVisible]); // 변경될 때 효과를 발생시킬 의존성을 추가합니다
+
   if (modalVisible) {
+    console.log("데이터 타입 잘 가져와?", datatype)
     console.log("nobar", nobar)
     return (
-      <View style={{ flex: 1, backgroundColor: 'white' }} >
+      <View style={{ flex: 1, backgroundColor: 'white' }}>
         <Modal
-          presentationStyle={"formSheet"}
+          // presentationStyle={"formSheet"}
           animationType="slide"  // 모달 애니메이션 지정
           onRequestClose={() => setModalVisible(false)} // 모달 닫기 버튼 클릭 시 처리할 함수 지정, 안드로이드에서는 필수로 구현해야 합니다
-          transparent={true} // 투명한 모달로 설정 
+          transparent={true} // 투명한 모달로 설정        
         >
-
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               {nobar === true ? (
                 <View accessible={true}>
                   <Card>
-                    <Card.Content style={{ backgroundColor: '#F5FAFD' }}>
+                    <Card.Content style={{ backgroundColor: '#f5fafd' }}>
                       <Text variant="bodyMedium">바코드에 등록된 정보가 없습니다.</Text>
                     </Card.Content>
                   </Card>
@@ -353,6 +367,7 @@ export default function Barcode({ navigation }) {
 
   return (
     <View style={styles.container}>
+      
       {/* 카메라 사용 중일 때 띄우는 화면 */}
       {useCamera && (
         <>
@@ -373,9 +388,8 @@ export default function Barcode({ navigation }) {
       {/*로딩 표시*/}
       {isLoading && <Loading />}
     </View>
+    
   );
-
-
 }
 
 const styles = StyleSheet.create({

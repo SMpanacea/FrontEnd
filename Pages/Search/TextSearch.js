@@ -1,11 +1,14 @@
 // 글로 검색할 때 보이는 화면
 import React from 'react';
 import axios from 'axios';
-import { StyleSheet, View, ScrollView, Modal, Image, Animated, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
-import { Text, TouchableRipple, Button, } from 'react-native-paper';
+import { StyleSheet, View, ScrollView, Modal, Image, Animated, TextInput, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
+import { Text, TouchableRipple, Button, DefaultTheme } from 'react-native-paper';
 
 // navigation
 import 'react-native-gesture-handler';
+
+// 화면 비율
+const { width, height } = Dimensions.get('window');
 
 // 외부에서 불러온 것들
 import Search from '../../Components/Search';
@@ -36,6 +39,18 @@ function TextSearch({ navigation }) {
   const [tokens, setTokens] = React.useState("");
   console.log("왜 ?", tokens)
 
+
+
+  //paper 색 관련
+  const customTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#51868C',
+    },
+  };
+
+
   const search = async (keyword = "", pageNo) => {
     setIsLoading(true);
     try {
@@ -53,6 +68,7 @@ function TextSearch({ navigation }) {
       } else {
         setMedicinedata(res.data.items);
         setTotalCount(res.data.totalCount);
+        console.log("totalcount몇?",res.data.totalCount)
       }
       // setTotalCount(res.data.totalCount);
     } catch (error) {
@@ -64,7 +80,7 @@ function TextSearch({ navigation }) {
   const handleButtonPress = () => {
     setPage(1); // Set page to 1
     search(input, 1);
-    
+
   };
 
   const handleClearInput = async () => {
@@ -80,9 +96,9 @@ function TextSearch({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
-              <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+          <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+        </TouchableOpacity>
       ),
       headerTitle: "약 검색",
       headerStyle: {
@@ -135,7 +151,8 @@ function TextSearch({ navigation }) {
         <Loading /> // 로딩 중인 동안 로딩 스피너 표시
       ) : (
         <View style={styles.container}>
-          <ScrollView>
+          {/* ScrollView bar 없애줌 */}
+          <ScrollView showsVerticalScrollIndicator={false}> 
             {/* 검색 창 */}
             <View style={styles.TextInputcontainer}>
               <View style={styles.innerContainer}>
@@ -151,14 +168,14 @@ function TextSearch({ navigation }) {
 
                   {input ? (
                     <TouchableOpacity onPress={() => { handleClearInput() }} >
-                      <Icon4 name="times" color='black' size={25} style={{ marginRight: 20 }}  accessibilityLabel='삭제' accessibilityRole='button'/>
+                      <Icon4 name="times" color='black' size={25} style={{ marginRight: 20 }} accessibilityLabel='삭제' accessibilityRole='button' />
                     </TouchableOpacity>
                   ) : null}
                 </View>
 
                 <View>
                   <TouchableOpacity onPress={() => { handleButtonPress() }}>
-                    <Icon4 name="search" color='black' size={25} accessibilityLabel='검색' accessibilityRole='button'/>
+                    <Icon4 name="search" color='black' size={25} accessibilityLabel='검색' accessibilityRole='button' />
                   </TouchableOpacity>
                 </View>
 
@@ -169,48 +186,80 @@ function TextSearch({ navigation }) {
             {/* <List medicinedata={medicinedata}/> */}
             {medicinedata.length > 0 ? (
               <>
-               <Card
-                medicinedata={medicinedata}
-                bookmark={bookmark} //bookmark list넘겨줌
-                setBookmark={setBookmark} //bookmark list를 변경하는 함수 넘겨줌
-                token={tokens}//token bookmark로 넘겨줌
-                onPress={(medicinename, bookmark) => {
-                  AccessibilityInfo.announceForAccessibility(medicinename + "을 선택하셨습니다!");
-                  navigation.navigate('Detail', { medicinename, bookmark })
-                }}
-              />
-              <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
-              <TouchableRipple onPress={() => { page > 1 && handlePageChange(page - 1) }} accessibilityLabel='이전 페이지' accessibilityRole='button'>
-                <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants' >이전 페이지</Button>
-              </TouchableRipple>
-              <Text style={styles.font} accessibilityLabel={`현재 페이지는 ${page}입니다`}>{page}</Text>
-              <TouchableRipple onPress={() => { handlePageChange(page + 1) }} accessibilityLabel='다음 페이지' accessibilityRole='button'>
-                <Button  mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
-              </TouchableRipple>
-            </View>
-              
+                <Card
+                  medicinedata={medicinedata}
+                  bookmark={bookmark} //bookmark list넘겨줌
+                  setBookmark={setBookmark} //bookmark list를 변경하는 함수 넘겨줌
+                  token={tokens}//token bookmark로 넘겨줌
+                  onPress={(medicinename, bookmark) => {
+                    AccessibilityInfo.announceForAccessibility(medicinename + "을 선택하셨습니다!");
+                    navigation.navigate('Detail', { medicinename, bookmark })
+                  }}
+                />
+                <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
+                {
+                  page === 1 ? (
+                    <TouchableRipple accessibilityLabel='이전 페이지' accessibilityRole='button' disabled>
+                      <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
+                    </TouchableRipple>
+                  ) : (
+                    <TouchableRipple onPress={() => { page > 1 && handlePageChange(page - 1) }} accessibilityLabel='이전 페이지' accessibilityRole='button'>
+                      <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>이전 페이지</Button>
+                    </TouchableRipple>
+                  )
+                }
+                  <Text style={styles.font} accessibilityLabel={`현재 페이지는 ${page}입니다`}>{page}</Text>
+                {
+                  page === Math.ceil(totalCount / 10) ? (
+                    <TouchableRipple accessibilityLabel='다음 페이지' accessibilityRole='button' disabled>
+                      <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
+                    </TouchableRipple>
+                  ) : (
+                    <TouchableRipple onPress={() => { handlePageChange(page + 1) }} accessibilityLabel='다음 페이지' accessibilityRole='button'>
+                      <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
+                    </TouchableRipple>
+                  )
+                }
+                </View>
+                
+                  
+                
+                
+                
+
               </>
-             
+
             ) : (
-              <View>
+              <View style={{ flex: 1, }}>
                 <Text>검색 결과가 없습니다.</Text>
-                <TouchableOpacity onPress={() => { search("", 1) }}><Text>다시 돌아가기</Text></TouchableOpacity>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  {/* <View style={styles.loginbox}>
+                  <TouchableOpacity onPress={() => { search("", 1) }}><Text>다시 돌아가기</Text></TouchableOpacity>
+                </View> */}
+                  <View style={{ flex: 3, height: height / 3.5 }}>
+                  </View>
+                  <View style={{ flex: 1, width: width / 2, height: height / 8, justifyContent: 'center', alignItems: 'center', }}>
+                    <Button
+                      accessibilityLabel='다시 검색하러 가기'
+                      mode="outlined"
+                      theme={customTheme}
+                      onPress={() => { search("", 1) }}
+                      labelStyle={{ color: '#447378' }}
+                      contentStyle={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+                    >다시 돌아가기 </Button>
+
+                  </View>
+                  <View style={{ flex: 3, height: height / 2 }}>
+
+                  </View>
+
+                </View>
+
               </View>
-              
-              
+
+
+
             )}
-              {/* <Card
-                medicinedata={medicinedata}
-                bookmark={bookmark}
-                setBookmark={setBookmark}
-                onPress={(medicinename, bookmark) => {
-                  AccessibilityInfo.announceForAccessibility(
-                    medicinename + "을 선택하셨습니다!"
-                  );
-                  navigation.navigate("Detail", { medicinename, bookmark });
-                }}
-              /> */}
-            
           </ScrollView>
         </View>
       )}

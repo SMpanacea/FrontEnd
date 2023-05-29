@@ -11,10 +11,18 @@ import {
 import ImagePicker from 'react-native-image-crop-picker';
 import ServerPort from '../../Components/ServerPort';
 import { useFocusEffect } from '@react-navigation/native';
+
+// 로딩
+import Loading from '../../Components/Loading';
+
 export default function CameraSearchMain({ navigation }) {
+
+    const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+
     const IP = ServerPort();
     // const screanReaderFocus = useRef(null);
     const decodeFromAlbum = async () => {
+        setIsLoading(true);//로딩 상태 true로 변경해서 보여줌
         ImagePicker.openPicker({
             multiple: true,
             includeBase64: true
@@ -35,8 +43,10 @@ export default function CameraSearchMain({ navigation }) {
                 .then((json) => {
                     navigation.navigate('Main', { json: json })
                     console.log(json)
+                    setIsLoading(false); // 로딩 화면 숨김
                 })  // 파싱된 결과를 콘솔에 출력합니다.
                 .catch((error) => console.error(error));  // 에러가 발생하면 콘솔에 에러를 출력합니다.
+           
         });
     };
 
@@ -54,7 +64,7 @@ export default function CameraSearchMain({ navigation }) {
                 shadowColor: 'black', // 그림자 색상 설정
                 shadowOffset: { width: 0, height: 2 }, // 그림자 오프셋 설정
                 shadowRadius: 4, // 그림자 반경 설정
-              },
+            },
         });
     }, [])
     const screanReaderFocus = useRef(null);
@@ -70,51 +80,58 @@ export default function CameraSearchMain({ navigation }) {
     }, []);
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
+        <View style={{ flex: 1, backgroundColor: "white" }}>
+            {/*로딩 표시*/}
+            {isLoading && isLoading ?
+                <Loading />
+                : (
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
 
-            <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => navigation.navigate('PillDetectionMain')}>
-                {/* <ImageBackground
+                        <TouchableOpacity ref={screanReaderFocus} style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => navigation.navigate('PillDetectionMain')}>
+                            {/* <ImageBackground
                     source={require('../../assets/animation_640_lhwuc4ir.gif')}
                     style={[styles.imageBackground,StyleSheet.absoluteFill]}
                 > */}
-                <View style={MainButtonStyle.textContainer}>
-                    <Text style={MainButtonStyle.text}>카메라로 촬영하여 알약 검색하기 &gt; </Text>
-                    <Text style={MainButtonStyle.subText}>카메라를 알약을 촬영하여 검색</Text>
-                </View>
-                {/* <Image
+                            <View style={MainButtonStyle.textContainer}>
+                                <Text style={MainButtonStyle.text}>카메라로 촬영하여 알약 검색하기 &gt; </Text>
+                                <Text style={MainButtonStyle.subText}>카메라를 알약을 촬영하여 검색</Text>
+                            </View>
+                            {/* <Image
                     source={require('../../assets/animation_640_lhwuujpi.gif')}
                     style={MainButtonStyle.image}
                 /> */}
-                <LottieView
-                    source={require('../../assets/68430-camera.json') /** 움직이는 LottieView */}
-                    style={MainButtonStyle.CameraSerachMainButton}
-                    autoPlay loop
-                />
-            </TouchableOpacity>
-            <TouchableOpacity style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => decodeFromAlbum()}>
+                            <LottieView
+                                source={require('../../assets/68430-camera.json') /** 움직이는 LottieView */}
+                                style={MainButtonStyle.CameraSerachMainButton}
+                                autoPlay loop
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => decodeFromAlbum()}>
 
-                <View style={MainButtonStyle.textContainer}>
-                    <Text style={MainButtonStyle.text}>사진으로 알약 검색 &gt; </Text>
-                    <Text style={MainButtonStyle.subText}>갤러리에서 사진 선택</Text>
-                </View>
-                <LottieView
-                    source={require('../../assets/album_icon.json') /** 움직이는 LottieView */}
-                    style={MainButtonStyle.CameraSerachMainButton_album}
-                    autoPlay loop
-                />
-            </TouchableOpacity>
-            <TouchableOpacity style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
+                            <View style={MainButtonStyle.textContainer}>
+                                <Text style={MainButtonStyle.text}>사진으로 알약 검색 &gt; </Text>
+                                <Text style={MainButtonStyle.subText}>갤러리에서 사진 선택</Text>
+                            </View>
+                            <LottieView
+                                source={require('../../assets/album_icon.json') /** 움직이는 LottieView */}
+                                style={MainButtonStyle.CameraSerachMainButton_album}
+                                autoPlay loop
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[MainButtonStyle.buttonThree, MainButtonStyle.down]} onPress={() => navigation.navigate('TextSearch')}>
 
-                <View style={MainButtonStyle.textContainer}>
-                    <Text style={MainButtonStyle.text}>이름으로 알약 검색 &gt; </Text>
-                    <Text style={MainButtonStyle.subText}>의약품이름으로 검색</Text>
-                </View>
-                <LottieView
-                    source={require('../../assets/77218-search-imm.json') /** 움직이는 LottieView */}
-                    style={MainButtonStyle.CameraSerachMainButton}
-                    autoPlay loop
-                />
-            </TouchableOpacity>
+                            <View style={MainButtonStyle.textContainer}>
+                                <Text style={MainButtonStyle.text}>이름으로 알약 검색 &gt; </Text>
+                                <Text style={MainButtonStyle.subText}>의약품이름으로 검색</Text>
+                            </View>
+                            <LottieView
+                                source={require('../../assets/77218-search-imm.json') /** 움직이는 LottieView */}
+                                style={MainButtonStyle.CameraSerachMainButton}
+                                autoPlay loop
+                            />
+                        </TouchableOpacity>
+                    </View>
+                )}
         </View>
     )
 }

@@ -2,24 +2,20 @@
 
 import axios from 'axios';
 import React from 'react';
-import {StyleSheet,  View, ScrollView, TouchableOpacity, AccessibilityInfo, UIManager, findNodeHandle} from 'react-native';
-import { Text, TouchableRipple, Button  } from 'react-native-paper';
+import {StyleSheet,  View, ScrollView, TouchableOpacity } from 'react-native';
 // 화면 비율
 import { Dimensions } from 'react-native'; 
 const { width, height } = Dimensions.get('window');
 // navigation
 import 'react-native-gesture-handler';
 
-// 외부에서 불러온 것들
-import Icon from 'react-native-vector-icons/FontAwesome';
-import BookMarkModal from './BookMarkModal';
 // 약목록 보여주는 component
-import List from '../../Components/Lists';
 import Card from '../../Components/Card';
 
 // 로딩
 import Loading from '../../Components/Loading';
 
+//토큰
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -31,28 +27,28 @@ function BookMarkMain({navigation}) {
   const [isLoading, setIsLoading] = React.useState(false); // 로딩 상태 추가
   const [bookmarkmedicine, setBookmarkmedicine] = React.useState([]);//즐겨찾기한 약 정보
   const [medicinedata, setMedicinedata] = React.useState([]);//약 정보
+  const [tokens, setTokens] = React.useState("");
 
-  //즐겨찾기한 약 가져오는 axios인데 로딩페이지 넣어서 다시 만들어라!
-  React.useEffect( async () => {
-    const getToken = await AsyncStorage.getItem('token'); 
-    console.log("bookmark token : ", getToken);
-    const Bookmarklsit = () => {
-      axios.post(`${IP}/medicine/bookmarkall`,{
-        //토큰만 보내면 즐겨찾기 가져올 수 있는 건가 아님 더 보내야 되는 건가
-        token : getToken
-      })
-      .then(function(res){
-        console.log("bookmark res.data : ", res.data);
+  const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
+  React.useEffect(async () => {
+    const getToken = await AsyncStorage.getItem('token');
+    console.log("bookmark token: ", getToken);
+    
+    const BookmarkListall = async () => {
+      try {
+        const res = await axios.post(`${IP}/medicine/bookmarkall`, {
+          token: getToken
+        });
+        console.log("bookmark res.data: ", res.data);
         setMedicinedata(res.data);
-        console.log("bookmarkall에서 가져온 놈임",medicinedata);
-      })
-      .catch(function(e){
-        console.log("즐겨찾기 목록 못 가져옴,,,", e)
-      })
+        console.log("bookmarkall에서 가져온 놈임", medicinedata);
+        setBookmarkmedicine(res.data || []); // bookmark가 null인 경우 빈 배열로 처리
+        setTokens(getToken);
+        console.log("하이류ㅜ",tokens)
+      } catch (e) {
+        console.log("즐겨찾기 목록 못 가져옴,,,", e);
+      }
     };
-    Bookmarklsit();
-    // console.log("bookmark배열 값 잘 가져오나요?",bookmark)
-  },[]);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -72,6 +68,41 @@ function BookMarkMain({navigation}) {
     });
   }, [])
 
+    if (getToken === null) {
+      // getToken이 null일 때 빈 배열을 처리
+      setBookmarkmedicine([]);
+    } else {
+      BookmarkListall();
+    }
+  }, []);
+
+
+  React.useEffect(async()=>{
+    const getToken = await AsyncStorage.getItem('token');
+    console.log("bookmarklist token: ", getToken);
+    
+    const BookmarkList = async () => {
+      try {
+        const res = await axios.post(`${IP}/medicine/bookmarklist`, {
+          token: getToken
+        });
+        console.log("bookmarklist res.data: ", res.data);
+        setBookmark(res.data);
+        console.log("bookmarklist에서 가져온 놈임", medicinedata);
+        console.log("list하이류ㅜ",tokens)
+      } catch (e) {
+        console.log("list즐겨찾기 목록 못 가져옴,,,", e);
+      }
+    };
+
+    if (getToken === null) {
+      // getToken이 null일 때 빈 배열을 처리
+      setBookmark([]);
+    } else {
+      BookmarkList();
+    }
+
+  },[])
 
   return (
   <View style={styles.c}>
@@ -79,10 +110,17 @@ function BookMarkMain({navigation}) {
       <Loading /> // 로딩 중인 동안 로딩 3초간 스피너 표시
     ) : (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <TouchableOpacity onPress={()=>{navigation.navigate("MedicineDetail")}}>
-            <Card medicinedata={medicinedata} />
-            {/* <List /> */}
+            <Card 
+            medicinedata={medicinedata} 
+            bookmark={bookmark} //bookmark list넘겨줌
+            token={tokens} //token bookmark로 넘겨줌
+            setBookmarkmedicine={setBookmarkmedicine} //bookmark list를 변경하는 함수 넘겨줌
+            onPress={(medicinename, bookmark) => {
+              navigation.navigate('Detail', { medicinename, bookmark })
+            }}
+            /> 
           </TouchableOpacity>
         </ScrollView> 
       </View>
@@ -110,38 +148,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     marginBottom: '10%',
   },
-  medibox: {
-    flex:1,
-    flexDirection: 'row',
-    alignItems: "center",
-    borderWidth:1,
-    borderBottomColor: 'black',
-    marginBottom: '10%',
-  },
-  mediicon:{
-    borderWidth:1,
-    // height:'100%',
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  medititletext:{
-     borderWidth:1,
-     borderColor:'blue',
-     width:'70%',
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  meditext:{
-    borderWidth:1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  medimodal:{
-    flex: 1, 
-    // borderBottomWidth:1,
-    justifyContent: 'center', 
-    alignItems: 'center'
-  }
 });
 
 export default BookMarkMain;
