@@ -68,6 +68,7 @@ function TextSearch({ navigation }) {
       } else {
         setMedicinedata(res.data.items);
         setTotalCount(res.data.totalCount);
+        console.log("totalcount몇?",res.data.totalCount)
       }
       // setTotalCount(res.data.totalCount);
     } catch (error) {
@@ -196,14 +197,35 @@ function TextSearch({ navigation }) {
                   }}
                 />
                 <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
-                  <TouchableRipple onPress={() => { page > 1 && handlePageChange(page - 1) }} accessibilityLabel='이전 페이지' accessibilityRole='button'>
-                    <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants' >이전 페이지</Button>
-                  </TouchableRipple>
+                {
+                  page === 1 ? (
+                    <TouchableRipple accessibilityLabel='이전 페이지' accessibilityRole='button' disabled>
+                      <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
+                    </TouchableRipple>
+                  ) : (
+                    <TouchableRipple onPress={() => { page > 1 && handlePageChange(page - 1) }} accessibilityLabel='이전 페이지' accessibilityRole='button'>
+                      <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>이전 페이지</Button>
+                    </TouchableRipple>
+                  )
+                }
                   <Text style={styles.font} accessibilityLabel={`현재 페이지는 ${page}입니다`}>{page}</Text>
-                  <TouchableRipple onPress={() => { handlePageChange(page + 1) }} accessibilityLabel='다음 페이지' accessibilityRole='button'>
-                    <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
-                  </TouchableRipple>
+                {
+                  page === Math.ceil(totalCount / 10) ? (
+                    <TouchableRipple accessibilityLabel='다음 페이지' accessibilityRole='button' disabled>
+                      <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
+                    </TouchableRipple>
+                  ) : (
+                    <TouchableRipple onPress={() => { handlePageChange(page + 1) }} accessibilityLabel='다음 페이지' accessibilityRole='button'>
+                      <Button mode="Outlined" labelStyle={{ color: '#447378' }} importantForAccessibility='no-hide-descendants'>다음 페이지</Button>
+                    </TouchableRipple>
+                  )
+                }
                 </View>
+                
+                  
+                
+                
+                
 
               </>
 
