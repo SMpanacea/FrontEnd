@@ -3,7 +3,6 @@ import React from 'react';
 import axios from 'axios';
 import { StyleSheet, View, ScrollView, Modal, Image, Animated, TextInput, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
 import { Text, TouchableRipple, Button, DefaultTheme } from 'react-native-paper';
-
 // navigation
 import 'react-native-gesture-handler';
 
@@ -270,6 +269,8 @@ function TextSearch({ navigation }) {
 const styles = StyleSheet.create({
   c: {
     flex: 1,
+    height:height,
+    width:width,
   },
   font: {
     color: '#447378'
@@ -284,7 +285,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: "center",
     borderWidth: 1,
-
     marginBottom: '5%',
     height: 150,
     padding: 20
