@@ -11,7 +11,6 @@ const IP = ServerPort();
 
 export default function ReissuancePw({ navigation }) {
     const [id, setId] = useState('');
-    const [tempId, setTempId] = useState('');
     const [email, setEmail] = useState('');
     const [emailNum, setEmailNum] = useState('');
     const [cemailNum, setCEmailNum] = useState('');
@@ -56,6 +55,8 @@ export default function ReissuancePw({ navigation }) {
       };
 
     const handleFind = async () => {      // 서버에 아이디, 이매알을 전송하는 최종 함수
+        console.log("id: ", id);
+        console.log("emailNumError: ", emailNumError);
         if (id === '' || emailNumError == false) {
             Alert.alert(
                 '',
@@ -70,14 +71,13 @@ export default function ReissuancePw({ navigation }) {
         } else {
             try {
                 const res = await axios.post(`${IP}/user/findpw`, {
-                    uid: tempId,
+                    uid: id,
                     email: email
                 });
                 console.log("res.data : ", res.data);
                 console.log("res.data type : ", typeof (res.data));
                 const bool = res.data;
                 if (bool) {
-                    setTempId(id);
                     navigation.navigate("ResetPw", { id });
                 } else {
                     Alert.alert(
