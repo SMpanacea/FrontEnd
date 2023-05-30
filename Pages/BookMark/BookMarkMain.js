@@ -3,6 +3,7 @@
 import axios from 'axios';
 import React from 'react';
 import {StyleSheet,  View, ScrollView, TouchableOpacity } from 'react-native';
+
 // 화면 비율
 import { Dimensions } from 'react-native'; 
 const { width, height } = Dimensions.get('window');
@@ -52,18 +53,13 @@ function BookMarkMain({navigation}) {
     } catch (e) {
       console.log("즐겨찾기 목록 못 가져옴,,,", e);
     }
-  };
-
-  React.useEffect(async () => {
-    
-
     if (getToken === null) {
       // getToken이 null일 때 빈 배열을 처리
       setBookmarkmedicine([]);
     } else {
       BookmarkListall();
     }
-  }, []);
+  };
 
 
   React.useEffect(async()=>{
