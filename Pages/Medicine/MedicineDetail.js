@@ -50,6 +50,7 @@ function MedicineDetail({ navigation, route }) {
   }, [bookmarked]);
 
   const click = (data) => { //setBookMarked라는 이름으로 BookMarkButton으로 넘겨줌
+    setBookmark(data)
     setBookmark2(data) //click 자신의 booklist(bookmark)를 변경해줌
     setBookMarked(!bookmarked)//별표에 활성 비활성화를 변경해줌()
   }
