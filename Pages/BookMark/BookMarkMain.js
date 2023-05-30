@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import React from 'react';
-import {StyleSheet,  View, ScrollView, TouchableOpacity, AccessibilityInfo } from 'react-native';
+import {StyleSheet,  View, ScrollView, TouchableOpacity, AccessibilityInfo, Image } from 'react-native';
 import {TouchableRipple} from 'react-native-paper';
 
 // 화면 비율
