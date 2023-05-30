@@ -189,19 +189,18 @@ const styles = StyleSheet.create({
 
   },
   profileContainer: {
-    flex:1,
+    flex:2,
     alignItems: 'center',
     paddingVertical: 30,
     borderBottomColor: '#ECECEC',
   },
   profileImage: {
-    flex:1,
+    flex: 1,
     width: 200,
     height: 200,
     borderRadius: 100,
-    marginBottom: 20,
-    borderWidth:1,
-  },
+    borderWidth: 1,
+  },  
   profileInfo: {
     flex:1,
     alignItems: 'center',
