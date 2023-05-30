@@ -43,7 +43,7 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
   const handleBookmark = () => { //bookmark핸들러
     
 
-    if(bookmark.length === 0){
+    if(!token){
       navigation.navigate('MyPage')
     }else{
       setBookmark(!bookmarked); //bookmarked의 반대값을 setBookmarked에 저장해줌
