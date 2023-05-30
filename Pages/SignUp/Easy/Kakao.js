@@ -86,7 +86,7 @@ export default function App({ route, navigation }) {
     };
 
     return (
-        <TouchableOpacity onPress={login}>
+        <TouchableOpacity style={{alignItems:'center', alignContent:'center'}}onPress={login} accessibilityLabel='카카오 간편 로그인' accessibilityRole='button'>
             <Image source={KakaoButton} style={styles.image} />
         </TouchableOpacity>
     );    
