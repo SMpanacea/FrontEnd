@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet,} from 'react-native';
+
 import bookmarkImage from '../assets/star.png'; //색별
 import bookmarkedImage from '../assets/binstar.png'; //빈별
 import { useNavigation } from '@react-navigation/native';
@@ -17,32 +18,15 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
 
   const navigation = useNavigation(); // navigation 객체 가져오기
 
-  React.useLayoutEffect(() => {
-    AccessibilityInfo.announceForAccessibility();
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableRipple onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
-          <Image source={require('../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
-        </TouchableRipple>
-      ),
-      headerTitle: "즐겨찾기 목록",
-      headerStyle: {
-        elevation: 10, // 안드로이드 그림자 효과
-        shadowOpacity: 0.5, // iOS 그림자 효과
-        shadowColor: 'black', // 그림자 색상 설정
-        shadowOffset: { width: 0, height: 2 }, // 그림자 오프셋 설정
-        shadowRadius: 4, // 그림자 반경 설정
-      },
-    });
-  }, [])
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowImage(true);
-    }, 3000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setShowImage(true);
+  //   }, 3000);
+
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   const click = (data) => {
     setBookMarked(data)//부모의 클릭함수를 실행시킴
@@ -125,7 +109,9 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
   return (
     <TouchableOpacity onPress={handleBookmark} accessibilityLabel='즐겨찾기' accessibilityRole='button' > 
       <View style={styles.bookmarkbutton}>
-        {showImage && <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />}
+       <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />
+
+        {/* {showImage && <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />} */}
         {/* <Image source={bookmarked2 ?  bookmarkImage : bookmarkedImage} style={styles.image} />  */}
         {/*bookmarked에 값이 있으면 색별, 아니면 빈별 뜨게 해줌*/}
       </View>
