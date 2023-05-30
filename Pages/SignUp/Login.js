@@ -142,8 +142,9 @@ export default function Login({ route, navigation }) {
 
                 <Text variant="titleMedium" style={styles.down2} importantForAccessibility='no-hide-descendants'>간편 로그인</Text>
 
-                <Kakao importantForAccessibility="no-hide-descendants" navigation={navigation} route={route} />
-
+                <View style={styles.kakaoContainer} accessibilityLabel='카카오 로그인 하기'>
+                    <Kakao navigation={navigation} route={route} />
+                </View>
             </SafeAreaView>
         </View>
     );

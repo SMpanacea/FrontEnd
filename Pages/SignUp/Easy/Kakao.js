@@ -86,7 +86,7 @@ export default function App({ route, navigation }) {
     };
 
     return (
-        <TouchableOpacity onPress={login}>
+        <TouchableOpacity onPress={login} importantForAccessibility="no-hide-descendants">
             <Image source={KakaoButton} style={styles.image} />
         </TouchableOpacity>
     );    

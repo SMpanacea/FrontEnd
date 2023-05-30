@@ -18,6 +18,7 @@ export default function MemberInfoEdit({ navigation, route }) {
     const { userData } = route.params;
     console.log("MemberInfoEdit userdata : ", userData);
 
+    const id = userData.id;
     const [img, setImg] = useState(userData.img);
     const [email, setEmail] = useState(userData.email);
     const [nickname, setNickname] = useState(userData.nickname);
@@ -132,7 +133,7 @@ export default function MemberInfoEdit({ navigation, route }) {
         console.log
         try {
             const res = await axios.post(`${IP}/user/update`, {
-                uid: userData.id,
+                uid: id,
                 image: base64Image
             });
             const response = res.data;
@@ -175,7 +176,7 @@ export default function MemberInfoEdit({ navigation, route }) {
 
         try {
             const res = await axios.post(`${IP}/user/update`, {
-                uid: userData.id,
+                uid: id,
                 email: email,
                 nickname: nickname,
                 birth: birth,
@@ -240,7 +241,7 @@ export default function MemberInfoEdit({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
                     
                     <TouchableOpacity onPress={handleImagePicker}
@@ -253,7 +254,7 @@ export default function MemberInfoEdit({ navigation, route }) {
                     <View style={styles.userInfoContainer}>
                         <View style={styles.userInfoItem}>
                             <Text style={styles.label}>아이디</Text>
-                            <Text style={styles.content}>{userData.id}</Text>
+                            <Text style={styles.content}>{id}</Text>
                         </View>
 
                         <View style={styles.userInfoItem}>
