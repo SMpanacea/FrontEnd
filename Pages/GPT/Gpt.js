@@ -88,6 +88,7 @@ function Gpt({ navigation, route }) {
               style={styles.input}
               value={message} // 현재 message 값을 입력 값으로 설정
               onChangeText={text => setMessage(text)}
+              accessibilityLabel='상담하고 싶은 내용을 입력해 주세요'
             />
 
             {/* <TouchableOpacity style={styles.rightIconButtonStyle}>
@@ -99,7 +100,7 @@ function Gpt({ navigation, route }) {
           </View>
 
           {/* 일단 잠들어 있어라,,,, 돈 나간다!!!!!! */}
-          <TouchableOpacity style={styles.sendButton} onPress={() => sendMessageToServer(message)}>
+          <TouchableOpacity style={styles.sendButton} onPress={() => sendMessageToServer(message)} accessibilityLabel='메세지 전송' accessibilityRole='button'>
             <Icon name={message ? "send" : "send"} size={23} color={theme.colors.white} />
           </TouchableOpacity>
         </View>

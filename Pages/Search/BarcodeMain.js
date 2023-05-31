@@ -213,7 +213,7 @@ export default function BarcodeMain({ navigation }) {
                     <View>
                       {pnm && pnm ? (
                         <View style={{ marginBottom: 10, }}>
-                          <View style={styles.Info2} accessible={true}>
+                          <View style={styles.Info2} accessible={true} accessibilityLabel='제품명'>
                             <Icon style={styles.InfoIcon} name="box" size={20} color="black" />
                             <Text style={styles.InfoTitle}>제품명</Text>
                           </View>
