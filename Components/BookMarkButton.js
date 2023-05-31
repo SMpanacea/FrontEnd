@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet,} from 'react-native';
+
 import bookmarkImage from '../assets/star.png'; //색별
 import bookmarkedImage from '../assets/binstar.png'; //빈별
 import { useNavigation } from '@react-navigation/native';
@@ -16,14 +17,16 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
   const [showImage, setShowImage] = useState(false);
 
   const navigation = useNavigation(); // navigation 객체 가져오기
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowImage(true);
-    }, 3000);
 
-    return () => clearTimeout(timer);
-  }, []);
+
+  
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setShowImage(true);
+  //   }, 3000);
+
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   const click = (data) => {
     setBookMarked(data)//부모의 클릭함수를 실행시킴
@@ -106,7 +109,9 @@ function BookMarkButton ({medicinedetail,bookmarked, setBookMarked, bookmark, se
   return (
     <TouchableOpacity onPress={handleBookmark} accessibilityLabel='즐겨찾기' accessibilityRole='button' > 
       <View style={styles.bookmarkbutton}>
-        {showImage && <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />}
+       <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />
+
+        {/* {showImage && <Image source={bookmarked2 ? bookmarkImage : bookmarkedImage} style={styles.image} />} */}
         {/* <Image source={bookmarked2 ?  bookmarkImage : bookmarkedImage} style={styles.image} />  */}
         {/*bookmarked에 값이 있으면 색별, 아니면 빈별 뜨게 해줌*/}
       </View>

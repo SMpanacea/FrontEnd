@@ -2,7 +2,8 @@
 
 import axios from 'axios';
 import React from 'react';
-import {StyleSheet,  View, ScrollView, TouchableOpacity } from 'react-native';
+import {StyleSheet,  View, ScrollView, TouchableOpacity, AccessibilityInfo, Image } from 'react-native';
+import {TouchableRipple} from 'react-native-paper';
 
 // 화면 비율
 import { Dimensions } from 'react-native'; 
@@ -31,6 +32,25 @@ function BookMarkMain({navigation}) {
   const [tokens, setTokens] = React.useState("");
 
   const [bookmark, setBookmark] = React.useState([]);//bookmark 리스트 있는지 확인
+
+  React.useLayoutEffect(() => {
+    AccessibilityInfo.announceForAccessibility();
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableRipple onPress={() => navigation.goBack()} accessibilityLabel='뒤로가기'>
+          <Image source={require('../../assets/left.png')} style={{ width: 30, height: 30, marginLeft: 10 }} />
+        </TouchableRipple>
+      ),
+      headerTitle: "즐겨찾기 목록",
+      headerStyle: {
+        elevation: 10, // 안드로이드 그림자 효과
+        shadowOpacity: 0.5, // iOS 그림자 효과
+        shadowColor: 'black', // 그림자 색상 설정
+        shadowOffset: { width: 0, height: 2 }, // 그림자 오프셋 설정
+        shadowRadius: 4, // 그림자 반경 설정
+      },
+    });
+  }, [])
 
   React.useEffect(()=> {
     console.log("북마크 바뀜")
