@@ -6,7 +6,7 @@
 [AI Model](https://github.com/SMpanacea/MODEL)<br>
 [어플리케이션 시연영상](https://youtu.be/BUATiiF5zXA?si=UXur5HznLdy3JnvA)<br>
 
-
+### 문제 정의
 
 
 ### developer
