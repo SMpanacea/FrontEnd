@@ -21,8 +21,10 @@
       
 ![문제정의#1](https://github.com/SMpanacea/FrontEnd/assets/37571367/583bf349-4c95-43b9-b8b2-7ae4ceb40be3)
 
-### 기술개발 연구 내용
+### 주요 기능
 ---
+  [![Video Label](http://img.youtube.com/vi/BUATiiF5zXA/0.jpg)]
+
   - 내용입력
 ### 기술개발 연구 결과
 ---
