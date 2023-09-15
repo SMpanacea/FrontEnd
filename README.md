@@ -1,5 +1,9 @@
 # PANACEA
 
+#### 의약품 안전 사용 및 보건 지식 제공 서비스
+
+![image](https://github.com/SMpanacea/FrontEnd/assets/101163897/ffa0d0c0-5109-4d1d-802b-cd0623eaee74)
+  
 ### 문제 정의
 ---
   - #### 휴대전화 카메라를 활용하여 알약 이미지만으로 의약품 정보 조회가 가능한 애플리케이션 개발
