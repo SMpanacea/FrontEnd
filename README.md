@@ -17,7 +17,7 @@
 
 ### 주요 기능
 ---
-  [![Video Label](http://img.youtube.com/vi/BUATiiF5zXA/0.jpg)]
+[![Video Label](http://img.youtube.com/vi/BUATiiF5zXA/0.jpg)](https://youtu.be/BUATiiF5zXA)
 
   - 내용입력
 ### 기술개발 연구 결과
