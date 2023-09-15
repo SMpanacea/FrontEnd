@@ -1,6 +1,6 @@
 # PANACEA
 
-#### 의약품 안전 사용 및 보건 지식 제공 서비스
+#### 시각장애인 및 사회적 약자를 위한 Machine Learning과 ChatGPT를 이용한 의약품 검색 및 상담 애플리케이션
 
 ![image](https://github.com/SMpanacea/FrontEnd/assets/101163897/ffa0d0c0-5109-4d1d-802b-cd0623eaee74)
   
