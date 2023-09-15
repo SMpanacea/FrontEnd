@@ -17,8 +17,8 @@
 
 ### 주요 기능
 ---
-  - 카메라로 알약을 촬영하여 알약을 인식하면 TTS로 시각장애인들에게 알약이 정상적으로 촬영이되었는지를 안내 후 촬영완료 후 해당하는 의약품 검색
-  [시연영상]([http://zeldahagoshipda.com](https://youtube.com/shorts/mRD1MLe8JcM?si=kktEk0BEJh5v39NZ))
+  - 카메라로 알약을 촬영하여 알약을 인식하면 TTS로 시각장애인들에게 알약이 정상적으로 촬영이되었는지를 안내 후 촬영완료 후 해당하는 의약품 검색<br>
+[![Video Label](http://img.youtube.com/vi/mRD1MLe8JcM?si=AAdZGiv9YlXRTjsE/0.jpg)](https://youtu.be/mRD1MLe8JcM?si=AAdZGiv9YlXRTjsE)
   - 사용모델
     - Pill detection - YOLO
     - Pill search - CNN
