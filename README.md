@@ -82,11 +82,11 @@
  -  참고 블로그 기술논문 작성
 ### DEVELOPER
 ---
-- 김가연
+- 김가연 - FrontEnd
   - [github](https://github.com/KIN0-0) 
-- 류희정
+- 류희정 - FrontEnd
   - [github](https://github.com/rhj7513)
-- 마기창
+- 마기창 - AI, Machine Learning
   - [github](https://github.com/smreo3839)
-- 박호준
+- 박호준 - BackEnd
   - [github](https://github.com/hoejun1208) 
