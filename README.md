@@ -16,6 +16,6 @@
 - 류희정
   - [github]()
 - 마기창
-  - [github]()
+  - [github](https://github.com/smreo3839)
 - 박호준
   - [github](https://github.com/hoejun1208) 
