@@ -19,7 +19,7 @@
 
 
       
-![문제 정의#1](https://github.com/SMpanacea/FrontEnd/assets/37571367/61b1d08f-cdf9-42a1-94f3-c519312224f0)
+![문제정의#1](https://github.com/SMpanacea/FrontEnd/assets/37571367/583bf349-4c95-43b9-b8b2-7ae4ceb40be3)
 
 ### 기술개발 연구 내용
 ---
