@@ -35,9 +35,9 @@
 ### DEVELOPER
 ---
 - 김가연
-  - [github]() 
+  - [github](https://github.com/KIN0-0) 
 - 류희정
-  - [github]()
+  - [github](https://github.com/rhj7513)
 - 마기창
   - [github](https://github.com/smreo3839)
 - 박호준
