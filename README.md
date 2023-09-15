@@ -30,7 +30,8 @@
     - Pill search - CNN
 
   - 전체 시연 영상
-[![Video Label](http://img.youtube.com/vi/BUATiiF5zXA/0.jpg)](https://youtu.be/BUATiiF5zXA)
+
+    [![Video Label](http://img.youtube.com/vi/BUATiiF5zXA/0.jpg)](https://youtu.be/BUATiiF5zXA)
 
   - 내용입력
 ### 기술개발 연구 결과
