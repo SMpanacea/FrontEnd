@@ -109,6 +109,10 @@
 <img src="https://img.shields.io/badge/jstl-75834b?style=for-the-badge&logo=jstl&logoColor=white">
 <img src="https://img.shields.io/badge/xml-ec9831?style=for-the-badge&logo=xml&logoColor=white"> 
 
+## AI
+<img src="https://img.shields.io/badge/pytorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white"> 
+<img src="https://img.shields.io/badge/pytorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white">
+
 ### FrameWork
 <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=Bootstrap&logoColor=white"> 
 
