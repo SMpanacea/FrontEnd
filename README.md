@@ -139,6 +139,5 @@
   - [어플리케이션 시연영상](https://youtu.be/BUATiiF5zXA?si=UXur5HznLdy3JnvA)
 
 ## 참고 자료
- -  참고 블로그 기술논문 작성
 
 
